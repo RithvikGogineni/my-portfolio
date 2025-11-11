@@ -742,9 +742,21 @@ a:hover {
     --font-size-3xl: 1.5rem;
   }
   
+  .section {
+    padding: var(--section-padding);
+  }
+  
   .section-title {
     font-size: var(--font-size-3xl);
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .section-subtitle {
+    font-size: var(--font-size-sm);
+  }
+  
+  .page-hero {
+    padding: 120px 0 60px;
   }
   
   .grid-2,
@@ -1818,6 +1830,7 @@ a:hover {
   
   .timeline-content {
     width: 100%;
+    padding: 1.5rem;
   }
   
   .timeline-content::before {
@@ -1830,6 +1843,10 @@ a:hover {
   
   .skill-category {
     padding: 1.5rem;
+  }
+  
+  .experience-timeline {
+    padding: 2rem 0;
   }
 }
 
@@ -2614,6 +2631,14 @@ a:hover {
   
   .blog-card {
     padding: 1.5rem;
+  }
+  
+  .blog-title {
+    font-size: 1.2rem;
+  }
+  
+  .blog-excerpt {
+    font-size: var(--font-size-sm);
   }
 }
 

@@ -87,6 +87,20 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+*:focus {
+  outline: none;
+}
+
+button,
+a,
+input,
+textarea,
+select {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 /* Performance optimizations */
@@ -315,12 +329,18 @@ img {
 
 /* Responsive Navbar */
 @media (max-width: 768px) {
+  .navbar {
+    padding: 1rem 1.5rem;
+  }
+  
   .navbar-nav {
     display: none;
   }
   
   .mobile-menu-btn {
     display: block;
+    min-width: 44px;
+    min-height: 44px;
   }
   
   .navbar-container {
@@ -334,6 +354,8 @@ img {
   .theme-toggle {
     width: 40px;
     height: 40px;
+    min-width: 40px;
+    min-height: 40px;
     margin-left: 0.5rem;
   }
 }
@@ -528,6 +550,8 @@ a:hover {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
   gap: 0.5rem;
   padding: 0.8rem 1.8rem;
   border-radius: 999px;

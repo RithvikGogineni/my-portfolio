@@ -40,25 +40,23 @@ const Gallery = () => {
   // Get images for active section
   const sectionImageFilenames = activeSectionData?.images || [];
   
-  // Pagination state - show 6 images initially
+  // Pagination state - show 6 images initially on home page, all on gallery page
   const [visibleCount, setVisibleCount] = useState(6);
-  const imagesToShow = sectionImageFilenames.slice(0, visibleCount);
-  const hasMore = sectionImageFilenames.length > visibleCount;
+  const imagesToShow = isGalleryPage 
+    ? sectionImageFilenames  // Show all images on gallery page
+    : sectionImageFilenames.slice(0, visibleCount);  // Show 6 on home page
+  const hasMore = !isGalleryPage && sectionImageFilenames.length > visibleCount;
   
-  // Reset visible count when section changes
+  // Reset visible count when section changes (only on home page)
   useEffect(() => {
-    setVisibleCount(6);
-  }, [activeSection]);
+    if (!isGalleryPage) {
+      setVisibleCount(6);
+    }
+  }, [activeSection, isGalleryPage]);
   
   const handleShowMore = () => {
-    // If on home page, redirect to gallery page
-    if (!isGalleryPage) {
-      navigate('/gallery');
-      return;
-    }
-    
-    // If on gallery page, show more images
-    setVisibleCount(prev => Math.min(prev + 6, sectionImageFilenames.length));
+    // Only redirect to gallery page (button only shows on home page)
+    navigate('/gallery');
   };
   
   // Debug logging
@@ -477,7 +475,7 @@ GalleryImageItem.displayName = 'GalleryImageItem';
                 )}
               </motion.div>
               
-              {/* Show More Button */}
+              {/* Show More Button - Only on home page */}
               {hasMore && (
                 <motion.div
                   className="gallery-show-more"
@@ -489,10 +487,7 @@ GalleryImageItem.displayName = 'GalleryImageItem';
                     className="btn btn-secondary"
                     onClick={handleShowMore}
                   >
-                    {isGalleryPage 
-                      ? `Show More (${sectionImageFilenames.length - visibleCount} remaining)`
-                      : 'View Full Gallery'
-                    }
+                    View Full Gallery
                   </button>
                 </motion.div>
               )}

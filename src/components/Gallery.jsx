@@ -3,8 +3,8 @@ import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { staggerContainer, fadeInUp } from '../animations/framerVariants';
-import { gallerySections } from '../data/gallery';
 import { useFirebaseImage } from '../hooks/useFirebaseImage';
+import { useGallerySections } from '../hooks/useGallerySections';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,76 +12,24 @@ const Gallery = () => {
   const sectionRef = useRef(null);
   const galleryItemsRef = useRef([]);
   const lightboxRef = useRef(null);
-  const [activeSection, setActiveSection] = useState('blender');
   
-  // Get images for active section from gallery data
+  // Load gallery sections dynamically from Firestore
+  const { sections: gallerySections, loading: sectionsLoading, error: sectionsError } = useGallerySections();
+  
+  // Set active section to first section when sections load
+  const [activeSection, setActiveSection] = useState(null);
+  
+  useEffect(() => {
+    if (gallerySections.length > 0 && !activeSection) {
+      setActiveSection(gallerySections[0].id);
+    }
+  }, [gallerySections, activeSection]);
+  
+  // Get active section data
   const activeSectionData = gallerySections.find(s => s.id === activeSection);
   
-  // Get image filenames for each section
-  const getSectionImageFilenames = (sectionId) => {
-    const imageMap = {
-      blender: [
-        '2d858e8d-1d66-43d9-8cba-41def5677647.JPG',
-        '2eaf52b8-d0ac-4859-b87d-44cc0518b410.JPG',
-        '43b8739b-9205-4072-bcf8-facb6b1488fe.JPG',
-        '4ba1bc90-c730-42b4-8279-36c56cc34e66.JPG',
-        '66198834-5bf7-496a-89b5-c9803b73208a.JPG',
-        '70c26b65-38e2-4bcf-b5a4-a80acaf708e2.JPG',
-        '962fe520-6a66-4472-aff6-0cb63c5b503b.JPG',
-        'IMG_3067.JPG',
-        'IMG_3068.JPG',
-        'IMG_3069.JPG',
-        'IMG_3070.JPG',
-        'IMG_3076.JPG',
-        'IMG_3077.JPG',
-        'IMG_3078.JPG',
-        'IMG_3079.JPG',
-        'IMG_3080.JPG',
-        'IMG_3144.JPG',
-        'IMG_3145.JPG',
-        'IMG_3146.JPG',
-        'IMG_3147.JPG',
-        'IMG_3148.JPG',
-        'IMG_3150.JPG',
-        'IMG_3151.JPG',
-        'IMG_3152.JPG',
-        'IMG_3153.JPG',
-        'IMG_3154.JPG',
-        'IMG_3155.JPG',
-        'IMG_3156.JPG',
-        'IMG_3157.JPG',
-        'IMG_3158.JPG',
-        'IMG_3159.JPG',
-        'IMG_3160.JPG',
-        'IMG_3161.JPG',
-        'PHOTO-2023-08-08-00-07-09.jpg',
-        'PHOTO-2023-08-08-00-07-10 2.jpg',
-        'PHOTO-2023-08-08-00-07-10.jpg',
-        'PHOTO-2023-09-01-14-04-53.jpg',
-        'PHOTO-2023-09-01-14-05-13.jpg',
-        'PHOTO-2023-09-02-12-31-15.jpg',
-        'PHOTO-2023-09-02-12-37-37 2.jpg',
-        'PHOTO-2023-09-02-12-37-37.jpg',
-        'PHOTO-2024-04-24-15-35-47.jpg',
-        'PHOTO-2024-05-01-13-39-14.jpg',
-        'PHOTO-2024-09-20-11-56-50.jpg',
-        'PHOTO-2024-11-26-13-39-50.jpg',
-        'bfb4706a-5dad-432c-ba7e-ba380b1b59dc.JPG',
-        'e0c269b7-ef47-4bf0-9c3a-39d2fe2b41f0.JPG',
-        'edb665a6-7572-4b81-9843-5282dc33d4a6.JPG',
-        'f1804f49-5ca5-4f49-be05-2061d1bc6eb3.JPG',
-        'f7533455-a4cc-4906-8443-14bf0d30c1fe.JPG'
-      ],
-      robotics: [],
-      competition: [],
-      engineering: [],
-      leadership: [],
-      education: []
-    };
-    return imageMap[sectionId] || [];
-  };
-
-  const sectionImageFilenames = getSectionImageFilenames(activeSection);
+  // Get images for active section
+  const sectionImageFilenames = activeSectionData?.images || [];
 
   useEffect(() => {
     // Gallery items animation
@@ -214,7 +162,6 @@ const GalleryImageItem = React.forwardRef(({ sectionId, filename, index, onImage
             <div className="gallery-overlay">
               <div className="gallery-content-overlay">
                 <h3 className="gallery-item-title">{title}</h3>
-                <p className="gallery-item-category">{gallerySections.find(s => s.id === sectionId)?.title}</p>
                 <div className="gallery-zoom-icon">🔍</div>
               </div>
             </div>
@@ -246,20 +193,34 @@ GalleryImageItem.displayName = 'GalleryImageItem';
           </motion.div>
 
           {/* Section Tabs */}
-          <motion.div 
-            className="gallery-section-tabs"
-            variants={fadeInUp}
-          >
-            {gallerySections.map((section) => (
-              <button
-                key={section.id}
-                className={`gallery-tab ${activeSection === section.id ? 'active' : ''}`}
-                onClick={() => setActiveSection(section.id)}
-              >
-                {section.title}
-              </button>
-            ))}
-          </motion.div>
+          {sectionsLoading ? (
+            <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--color-text-muted)' }}>
+              Loading gallery sections...
+            </div>
+          ) : sectionsError ? (
+            <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--color-accent-primary)' }}>
+              Error loading gallery sections. Please check your Firestore setup.
+            </div>
+          ) : gallerySections.length > 0 ? (
+            <motion.div 
+              className="gallery-section-tabs"
+              variants={fadeInUp}
+            >
+              {gallerySections.map((section) => (
+                <button
+                  key={section.id}
+                  className={`gallery-tab ${activeSection === section.id ? 'active' : ''}`}
+                  onClick={() => setActiveSection(section.id)}
+                >
+                  {section.title || section.id}
+                </button>
+              ))}
+            </motion.div>
+          ) : (
+            <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--color-text-muted)' }}>
+              No gallery sections found. Add sections to Firestore.
+            </div>
+          )}
 
           {/* Active Section Info */}
           {activeSectionData && (
@@ -268,8 +229,10 @@ GalleryImageItem.displayName = 'GalleryImageItem';
               variants={fadeInUp}
               key={activeSection}
             >
-              <h3 className="gallery-section-title">{activeSectionData.title}</h3>
-              <p className="gallery-section-description">{activeSectionData.description}</p>
+              <h3 className="gallery-section-title">{activeSectionData.title || activeSectionData.id}</h3>
+              {activeSectionData.description && (
+                <p className="gallery-section-description">{activeSectionData.description}</p>
+              )}
             </motion.div>
           )}
 
@@ -294,7 +257,7 @@ GalleryImageItem.displayName = 'GalleryImageItem';
               <div className="gallery-empty-state">
                 <p>No images in this section yet.</p>
                 <p className="gallery-empty-hint">
-                  Add image filenames to the gallery data to display them here.
+                  Upload images to Firebase Storage in the {activeSection} folder and add them to Firestore.
                 </p>
               </div>
             )}

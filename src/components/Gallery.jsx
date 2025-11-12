@@ -17,13 +17,61 @@ const Gallery = () => {
   // Get images for active section from gallery data
   const activeSectionData = gallerySections.find(s => s.id === activeSection);
   
-  // For now, we'll create a simple system where you can add image filenames
-  // In the future, you can load this from Firestore or a config file
+  // Get image filenames for each section
   const getSectionImageFilenames = (sectionId) => {
-    // This is a placeholder - you'll need to add your actual image filenames
-    // For blender section, if you uploaded images, add their filenames here
     const imageMap = {
-      blender: [], // Add filenames like: ['image1.png', 'image2.jpg']
+      blender: [
+        '2d858e8d-1d66-43d9-8cba-41def5677647.JPG',
+        '2eaf52b8-d0ac-4859-b87d-44cc0518b410.JPG',
+        '43b8739b-9205-4072-bcf8-facb6b1488fe.JPG',
+        '4ba1bc90-c730-42b4-8279-36c56cc34e66.JPG',
+        '66198834-5bf7-496a-89b5-c9803b73208a.JPG',
+        '70c26b65-38e2-4bcf-b5a4-a80acaf708e2.JPG',
+        '962fe520-6a66-4472-aff6-0cb63c5b503b.JPG',
+        'IMG_3067.JPG',
+        'IMG_3068.JPG',
+        'IMG_3069.JPG',
+        'IMG_3070.JPG',
+        'IMG_3076.JPG',
+        'IMG_3077.JPG',
+        'IMG_3078.JPG',
+        'IMG_3079.JPG',
+        'IMG_3080.JPG',
+        'IMG_3144.JPG',
+        'IMG_3145.JPG',
+        'IMG_3146.JPG',
+        'IMG_3147.JPG',
+        'IMG_3148.JPG',
+        'IMG_3150.JPG',
+        'IMG_3151.JPG',
+        'IMG_3152.JPG',
+        'IMG_3153.JPG',
+        'IMG_3154.JPG',
+        'IMG_3155.JPG',
+        'IMG_3156.JPG',
+        'IMG_3157.JPG',
+        'IMG_3158.JPG',
+        'IMG_3159.JPG',
+        'IMG_3160.JPG',
+        'IMG_3161.JPG',
+        'PHOTO-2023-08-08-00-07-09.jpg',
+        'PHOTO-2023-08-08-00-07-10 2.jpg',
+        'PHOTO-2023-08-08-00-07-10.jpg',
+        'PHOTO-2023-09-01-14-04-53.jpg',
+        'PHOTO-2023-09-01-14-05-13.jpg',
+        'PHOTO-2023-09-02-12-31-15.jpg',
+        'PHOTO-2023-09-02-12-37-37 2.jpg',
+        'PHOTO-2023-09-02-12-37-37.jpg',
+        'PHOTO-2024-04-24-15-35-47.jpg',
+        'PHOTO-2024-05-01-13-39-14.jpg',
+        'PHOTO-2024-09-20-11-56-50.jpg',
+        'PHOTO-2024-11-26-13-39-50.jpg',
+        'bfb4706a-5dad-432c-ba7e-ba380b1b59dc.JPG',
+        'e0c269b7-ef47-4bf0-9c3a-39d2fe2b41f0.JPG',
+        'edb665a6-7572-4b81-9843-5282dc33d4a6.JPG',
+        'f1804f49-5ca5-4f49-be05-2061d1bc6eb3.JPG',
+        'f7533455-a4cc-4906-8443-14bf0d30c1fe.JPG'
+      ],
       robotics: [],
       competition: [],
       engineering: [],

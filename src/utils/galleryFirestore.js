@@ -2,6 +2,8 @@
 import { 
   collection, 
   getDocs, 
+  getDoc,
+  doc,
   query, 
   orderBy,
   where 
@@ -41,7 +43,6 @@ export const getGallerySections = async () => {
  */
 export const getSectionImages = async (sectionId) => {
   try {
-    const { getDoc, doc } = await import('firebase/firestore');
     const sectionRef = doc(db, 'gallerySections', sectionId);
     const sectionSnap = await getDoc(sectionRef);
     

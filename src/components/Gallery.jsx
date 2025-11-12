@@ -206,7 +206,19 @@ const Gallery = () => {
 // Gallery Image Item Component
 const GalleryImageItem = React.forwardRef(({ sectionId, filename, index, onImageClick }, ref) => {
   const imagePath = `images/gallery/${sectionId}/${filename}`;
-  const { imageUrl, loading } = useFirebaseImage(imagePath);
+  const { imageUrl, loading, error } = useFirebaseImage(imagePath);
+
+  // Debug logging for first few images
+  useEffect(() => {
+    if (index < 3) {
+      console.log(`Image ${index} (${filename}):`, {
+        imagePath,
+        imageUrl,
+        loading,
+        error: error?.message
+      });
+    }
+  }, [imagePath, imageUrl, loading, error, filename, index]);
 
   const handleClick = () => {
     if (imageUrl) {
@@ -227,17 +239,38 @@ const GalleryImageItem = React.forwardRef(({ sectionId, filename, index, onImage
         {loading ? (
           <div className="gallery-image-loading">
             <div className="loading-spinner"></div>
+            <p style={{ fontSize: '0.75rem', marginTop: '0.5rem', opacity: 0.7 }}>
+              Loading...
+            </p>
           </div>
-        ) : (
+        ) : error ? (
+          <div className="gallery-image-error" style={{
+            padding: '2rem',
+            textAlign: 'center',
+            color: 'var(--color-accent-secondary)',
+            fontSize: '0.875rem'
+          }}>
+            <p>Failed to load</p>
+            <p style={{ fontSize: '0.75rem', opacity: 0.7, marginTop: '0.25rem' }}>
+              {filename}
+            </p>
+          </div>
+        ) : imageUrl ? (
           <>
             <img 
-              src={imageUrl || '/placeholder-image.png'} 
+              src={imageUrl} 
               alt={filename || 'Gallery image'}
               className="gallery-image"
               loading="lazy"
               decoding="async"
               onError={(e) => {
+                console.error('Image load error for:', filename, imageUrl);
                 e.target.src = '/placeholder-image.png';
+              }}
+              onLoad={() => {
+                if (index < 3) {
+                  console.log(`Image ${index} loaded successfully:`, filename);
+                }
               }}
             />
             <div className="gallery-overlay">
@@ -247,6 +280,15 @@ const GalleryImageItem = React.forwardRef(({ sectionId, filename, index, onImage
               </div>
             </div>
           </>
+        ) : (
+          <div className="gallery-image-error" style={{
+            padding: '2rem',
+            textAlign: 'center',
+            color: 'var(--color-text-muted)',
+            fontSize: '0.875rem'
+          }}>
+            <p>No image URL</p>
+          </div>
         )}
       </div>
     </motion.div>

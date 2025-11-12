@@ -11,13 +11,16 @@ gsap.registerPlugin(ScrollTrigger);
 const Gallery = () => {
   const sectionRef = useRef(null);
   const galleryItemsRef = useRef([]);
-  const lightboxRef = useRef(null);
+  const detailPanelRef = useRef(null);
   
   // Load gallery sections dynamically from Firestore
   const { sections: gallerySections, loading: sectionsLoading, error: sectionsError } = useGallerySections();
   
   // Set active section to first section when sections load
   const [activeSection, setActiveSection] = useState(null);
+  
+  // Selected image for detail view
+  const [selectedImage, setSelectedImage] = useState(null);
   
   useEffect(() => {
     if (gallerySections.length > 0 && !activeSection) {
@@ -30,6 +33,39 @@ const Gallery = () => {
   
   // Get images for active section
   const sectionImageFilenames = activeSectionData?.images || [];
+  
+  // Load image metadata (title and description)
+  const [imageMetadata, setImageMetadata] = useState({});
+  
+  useEffect(() => {
+    // Load metadata for the active section
+    const loadMetadata = async () => {
+      try {
+        // Try to load from JSON file first (for blender section)
+        if (activeSection === 'blender') {
+          const metadata = await import('../data/blenderimages.json');
+          const metadataMap = {};
+          metadata.default.forEach(item => {
+            metadataMap[item.fileName] = {
+              title: item.title,
+              description: item.description
+            };
+          });
+          setImageMetadata(metadataMap);
+        } else {
+          // For other sections, you can add metadata to Firestore or JSON files
+          setImageMetadata({});
+        }
+      } catch (error) {
+        console.error('Error loading image metadata:', error);
+        setImageMetadata({});
+      }
+    };
+    
+    if (activeSection) {
+      loadMetadata();
+    }
+  }, [activeSection]);
 
   useEffect(() => {
     // Gallery items animation
@@ -92,44 +128,67 @@ const Gallery = () => {
     });
   }, []);
 
-  const openLightbox = (imageSrc, title) => {
-    if (lightboxRef.current) {
-      const lightbox = lightboxRef.current;
-      const lightboxImage = lightbox.querySelector('.lightbox-image');
-      const lightboxTitle = lightbox.querySelector('.lightbox-title');
-      
-      lightboxImage.src = imageSrc;
-      lightboxTitle.textContent = title;
-      
-      gsap.to(lightbox, {
-        opacity: 1,
-        visibility: 'visible',
-        duration: 0.3,
-        ease: [0.25, 0.46, 0.45, 0.94]
-      });
+  const openImageDetail = (imageUrl, filename) => {
+    const metadata = imageMetadata[filename] || {};
+    setSelectedImage({
+      url: imageUrl,
+      filename: filename,
+      title: metadata.title || filename.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " "),
+      description: metadata.description || "No description available."
+    });
+    
+    // Animate panel in
+    if (detailPanelRef.current) {
+      gsap.fromTo(detailPanelRef.current,
+        { x: '100%' },
+        {
+          x: 0,
+          duration: 0.4,
+          ease: [0.25, 0.46, 0.45, 0.94]
+        }
+      );
     }
+    
+    // Prevent body scroll when panel is open
+    document.body.style.overflow = 'hidden';
   };
 
-  const closeLightbox = () => {
-    if (lightboxRef.current) {
-      gsap.to(lightboxRef.current, {
-        opacity: 0,
-        visibility: 'hidden',
-        duration: 0.3,
-        ease: [0.25, 0.46, 0.45, 0.94]
+  const closeImageDetail = () => {
+    if (detailPanelRef.current) {
+      gsap.to(detailPanelRef.current, {
+        x: '100%',
+        duration: 0.4,
+        ease: [0.25, 0.46, 0.45, 0.94],
+        onComplete: () => {
+          setSelectedImage(null);
+          document.body.style.overflow = '';
+        }
       });
+    } else {
+      setSelectedImage(null);
+      document.body.style.overflow = '';
     }
   };
+  
+  // Close panel on escape key
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && selectedImage) {
+        closeImageDetail();
+      }
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [selectedImage]);
 
 // Gallery Image Item Component
 const GalleryImageItem = React.forwardRef(({ sectionId, filename, index, onImageClick }, ref) => {
   const imagePath = `images/gallery/${sectionId}/${filename}`;
   const { imageUrl, loading } = useFirebaseImage(imagePath);
-  const title = filename.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
 
   const handleClick = () => {
     if (imageUrl) {
-      onImageClick(imageUrl, title);
+      onImageClick(imageUrl, filename);
     }
   };
 
@@ -161,8 +220,8 @@ const GalleryImageItem = React.forwardRef(({ sectionId, filename, index, onImage
             />
             <div className="gallery-overlay">
               <div className="gallery-content-overlay">
-                <h3 className="gallery-item-title">{title}</h3>
-                <div className="gallery-zoom-icon">🔍</div>
+                <div className="gallery-zoom-icon">👁️</div>
+                <p className="gallery-view-text">View Details</p>
               </div>
             </div>
           </>
@@ -250,7 +309,7 @@ GalleryImageItem.displayName = 'GalleryImageItem';
                   sectionId={activeSection}
                   filename={filename}
                   ref={el => galleryItemsRef.current[index] = el}
-                  onImageClick={(imageUrl, title) => openLightbox(imageUrl, title)}
+                  onImageClick={(imageUrl, filename) => openImageDetail(imageUrl, filename)}
                 />
               ))
             ) : (
@@ -263,14 +322,36 @@ GalleryImageItem.displayName = 'GalleryImageItem';
             )}
           </motion.div>
 
-          {/* Lightbox */}
-          <div ref={lightboxRef} className="lightbox" onClick={closeLightbox}>
-            <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
-              <button className="lightbox-close" onClick={closeLightbox}>×</button>
-              <img className="lightbox-image" alt="" />
-              <h3 className="lightbox-title"></h3>
-            </div>
-          </div>
+          {/* Image Detail Panel */}
+          {selectedImage && (
+            <>
+              <div className="gallery-detail-overlay" onClick={closeImageDetail}></div>
+              <motion.div
+                ref={detailPanelRef}
+                className="gallery-detail-panel"
+                initial={{ x: '100%' }}
+                animate={{ x: 0 }}
+                exit={{ x: '100%' }}
+              >
+                <button className="gallery-detail-close" onClick={closeImageDetail}>×</button>
+                
+                <div className="gallery-detail-content">
+                  <div className="gallery-detail-image-container">
+                    <img 
+                      src={selectedImage.url} 
+                      alt={selectedImage.title}
+                      className="gallery-detail-image"
+                    />
+                  </div>
+                  
+                  <div className="gallery-detail-info">
+                    <h2 className="gallery-detail-title">{selectedImage.title}</h2>
+                    <p className="gallery-detail-description">{selectedImage.description}</p>
+                  </div>
+                </div>
+              </motion.div>
+            </>
+          )}
         </motion.div>
       </div>
     </section>

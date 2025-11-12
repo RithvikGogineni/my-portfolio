@@ -15,7 +15,7 @@ const GalleryPage = () => {
         <div className="container">
           <h1 className="page-title">Gallery</h1>
           <p className="page-subtitle">
-            Visual journey through my robotics builds, designs, and moments
+            Visual showcase of robotics builds, 3D designs, and creative moments
           </p>
         </div>
       </motion.div>

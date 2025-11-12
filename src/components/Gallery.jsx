@@ -34,6 +34,20 @@ const Gallery = () => {
   // Get images for active section
   const sectionImageFilenames = activeSectionData?.images || [];
   
+  // Pagination state - show 6 images initially
+  const [visibleCount, setVisibleCount] = useState(6);
+  const imagesToShow = sectionImageFilenames.slice(0, visibleCount);
+  const hasMore = sectionImageFilenames.length > visibleCount;
+  
+  // Reset visible count when section changes
+  useEffect(() => {
+    setVisibleCount(6);
+  }, [activeSection]);
+  
+  const handleShowMore = () => {
+    setVisibleCount(prev => Math.min(prev + 6, sectionImageFilenames.length));
+  };
+  
   // Debug logging
   useEffect(() => {
     if (activeSection) {
@@ -41,8 +55,9 @@ const Gallery = () => {
       console.log('Active section data:', activeSectionData);
       console.log('Image filenames:', sectionImageFilenames);
       console.log('Number of images:', sectionImageFilenames.length);
+      console.log('Visible count:', visibleCount);
     }
-  }, [activeSection, activeSectionData, sectionImageFilenames]);
+  }, [activeSection, activeSectionData, sectionImageFilenames, visibleCount]);
   
   // Load image metadata (title and description)
   const [imageMetadata, setImageMetadata] = useState({});
@@ -88,8 +103,8 @@ const Gallery = () => {
   }, [activeSection]);
 
   useEffect(() => {
-    // Reset refs array
-    galleryItemsRef.current = galleryItemsRef.current.slice(0, sectionImageFilenames.length);
+    // Reset refs array based on visible images
+    galleryItemsRef.current = galleryItemsRef.current.slice(0, imagesToShow.length);
     
     // Track scroll velocity for dynamic animation speed
     let lastScrollY = window.scrollY;
@@ -105,7 +120,9 @@ const Gallery = () => {
     velocityUpdateInterval = setInterval(updateVelocity, 16); // ~60fps
     
     // Gallery items animation with scroll-velocity-based speed
-    galleryItemsRef.current.forEach((item, index) => {
+    // Only animate visible items
+    imagesToShow.forEach((filename, index) => {
+      const item = galleryItemsRef.current[index];
       if (item) {
         // Calculate dynamic duration based on scroll velocity
         const baseDuration = 0.8;
@@ -200,7 +217,7 @@ const Gallery = () => {
         }
       });
     };
-  }, [sectionImageFilenames]);
+  }, [imagesToShow]);
 
   const openImageDetail = (imageUrl, filename) => {
     if (!imageUrl || !filename) return;
@@ -414,37 +431,56 @@ GalleryImageItem.displayName = 'GalleryImageItem';
 
           {/* Gallery Grid */}
           {activeSection ? (
-            <motion.div 
-              className="gallery-grid"
-              variants={staggerContainer}
-              key={`gallery-grid-${activeSection}`}
-            >
-              {sectionImageFilenames.length > 0 ? (
-                sectionImageFilenames.map((filename, index) => (
-                  <GalleryImageItem
-                    key={`${activeSection}-${filename}-${index}`}
-                    index={index}
-                    sectionId={activeSection}
-                    filename={filename}
-                    ref={el => {
-                      if (el) {
-                        galleryItemsRef.current[index] = el;
-                      }
-                    }}
-                    onImageClick={(imageUrl, filename) => openImageDetail(imageUrl, filename)}
-                  />
-                ))
-              ) : (
-                <div className="gallery-empty-state">
-                  <p>No images in this section yet.</p>
-                  <p className="gallery-empty-hint">
-                    Add image filenames to the `images` array in Firestore for the "{activeSection}" section.
-                    <br />
-                    Then upload the actual image files to Firebase Storage at: <code>images/gallery/{activeSection}/</code>
-                  </p>
-                </div>
+            <>
+              <motion.div 
+                className="gallery-grid"
+                variants={staggerContainer}
+                key={`gallery-grid-${activeSection}`}
+              >
+                {imagesToShow.length > 0 ? (
+                  imagesToShow.map((filename, index) => (
+                    <GalleryImageItem
+                      key={`${activeSection}-${filename}-${index}`}
+                      index={index}
+                      sectionId={activeSection}
+                      filename={filename}
+                      ref={el => {
+                        if (el) {
+                          galleryItemsRef.current[index] = el;
+                        }
+                      }}
+                      onImageClick={(imageUrl, filename) => openImageDetail(imageUrl, filename)}
+                    />
+                  ))
+                ) : (
+                  <div className="gallery-empty-state">
+                    <p>No images in this section yet.</p>
+                    <p className="gallery-empty-hint">
+                      Add image filenames to the `images` array in Firestore for the "{activeSection}" section.
+                      <br />
+                      Then upload the actual image files to Firebase Storage at: <code>images/gallery/{activeSection}/</code>
+                    </p>
+                  </div>
+                )}
+              </motion.div>
+              
+              {/* Show More Button */}
+              {hasMore && (
+                <motion.div
+                  className="gallery-show-more"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <button 
+                    className="btn btn-secondary"
+                    onClick={handleShowMore}
+                  >
+                    Show More ({sectionImageFilenames.length - visibleCount} remaining)
+                  </button>
+                </motion.div>
               )}
-            </motion.div>
+            </>
           ) : (
             <div className="gallery-empty-state">
               <p>Loading gallery sections...</p>

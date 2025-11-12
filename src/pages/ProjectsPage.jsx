@@ -22,7 +22,7 @@ const ProjectsPage = () => {
         <div className="container">
           <h1 className="page-title">Projects</h1>
           <p className="page-subtitle">
-            A collection of projects showcasing robotics, web development, and design work
+            Robotics systems, web development, and design work that showcase innovation and problem-solving
           </p>
         </div>
       </motion.div>

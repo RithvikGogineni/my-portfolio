@@ -2613,6 +2613,12 @@ a:hover {
   margin: 0;
 }
 
+.gallery-show-more {
+  text-align: center;
+  margin-top: 3rem;
+  padding: 2rem 0;
+}
+
 .lightbox {
   position: fixed;
   top: 0;

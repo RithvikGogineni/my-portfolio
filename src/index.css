@@ -92,11 +92,23 @@
 
 /* Hide default cursor on desktop */
 @media (min-width: 769px) {
+  html,
+  body,
   * {
     cursor: none !important;
   }
   
-  a, button, input, textarea, [role="button"], .project-card, .blog-card, .gallery-item {
+  a, 
+  button, 
+  input, 
+  textarea, 
+  select,
+  [role="button"], 
+  .project-card, 
+  .blog-card, 
+  .gallery-item,
+  .btn,
+  .nav-link {
     cursor: none !important;
   }
 }

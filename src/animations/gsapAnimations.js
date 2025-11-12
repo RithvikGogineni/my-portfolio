@@ -186,7 +186,8 @@ export const initCustomCursor = () => {
   
   if (!cursor || !cursorFollower) return;
 
-  // Hide default cursor
+  // Hide default cursor completely
+  document.documentElement.style.cursor = 'none';
   document.body.style.cursor = 'none';
 
   let mouseX = 0, mouseY = 0;

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { staggerContainer, fadeInUp } from '../animations/framerVariants';
@@ -12,6 +13,11 @@ const Gallery = () => {
   const sectionRef = useRef(null);
   const galleryItemsRef = useRef([]);
   const detailPanelRef = useRef(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Check if we're on the gallery page
+  const isGalleryPage = location.pathname === '/gallery';
   
   // Load gallery sections dynamically from Firestore
   const { sections: gallerySections, loading: sectionsLoading, error: sectionsError } = useGallerySections();
@@ -45,6 +51,13 @@ const Gallery = () => {
   }, [activeSection]);
   
   const handleShowMore = () => {
+    // If on home page, redirect to gallery page
+    if (!isGalleryPage) {
+      navigate('/gallery');
+      return;
+    }
+    
+    // If on gallery page, show more images
     setVisibleCount(prev => Math.min(prev + 6, sectionImageFilenames.length));
   };
   
@@ -476,7 +489,10 @@ GalleryImageItem.displayName = 'GalleryImageItem';
                     className="btn btn-secondary"
                     onClick={handleShowMore}
                   >
-                    Show More ({sectionImageFilenames.length - visibleCount} remaining)
+                    {isGalleryPage 
+                      ? `Show More (${sectionImageFilenames.length - visibleCount} remaining)`
+                      : 'View Full Gallery'
+                    }
                   </button>
                 </motion.div>
               )}

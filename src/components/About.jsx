@@ -149,18 +149,17 @@ const About = () => {
                 ref={el => textRefs.current[0] = el}
                 className="about-description"
               >
-                I'm a STEM student and robotics enthusiast from Kingston, Jamaica, with over 12 years 
-                in competitive robotics and design. I serve as Vice-Captain of FTC Jamaica's National 
-                Inspire Award–winning team and lead robotics mentorship programs across local schools.
+                I’m an engineering student and lifelong robotics enthusiast from Kingston, Jamaica, driven by a passion for innovation, mentorship, and purposeful design. With over 12 years of experience in competitive robotics, I currently serve as the Vice-Captain of Jamaica’s National Inspire Award–winning FTC team, where I lead initiatives that merge creativity, engineering, and teamwork to push the boundaries of what’s possible.
               </motion.p>
 
               <motion.p 
                 ref={el => textRefs.current[1] = el}
                 className="about-description"
               >
-                My passion lies in building machines that move with purpose — blending mechanical design, 
-                coding, and creativity to solve real-world challenges. When I'm not building robots, you'll 
-                find me mentoring students, exploring new technologies, or sharing knowledge with the STEM community.
+                Beyond competition, I’m deeply committed to empowering the next generation of innovators. I mentor students across local schools, guiding them in mechanical design, coding, and problem-solving — helping them discover the same excitement for STEM that shaped my own journey.
+
+At my core, I’m an engineer who loves to build — not just machines, but ideas, teams, and communities. Whether designing complex mechanisms, writing code, or exploring emerging technologies, I’m always seeking new ways to learn, improve, and make an impact.
+
               </motion.p>
 
               <motion.div 

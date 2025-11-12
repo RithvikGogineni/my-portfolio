@@ -1,10 +1,12 @@
+// Projects data with Firebase Storage paths
+// Images are stored in Firebase Storage at: images/projects/{filename}
 export const projects = [
   {
     id: 1,
     title: "FGC Eco-Equilibrium Robot",
     description:
       "Designed a high-precision flywheel shooter to launch biodiversity units into a 6ft goal using custom projectile calculations and advanced mechanical design.",
-    image: "/src/assets/images/fgc-robot.png",
+    image: "images/projects/fgc-robot.png", // Firebase Storage path
     technologies: ["CAD Design", "Mechanical Engineering", "Physics Calculations"],
     category: "robotics",
     liveUrl: "#",
@@ -15,7 +17,7 @@ export const projects = [
     title: "FTC Jamaica Inspire Award Robot",
     description:
       "Led mechanical and programming teams to win National Inspire and Judge's Choice (Ochoa) Awards at FTC Worlds 2025.",
-    image: "/src/assets/images/ftc-robot.png",
+    image: "images/projects/ftc-robot.png",
     technologies: ["FTC Systems", "Leadership", "Team Management"],
     category: "robotics",
     liveUrl: "#",
@@ -26,7 +28,7 @@ export const projects = [
     title: "MedRehab Professionals Website",
     description:
       "Developed responsive website for medical practice with focus on user accessibility and modern healthcare branding.",
-    image: "/src/assets/images/medrehab-website.png",
+    image: "images/projects/medrehab-website.png",
     technologies: ["Web Development", "Branding", "Accessibility"],
     category: "web",
     liveUrl: "#",
@@ -37,7 +39,7 @@ export const projects = [
     title: "Proper Constructions Ltd. Portfolio",
     description:
       "Designed and deployed digital portfolio site for construction firm showcasing projects and services with modern UX.",
-    image: "/src/assets/images/proper-constructions.png",
+    image: "images/projects/proper-constructions.png",
     technologies: ["Freelance", "Client Work", "Brand Design"],
     category: "web",
     liveUrl: "#",
@@ -48,7 +50,7 @@ export const projects = [
     title: "Gorilla Gym & Club1962 Websites",
     description:
       "Created brand-aligned online platforms integrating modern, minimal UX design for fitness and entertainment venues.",
-    image: "/src/assets/images/gorilla-gym.png",
+    image: "images/projects/gorilla-gym.png",
     technologies: ["Web Design", "Freelance", "Brand Integration"],
     category: "design",
     liveUrl: "#",
@@ -59,7 +61,7 @@ export const projects = [
     title: "Personal Portfolio Website",
     description:
       "My personal portfolio showcasing robotics, design, and leadership through motion and interaction.",
-    image: "/src/assets/images/portfolio-screenshot.png",
+    image: "images/projects/portfolio-screenshot.png",
     technologies: ["React", "Framer Motion", "GSAP", "CSS3"],
     category: "web",
     liveUrl: "#",
@@ -70,7 +72,7 @@ export const projects = [
     title: "Campion FTC Starter Guide",
     description:
       "Created a comprehensive guide for new FIRST Tech Challenge teams covering engineering design, control systems, and strategy fundamentals.",
-    image: "/src/assets/images/ftc-starter-guide.png",
+    image: "images/projects/ftc-starter-guide.png",
     technologies: ["Technical Writing", "Education", "Engineering Design"],
     category: "robotics",
     liveUrl: "#",
@@ -81,7 +83,7 @@ export const projects = [
     title: "Autonomous Object Tracking System",
     description:
       "Developed an AI-powered object tracking prototype using OpenCV and TensorFlow, capable of following color and shape targets for robotics applications.",
-    image: "/src/assets/images/object-tracking.png",
+    image: "images/projects/object-tracking.png",
     technologies: ["Python", "Computer Vision", "Machine Learning"],
     category: "robotics",
     liveUrl: "#",
@@ -92,7 +94,7 @@ export const projects = [
     title: "Jarvis AI Assistant",
     description:
       "Developing a cross-platform AI assistant with natural language processing, speech recognition, face detection, and reinforcement learning capabilities.",
-    image: "/src/assets/images/jarvis-ai.png",
+    image: "images/projects/jarvis-ai.png",
     technologies: ["Python", "Objective-C", "Machine Learning", "Speech Recognition"],
     category: "robotics",
     liveUrl: "#",

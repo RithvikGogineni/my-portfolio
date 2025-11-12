@@ -5,6 +5,36 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { staggerContainer, fadeInUp, cardVariants } from '../animations/framerVariants';
 import { projects as projectsData, categories as categoryDefs } from '../data/projects';
+import { useFirebaseImage } from '../hooks/useFirebaseImage';
+
+// Component to handle Firebase image loading
+const ProjectImage = ({ project }) => {
+  const { imageUrl, loading } = useFirebaseImage(
+    project.image,
+    project.image?.startsWith('/') ? project.image : null
+  );
+
+  if (loading) {
+    return (
+      <div className="project-image-loading">
+        <div className="loading-spinner"></div>
+      </div>
+    );
+  }
+
+  return (
+    <img 
+      src={imageUrl || '/placeholder-image.png'} 
+      alt={project.title}
+      className="project-image"
+      loading="lazy"
+      decoding="async"
+      onError={(e) => {
+        e.target.src = '/placeholder-image.png';
+      }}
+    />
+  );
+};
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -178,13 +208,7 @@ const Projects = () => {
               >
                 <Link to={`/projects/${project.id}`} className="project-card-link">
                   <div className="project-image-container">
-                    <img 
-                      src={project.image} 
-                      alt={project.title}
-                      className="project-image"
-                      loading="lazy"
-                      decoding="async"
-                    />
+                    <ProjectImage project={project} />
                     <div className="project-overlay">
                       <div className="project-links">
                         <span className="project-link">

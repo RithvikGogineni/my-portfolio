@@ -1765,12 +1765,12 @@ a:hover {
 
 .timeline-item.left .timeline-content::before {
   right: -20px;
-  border-left-color: rgba(26, 26, 46, 0.8);
+  border-left-color: var(--color-bg-secondary);
 }
 
 .timeline-item.right .timeline-content::before {
   left: -20px;
-  border-right-color: rgba(26, 26, 46, 0.8);
+  border-right-color: var(--color-bg-secondary);
 }
 
 .timeline-header {

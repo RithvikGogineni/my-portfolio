@@ -91,22 +91,59 @@ const Gallery = () => {
     // Reset refs array
     galleryItemsRef.current = galleryItemsRef.current.slice(0, sectionImageFilenames.length);
     
-    // Gallery items animation
+    // Track scroll velocity for dynamic animation speed
+    let lastScrollY = window.scrollY;
+    let scrollVelocity = 0;
+    let velocityUpdateInterval = null;
+    
+    const updateVelocity = () => {
+      const currentScrollY = window.scrollY;
+      scrollVelocity = Math.abs(currentScrollY - lastScrollY);
+      lastScrollY = currentScrollY;
+    };
+    
+    velocityUpdateInterval = setInterval(updateVelocity, 16); // ~60fps
+    
+    // Gallery items animation with scroll-velocity-based speed
     galleryItemsRef.current.forEach((item, index) => {
       if (item) {
+        // Calculate dynamic duration based on scroll velocity
+        const baseDuration = 0.8;
+        const minDuration = 0.3;
+        const maxDuration = 1.5;
+        
+        // Higher velocity = faster animation (shorter duration)
+        const velocityFactor = Math.min(scrollVelocity / 10, 1); // Normalize to 0-1
+        const dynamicDuration = baseDuration * (1 - velocityFactor * 0.5);
+        const clampedDuration = Math.max(minDuration, Math.min(maxDuration, dynamicDuration));
+        
         gsap.fromTo(item,
           { scale: 0, opacity: 0, rotation: -10 },
           {
             scale: 1,
             opacity: 1,
             rotation: 0,
-            duration: 0.8,
+            duration: clampedDuration,
             ease: "back.out(1.7)",
             delay: index * 0.1,
             scrollTrigger: {
               trigger: item,
               start: "top 85%",
-              toggleActions: "play none none reverse"
+              toggleActions: "play none none reverse",
+              onEnter: () => {
+                // Recalculate duration based on current scroll velocity
+                const currentVelocity = scrollVelocity;
+                const vFactor = Math.min(currentVelocity / 10, 1);
+                const dynDuration = baseDuration * (1 - vFactor * 0.5);
+                const clamped = Math.max(minDuration, Math.min(maxDuration, dynDuration));
+                gsap.to(item, {
+                  scale: 1,
+                  opacity: 1,
+                  rotation: 0,
+                  duration: clamped,
+                  ease: "back.out(1.7)"
+                });
+              }
             }
           }
         );
@@ -146,6 +183,23 @@ const Gallery = () => {
         }
       }
     });
+    
+    // Cleanup
+    return () => {
+      if (velocityUpdateInterval) {
+        clearInterval(velocityUpdateInterval);
+      }
+      // Kill all ScrollTriggers for gallery items
+      galleryItemsRef.current.forEach((item) => {
+        if (item) {
+          ScrollTrigger.getAll().forEach(trigger => {
+            if (trigger.vars && trigger.vars.trigger === item) {
+              trigger.kill();
+            }
+          });
+        }
+      });
+    };
   }, [sectionImageFilenames]);
 
   const openImageDetail = (imageUrl, filename) => {
@@ -401,13 +455,22 @@ GalleryImageItem.displayName = 'GalleryImageItem';
           {/* Image Detail Panel */}
           {selectedImage && (
             <>
-              <div className="gallery-detail-overlay" onClick={closeImageDetail}></div>
+              <div 
+                className="gallery-detail-overlay" 
+                onClick={(e) => {
+                  // Only close if clicking the overlay itself, not children
+                  if (e.target === e.currentTarget) {
+                    closeImageDetail();
+                  }
+                }}
+              ></div>
               <motion.div
                 ref={detailPanelRef}
                 className="gallery-detail-panel"
                 initial={{ x: '100%' }}
                 animate={{ x: 0 }}
                 exit={{ x: '100%' }}
+                onClick={(e) => e.stopPropagation()}
               >
                 <button className="gallery-detail-close" onClick={closeImageDetail}>×</button>
                 

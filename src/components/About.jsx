@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { staggerContainer, fadeInUp, fadeInLeft, fadeInRight, scaleIn } from '../animations/framerVariants';
+import { useFirebaseImage } from '../hooks/useFirebaseImage';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,6 +12,13 @@ const About = () => {
   const profileImageRef = useRef(null);
   const textRefs = useRef([]);
   const techStackRefs = useRef([]);
+  
+  // Load profile image from Firebase Storage
+  // Note: If your profile-photo.jpg is in images/projects/, use "images/projects/profile-photo.jpg"
+  const { imageUrl: profileImageUrl, loading: profileImageLoading } = useFirebaseImage(
+    "images/profile-photo.jpg", // Firebase Storage path
+    "/src/assets/images/profile-photo.jpg" // Fallback to local path
+  );
 
   useEffect(() => {
     // Profile image animation
@@ -127,14 +135,24 @@ const About = () => {
               variants={fadeInLeft}
             >
               <div className="profile-image-wrapper">
-                <motion.img
-                  ref={profileImageRef}
-                  src="/src/assets/images/profile-photo.jpg"
-                  alt="Rithvik Gogineni - Robotics Innovator and STEM Leader"
-                  className="profile-image"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.3 }}
-                />
+                {profileImageLoading ? (
+                  <div className="profile-image-loading">
+                    <div className="loading-spinner"></div>
+                  </div>
+                ) : (
+                  <motion.img
+                    ref={profileImageRef}
+                    src={profileImageUrl || "/src/assets/images/profile-photo.jpg"}
+                    alt="Rithvik Gogineni - Robotics Innovator and STEM Leader"
+                    className="profile-image"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.3 }}
+                    onError={(e) => {
+                      // Fallback if Firebase image fails to load
+                      e.target.src = "/src/assets/images/profile-photo.jpg";
+                    }}
+                  />
+                )}
                 <div className="profile-image-bg"></div>
                 <div className="profile-image-glow"></div>
               </div>

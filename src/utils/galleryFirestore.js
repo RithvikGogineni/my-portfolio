@@ -17,6 +17,12 @@ import { db } from '../config/firebase';
  */
 export const getGallerySections = async () => {
   try {
+    // Check if Firebase is initialized
+    if (!db) {
+      console.warn('Firestore not initialized');
+      return [];
+    }
+    
     const sectionsRef = collection(db, 'gallerySections');
     const q = query(sectionsRef, orderBy('order', 'asc'));
     const querySnapshot = await getDocs(q);
@@ -32,6 +38,7 @@ export const getGallerySections = async () => {
     return sections;
   } catch (error) {
     console.error('Error fetching gallery sections:', error);
+    // Return empty array instead of throwing
     return [];
   }
 };

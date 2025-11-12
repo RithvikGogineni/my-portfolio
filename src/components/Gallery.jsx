@@ -43,15 +43,25 @@ const Gallery = () => {
       try {
         // Try to load from JSON file first (for blender section)
         if (activeSection === 'blender') {
-          const metadata = await import('../data/blenderimages.json');
-          const metadataMap = {};
-          metadata.default.forEach(item => {
-            metadataMap[item.fileName] = {
-              title: item.title,
-              description: item.description
-            };
-          });
-          setImageMetadata(metadataMap);
+          try {
+            const metadata = await import('../data/blenderimages.json');
+            const metadataMap = {};
+            const data = metadata.default || metadata;
+            if (Array.isArray(data)) {
+              data.forEach(item => {
+                if (item && item.fileName) {
+                  metadataMap[item.fileName] = {
+                    title: item.title || '',
+                    description: item.description || ''
+                  };
+                }
+              });
+            }
+            setImageMetadata(metadataMap);
+          } catch (jsonError) {
+            console.warn('Could not load blenderimages.json, using fallback:', jsonError);
+            setImageMetadata({});
+          }
         } else {
           // For other sections, you can add metadata to Firestore or JSON files
           setImageMetadata({});
@@ -68,6 +78,9 @@ const Gallery = () => {
   }, [activeSection]);
 
   useEffect(() => {
+    // Reset refs array
+    galleryItemsRef.current = galleryItemsRef.current.slice(0, sectionImageFilenames.length);
+    
     // Gallery items animation
     galleryItemsRef.current.forEach((item, index) => {
       if (item) {
@@ -92,43 +105,42 @@ const Gallery = () => {
         const image = item.querySelector('.gallery-image');
         const overlay = item.querySelector('.gallery-overlay');
 
-        item.addEventListener('mouseenter', () => {
-          gsap.to(image, {
-            scale: 1.1,
-            duration: 0.3,
-            ease: [0.25, 0.46, 0.45, 0.94]
+        if (image && overlay) {
+          item.addEventListener('mouseenter', () => {
+            gsap.to(image, {
+              scale: 1.1,
+              duration: 0.3,
+              ease: [0.25, 0.46, 0.45, 0.94]
+            });
+            
+            gsap.to(overlay, {
+              opacity: 1,
+              duration: 0.3,
+              ease: [0.25, 0.46, 0.45, 0.94]
+            });
           });
-          
-          gsap.to(overlay, {
-            opacity: 1,
-            duration: 0.3,
-            ease: [0.25, 0.46, 0.45, 0.94]
-          });
-        });
 
-        item.addEventListener('mouseleave', () => {
-          gsap.to(image, {
-            scale: 1,
-            duration: 0.3,
-            ease: [0.25, 0.46, 0.45, 0.94]
+          item.addEventListener('mouseleave', () => {
+            gsap.to(image, {
+              scale: 1,
+              duration: 0.3,
+              ease: [0.25, 0.46, 0.45, 0.94]
+            });
+            
+            gsap.to(overlay, {
+              opacity: 0,
+              duration: 0.3,
+              ease: [0.25, 0.46, 0.45, 0.94]
+            });
           });
-          
-          gsap.to(overlay, {
-            opacity: 0,
-            duration: 0.3,
-            ease: [0.25, 0.46, 0.45, 0.94]
-          });
-        });
-
-        // Click to open lightbox
-        item.addEventListener('click', () => {
-          openLightbox(item.dataset.image, item.dataset.title);
-        });
+        }
       }
     });
-  }, []);
+  }, [sectionImageFilenames]);
 
   const openImageDetail = (imageUrl, filename) => {
+    if (!imageUrl || !filename) return;
+    
     const metadata = imageMetadata[filename] || {};
     setSelectedImage({
       url: imageUrl,
@@ -198,7 +210,7 @@ const GalleryImageItem = React.forwardRef(({ sectionId, filename, index, onImage
       className="gallery-item"
       variants={fadeInUp}
       data-image={imageUrl}
-      data-title={title}
+      data-filename={filename}
       onClick={handleClick}
     >
       <div className="gallery-image-container">

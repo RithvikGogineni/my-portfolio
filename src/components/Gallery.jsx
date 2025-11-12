@@ -222,7 +222,7 @@ const GalleryImageItem = React.forwardRef(({ sectionId, filename, index, onImage
           <>
             <img 
               src={imageUrl || '/placeholder-image.png'} 
-              alt={title}
+              alt={filename || 'Gallery image'}
               className="gallery-image"
               loading="lazy"
               decoding="async"
@@ -277,9 +277,9 @@ GalleryImageItem.displayName = 'GalleryImageItem';
               className="gallery-section-tabs"
               variants={fadeInUp}
             >
-              {gallerySections.map((section) => (
+              {gallerySections.map((section, index) => (
                 <button
-                  key={section.id}
+                  key={`${section.id}-${index}`}
                   className={`gallery-tab ${activeSection === section.id ? 'active' : ''}`}
                   onClick={() => setActiveSection(section.id)}
                 >

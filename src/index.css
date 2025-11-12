@@ -2463,6 +2463,83 @@ a:hover {
   margin: 0 auto;
 }
 
+.gallery-section-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin: 2rem 0 3rem;
+}
+
+.gallery-tab {
+  padding: 0.75rem 1.5rem;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 999px;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.gallery-tab:hover {
+  background: var(--color-surface);
+  border-color: var(--color-border-strong);
+  color: var(--color-text-light);
+  transform: translateY(-2px);
+}
+
+.gallery-tab.active {
+  background: var(--color-accent-primary);
+  border-color: var(--color-accent-primary);
+  color: var(--color-text-light);
+  box-shadow: 0 4px 15px rgba(255, 59, 48, 0.3);
+}
+
+.gallery-section-info {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.gallery-section-title {
+  font-size: var(--font-size-2xl);
+  color: var(--color-text-light);
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.gallery-section-description {
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.gallery-empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--color-text-muted);
+}
+
+.gallery-empty-hint {
+  font-size: var(--font-size-sm);
+  margin-top: 0.5rem;
+  opacity: 0.7;
+}
+
+.gallery-image-loading {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-secondary);
+  min-height: 300px;
+}
+
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));

@@ -1,8 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { staggerContainer, fadeInUp } from '../animations/framerVariants';
+import { gallerySections } from '../data/gallery';
+import { useFirebaseImage } from '../hooks/useFirebaseImage';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -10,6 +12,28 @@ const Gallery = () => {
   const sectionRef = useRef(null);
   const galleryItemsRef = useRef([]);
   const lightboxRef = useRef(null);
+  const [activeSection, setActiveSection] = useState('blender');
+  
+  // Get images for active section from gallery data
+  const activeSectionData = gallerySections.find(s => s.id === activeSection);
+  
+  // For now, we'll create a simple system where you can add image filenames
+  // In the future, you can load this from Firestore or a config file
+  const getSectionImageFilenames = (sectionId) => {
+    // This is a placeholder - you'll need to add your actual image filenames
+    // For blender section, if you uploaded images, add their filenames here
+    const imageMap = {
+      blender: [], // Add filenames like: ['image1.png', 'image2.jpg']
+      robotics: [],
+      competition: [],
+      engineering: [],
+      leadership: [],
+      education: []
+    };
+    return imageMap[sectionId] || [];
+  };
+
+  const sectionImageFilenames = getSectionImageFilenames(activeSection);
 
   useEffect(() => {
     // Gallery items animation
@@ -101,44 +125,59 @@ const Gallery = () => {
     }
   };
 
-  const galleryItems = [
-    {
-      id: 1,
-      title: "FTC Team Build Session",
-      image: "/src/assets/images/gallery/ftc-build-session.jpg",
-      category: "Robotics"
-    },
-    {
-      id: 2,
-      title: "Robot Competition Action",
-      image: "/src/assets/images/gallery/robot-competition.jpg",
-      category: "Competition"
-    },
-    {
-      id: 3,
-      title: "CAD Design Work",
-      image: "/src/assets/images/gallery/cad-design.jpg",
-      category: "Engineering"
-    },
-    {
-      id: 4,
-      title: "Team Mentorship",
-      image: "/src/assets/images/gallery/mentorship.jpg",
-      category: "Leadership"
-    },
-    {
-      id: 5,
-      title: "Award Ceremony",
-      image: "/src/assets/images/gallery/award-ceremony.jpg",
-      category: "Achievement"
-    },
-    {
-      id: 6,
-      title: "Workshop Teaching",
-      image: "/src/assets/images/gallery/workshop-teaching.jpg",
-      category: "Education"
+// Gallery Image Item Component
+const GalleryImageItem = React.forwardRef(({ sectionId, filename, index, onImageClick }, ref) => {
+  const imagePath = `images/gallery/${sectionId}/${filename}`;
+  const { imageUrl, loading } = useFirebaseImage(imagePath);
+  const title = filename.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
+
+  const handleClick = () => {
+    if (imageUrl) {
+      onImageClick(imageUrl, title);
     }
-  ];
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      className="gallery-item"
+      variants={fadeInUp}
+      data-image={imageUrl}
+      data-title={title}
+      onClick={handleClick}
+    >
+      <div className="gallery-image-container">
+        {loading ? (
+          <div className="gallery-image-loading">
+            <div className="loading-spinner"></div>
+          </div>
+        ) : (
+          <>
+            <img 
+              src={imageUrl || '/placeholder-image.png'} 
+              alt={title}
+              className="gallery-image"
+              loading="lazy"
+              decoding="async"
+              onError={(e) => {
+                e.target.src = '/placeholder-image.png';
+              }}
+            />
+            <div className="gallery-overlay">
+              <div className="gallery-content-overlay">
+                <h3 className="gallery-item-title">{title}</h3>
+                <p className="gallery-item-category">{gallerySections.find(s => s.id === sectionId)?.title}</p>
+                <div className="gallery-zoom-icon">🔍</div>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+    </motion.div>
+  );
+});
+
+GalleryImageItem.displayName = 'GalleryImageItem';
 
   return (
     <section ref={sectionRef} className="gallery-section section" id="gallery">
@@ -158,38 +197,59 @@ const Gallery = () => {
             </p>
           </motion.div>
 
+          {/* Section Tabs */}
+          <motion.div 
+            className="gallery-section-tabs"
+            variants={fadeInUp}
+          >
+            {gallerySections.map((section) => (
+              <button
+                key={section.id}
+                className={`gallery-tab ${activeSection === section.id ? 'active' : ''}`}
+                onClick={() => setActiveSection(section.id)}
+              >
+                {section.title}
+              </button>
+            ))}
+          </motion.div>
+
+          {/* Active Section Info */}
+          {activeSectionData && (
+            <motion.div 
+              className="gallery-section-info"
+              variants={fadeInUp}
+              key={activeSection}
+            >
+              <h3 className="gallery-section-title">{activeSectionData.title}</h3>
+              <p className="gallery-section-description">{activeSectionData.description}</p>
+            </motion.div>
+          )}
+
           {/* Gallery Grid */}
           <motion.div 
             className="gallery-grid"
             variants={staggerContainer}
+            key={activeSection}
           >
-            {galleryItems.map((item, index) => (
-              <motion.div
-                key={item.id}
-                ref={el => galleryItemsRef.current[index] = el}
-                className="gallery-item"
-                variants={fadeInUp}
-                data-image={item.image}
-                data-title={item.title}
-              >
-                <div className="gallery-image-container">
-                  <img 
-                    src={item.image} 
-                    alt={item.title}
-                    className="gallery-image"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                  <div className="gallery-overlay">
-                    <div className="gallery-content-overlay">
-                      <h3 className="gallery-item-title">{item.title}</h3>
-                      <p className="gallery-item-category">{item.category}</p>
-                      <div className="gallery-zoom-icon">🔍</div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+            {sectionImageFilenames.length > 0 ? (
+              sectionImageFilenames.map((filename, index) => (
+                <GalleryImageItem
+                  key={`${activeSection}-${filename}-${index}`}
+                  index={index}
+                  sectionId={activeSection}
+                  filename={filename}
+                  ref={el => galleryItemsRef.current[index] = el}
+                  onImageClick={(imageUrl, title) => openLightbox(imageUrl, title)}
+                />
+              ))
+            ) : (
+              <div className="gallery-empty-state">
+                <p>No images in this section yet.</p>
+                <p className="gallery-empty-hint">
+                  Add image filenames to the gallery data to display them here.
+                </p>
+              </div>
+            )}
           </motion.div>
 
           {/* Lightbox */}

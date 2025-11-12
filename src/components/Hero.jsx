@@ -41,9 +41,7 @@ const Hero = () => {
             animate={fadeUp.visible}
             transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
           >
-            I design, build, and mentor robotics systems that move with purpose. My work blends
-            mechanical design, control systems, and storytelling to inspire innovation across Jamaica
-            and the global FIRST community.
+            I create purposeful robotics systems and mentor young engineers to think boldly, build creatively, and drive technological innovation across Jamaica’s growing STEM landscape.
           </motion.p>
 
           <motion.div

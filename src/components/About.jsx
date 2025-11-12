@@ -14,9 +14,9 @@ const About = () => {
   const techStackRefs = useRef([]);
   
   // Load profile image from Firebase Storage
-  // Note: If your profile-photo.jpg is in images/projects/, use "images/projects/profile-photo.jpg"
+  // Note: profile-photo.jpg is currently in images/projects/ folder
   const { imageUrl: profileImageUrl, loading: profileImageLoading } = useFirebaseImage(
-    "images/profile-photo.jpg", // Firebase Storage path
+    "images/projects/profile-photo.jpg", // Firebase Storage path
     "/src/assets/images/profile-photo.jpg" // Fallback to local path
   );
 

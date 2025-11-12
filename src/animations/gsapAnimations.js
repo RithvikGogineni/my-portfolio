@@ -178,27 +178,105 @@ export const createHoverAnimation = (element, animation) => {
   return hoverTl;
 };
 
-// Custom cursor animation
+// Custom cursor animation with trail effect
 export const initCustomCursor = () => {
   const cursor = document.querySelector('.custom-cursor');
   const cursorFollower = document.querySelector('.cursor-follower');
+  const cursorTrail = document.querySelector('.cursor-trail');
   
   if (!cursor || !cursorFollower) return;
 
+  // Hide default cursor
+  document.body.style.cursor = 'none';
+
   let mouseX = 0, mouseY = 0;
   let cursorX = 0, cursorY = 0;
+  let followerX = 0, followerY = 0;
+  const trail = [];
+  const trailLength = 8;
+
+  // Initialize trail elements
+  if (cursorTrail) {
+    for (let i = 0; i < trailLength; i++) {
+      const trailDot = document.createElement('div');
+      trailDot.className = 'cursor-trail-dot';
+      cursorTrail.appendChild(trailDot);
+      trail.push({ element: trailDot, x: 0, y: 0 });
+    }
+  }
 
   document.addEventListener('mousemove', (e) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
   });
 
-  gsap.ticker.add(() => {
-    cursorX += (mouseX - cursorX) * 0.1;
-    cursorY += (mouseY - cursorY) * 0.1;
+  // Check for interactive elements
+  const interactiveElements = document.querySelectorAll('a, button, input, textarea, [role="button"], .project-card, .blog-card, .gallery-item');
+  
+  interactiveElements.forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor?.classList.add('cursor-hover');
+      cursorFollower?.classList.add('cursor-hover');
+    });
     
-    gsap.set(cursor, { x: cursorX, y: cursorY });
-    gsap.set(cursorFollower, { x: cursorX, y: cursorY });
+    el.addEventListener('mouseleave', () => {
+      cursor?.classList.remove('cursor-hover');
+      cursorFollower?.classList.remove('cursor-hover');
+    });
+  });
+
+  // Click effect
+  document.addEventListener('mousedown', () => {
+    cursor?.classList.add('cursor-click');
+    cursorFollower?.classList.add('cursor-click');
+  });
+
+  document.addEventListener('mouseup', () => {
+    cursor?.classList.remove('cursor-click');
+    cursorFollower?.classList.remove('cursor-click');
+  });
+
+  // Smooth animation loop
+  gsap.ticker.add(() => {
+    // Main cursor - instant
+    cursorX = mouseX;
+    cursorY = mouseY;
+    gsap.set(cursor, { 
+      x: cursorX - 10, 
+      y: cursorY - 10 
+    });
+
+    // Follower - smooth lag
+    followerX += (mouseX - followerX) * 0.15;
+    followerY += (mouseY - followerY) * 0.15;
+    gsap.set(cursorFollower, { 
+      x: followerX - 20, 
+      y: followerY - 20 
+    });
+
+    // Trail - cascading effect
+    if (trail.length > 0) {
+      let prevX = mouseX;
+      let prevY = mouseY;
+      
+      trail.forEach((dot, index) => {
+        const delay = (index + 1) * 0.05;
+        const speed = 0.2 - (index * 0.02);
+        
+        dot.x += (prevX - dot.x) * speed;
+        dot.y += (prevY - dot.y) * speed;
+        
+        gsap.set(dot.element, {
+          x: dot.x - 3,
+          y: dot.y - 3,
+          opacity: 1 - (index / trailLength) * 0.8,
+          scale: 1 - (index / trailLength) * 0.5
+        });
+        
+        prevX = dot.x;
+        prevY = dot.y;
+      });
+    }
   });
 };
 

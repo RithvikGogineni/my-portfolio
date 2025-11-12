@@ -36,17 +36,17 @@ export const getGallerySections = async () => {
 
 /**
  * Get images for a specific gallery section
- * @param {string} sectionId - Section ID (folder name)
+ * @param {string} sectionId - Section ID (folder name, also document ID)
  * @returns {Promise<Array>} Array of image filenames
  */
 export const getSectionImages = async (sectionId) => {
   try {
-    const sectionRef = collection(db, 'gallerySections');
-    const q = query(sectionRef, where('id', '==', sectionId));
-    const querySnapshot = await getDocs(q);
+    const { getDoc, doc } = await import('firebase/firestore');
+    const sectionRef = doc(db, 'gallerySections', sectionId);
+    const sectionSnap = await getDoc(sectionRef);
     
-    if (!querySnapshot.empty) {
-      const sectionData = querySnapshot.docs[0].data();
+    if (sectionSnap.exists()) {
+      const sectionData = sectionSnap.data();
       return sectionData.images || [];
     }
     

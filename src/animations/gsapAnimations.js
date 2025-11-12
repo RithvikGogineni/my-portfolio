@@ -181,15 +181,12 @@ export const createHoverAnimation = (element, animation) => {
 // Custom cursor animation with magnetic effects
 export const initCustomCursor = () => {
   const cursor = document.querySelector('.custom-cursor');
-  const cursorFollower = document.querySelector('.cursor-follower');
   
-  if (!cursor || !cursorFollower) return;
+  if (!cursor) return;
 
   let mouseX = 0, mouseY = 0;
   let cursorX = 0, cursorY = 0;
-  let followerX = 0, followerY = 0;
   let isHovering = false;
-  let isClicking = false;
 
   // Hide default cursor on desktop
   if (window.innerWidth > 768) {
@@ -206,15 +203,11 @@ export const initCustomCursor = () => {
 
   // Click handlers
   document.addEventListener('mousedown', () => {
-    isClicking = true;
     gsap.to(cursor, { scale: 0.8, duration: 0.1 });
-    gsap.to(cursorFollower, { scale: 1.2, duration: 0.1 });
   });
 
   document.addEventListener('mouseup', () => {
-    isClicking = false;
     gsap.to(cursor, { scale: 1, duration: 0.2 });
-    gsap.to(cursorFollower, { scale: 1, duration: 0.2 });
   });
 
   // Hover detection for interactive elements
@@ -226,13 +219,11 @@ export const initCustomCursor = () => {
     el.addEventListener('mouseenter', () => {
       isHovering = true;
       gsap.to(cursor, { scale: 1.5, duration: 0.3, ease: 'back.out(1.7)' });
-      gsap.to(cursorFollower, { scale: 1.8, opacity: 0.6, duration: 0.3 });
     });
 
     el.addEventListener('mouseleave', () => {
       isHovering = false;
       gsap.to(cursor, { scale: 1, duration: 0.3, ease: 'back.out(1.7)' });
-      gsap.to(cursorFollower, { scale: 1, opacity: 0.3, duration: 0.3 });
     });
   });
 
@@ -268,23 +259,12 @@ export const initCustomCursor = () => {
 
   // Smooth cursor animation
   gsap.ticker.add(() => {
-    // Main cursor - fast and precise
     cursorX += (mouseX - cursorX) * 0.2;
     cursorY += (mouseY - cursorY) * 0.2;
-    
-    // Follower - slower and smoother
-    followerX += (mouseX - followerX) * 0.08;
-    followerY += (mouseY - followerY) * 0.08;
     
     gsap.set(cursor, { 
       x: cursorX, 
       y: cursorY,
-      transform: 'translate(-50%, -50%)'
-    });
-    
-    gsap.set(cursorFollower, { 
-      x: followerX, 
-      y: followerY,
       transform: 'translate(-50%, -50%)'
     });
   });

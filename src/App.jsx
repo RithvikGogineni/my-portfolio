@@ -80,7 +80,6 @@ function App() {
 
           {/* Custom Cursor */}
           <div className="custom-cursor"></div>
-          <div className="cursor-follower"></div>
 
           {/* Scroll Progress Bar */}
           <div className="scroll-progress"></div>

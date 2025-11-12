@@ -2658,6 +2658,7 @@ a:hover {
   background: rgba(0, 0, 0, 0.85);
   z-index: 9998;
   backdrop-filter: blur(4px);
+  cursor: pointer;
 }
 
 .gallery-detail-panel {

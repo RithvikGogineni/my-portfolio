@@ -358,8 +358,7 @@ GalleryImageItem.displayName = 'GalleryImageItem';
           className="gallery-content"
           variants={staggerContainer}
           initial="initial"
-          whileInView="animate"
-          viewport={{ once: true }}
+          animate="animate"
         >
           {/* Section Header */}
           <motion.div className="section-header" variants={fadeInUp}>

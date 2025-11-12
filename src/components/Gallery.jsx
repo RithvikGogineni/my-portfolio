@@ -34,6 +34,16 @@ const Gallery = () => {
   // Get images for active section
   const sectionImageFilenames = activeSectionData?.images || [];
   
+  // Debug logging
+  useEffect(() => {
+    if (activeSection) {
+      console.log('Active section:', activeSection);
+      console.log('Active section data:', activeSectionData);
+      console.log('Image filenames:', sectionImageFilenames);
+      console.log('Number of images:', sectionImageFilenames.length);
+    }
+  }, [activeSection, activeSectionData, sectionImageFilenames]);
+  
   // Load image metadata (title and description)
   const [imageMetadata, setImageMetadata] = useState({});
   
@@ -308,31 +318,43 @@ GalleryImageItem.displayName = 'GalleryImageItem';
           )}
 
           {/* Gallery Grid */}
-          <motion.div 
-            className="gallery-grid"
-            variants={staggerContainer}
-            key={activeSection}
-          >
-            {sectionImageFilenames.length > 0 ? (
-              sectionImageFilenames.map((filename, index) => (
-                <GalleryImageItem
-                  key={`${activeSection}-${filename}-${index}`}
-                  index={index}
-                  sectionId={activeSection}
-                  filename={filename}
-                  ref={el => galleryItemsRef.current[index] = el}
-                  onImageClick={(imageUrl, filename) => openImageDetail(imageUrl, filename)}
-                />
-              ))
-            ) : (
-              <div className="gallery-empty-state">
-                <p>No images in this section yet.</p>
-                <p className="gallery-empty-hint">
-                  Upload images to Firebase Storage in the {activeSection} folder and add them to Firestore.
-                </p>
-              </div>
-            )}
-          </motion.div>
+          {activeSection ? (
+            <motion.div 
+              className="gallery-grid"
+              variants={staggerContainer}
+              key={activeSection}
+            >
+              {sectionImageFilenames.length > 0 ? (
+                sectionImageFilenames.map((filename, index) => (
+                  <GalleryImageItem
+                    key={`${activeSection}-${filename}-${index}`}
+                    index={index}
+                    sectionId={activeSection}
+                    filename={filename}
+                    ref={el => {
+                      if (el) {
+                        galleryItemsRef.current[index] = el;
+                      }
+                    }}
+                    onImageClick={(imageUrl, filename) => openImageDetail(imageUrl, filename)}
+                  />
+                ))
+              ) : (
+                <div className="gallery-empty-state">
+                  <p>No images in this section yet.</p>
+                  <p className="gallery-empty-hint">
+                    Add image filenames to the `images` array in Firestore for the "{activeSection}" section.
+                    <br />
+                    Then upload the actual image files to Firebase Storage at: <code>images/gallery/{activeSection}/</code>
+                  </p>
+                </div>
+              )}
+            </motion.div>
+          ) : (
+            <div className="gallery-empty-state">
+              <p>Loading gallery sections...</p>
+            </div>
+          )}
 
           {/* Image Detail Panel */}
           {selectedImage && (

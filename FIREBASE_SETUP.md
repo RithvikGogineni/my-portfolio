@@ -27,7 +27,7 @@ Go to **Storage > Rules** and update to:
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
-    // Allow read access to all images
+    // Allow read access to all images 
     match /images/{allPaths=**} {
       allow read: if true;
       allow write: if request.auth != null; // Only authenticated users can write

@@ -308,7 +308,7 @@ GalleryImageItem.displayName = 'GalleryImageItem';
             <motion.div 
               className="gallery-section-info"
               variants={fadeInUp}
-              key={activeSection}
+              key={`section-info-${activeSection}`}
             >
               <h3 className="gallery-section-title">{activeSectionData.title || activeSectionData.id}</h3>
               {activeSectionData.description && (
@@ -322,7 +322,7 @@ GalleryImageItem.displayName = 'GalleryImageItem';
             <motion.div 
               className="gallery-grid"
               variants={staggerContainer}
-              key={activeSection}
+              key={`gallery-grid-${activeSection}`}
             >
               {sectionImageFilenames.length > 0 ? (
                 sectionImageFilenames.map((filename, index) => (

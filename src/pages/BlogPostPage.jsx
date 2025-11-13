@@ -1,6 +1,8 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { fadeInUp } from '../animations/framerVariants';
 import { useBlogPost } from '../hooks/useBlogPost';
 
@@ -62,10 +64,32 @@ const BlogPostPage = () => {
             </div>
           </header>
 
-          <div 
-            className="blog-post-content"
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
+          <div className="blog-post-content">
+            <ReactMarkdown 
+              remarkPlugins={[remarkGfm]}
+              components={{
+                // Custom styling for markdown elements
+                h2: ({node, ...props}) => <h2 className="blog-markdown-h2" {...props} />,
+                h3: ({node, ...props}) => <h3 className="blog-markdown-h3" {...props} />,
+                p: ({node, ...props}) => <p className="blog-markdown-p" {...props} />,
+                ul: ({node, ...props}) => <ul className="blog-markdown-ul" {...props} />,
+                ol: ({node, ...props}) => <ol className="blog-markdown-ol" {...props} />,
+                li: ({node, ...props}) => <li className="blog-markdown-li" {...props} />,
+                code: ({node, inline, ...props}) => 
+                  inline ? (
+                    <code className="blog-markdown-code-inline" {...props} />
+                  ) : (
+                    <code className="blog-markdown-code-block" {...props} />
+                  ),
+                pre: ({node, ...props}) => <pre className="blog-markdown-pre" {...props} />,
+                blockquote: ({node, ...props}) => <blockquote className="blog-markdown-blockquote" {...props} />,
+                a: ({node, ...props}) => <a className="blog-markdown-link" target="_blank" rel="noopener noreferrer" {...props} />,
+                img: ({node, ...props}) => <img className="blog-markdown-img" {...props} />,
+              }}
+            >
+              {post.content}
+            </ReactMarkdown>
+          </div>
         </div>
       </motion.article>
     </main>

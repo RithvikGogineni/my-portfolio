@@ -61,9 +61,19 @@ export const getBlogPost = async (postId) => {
 };
 
 /**
+ * Clear blog posts cache (useful for forcing refresh)
+ */
+export const clearBlogPostsCache = () => {
+  localStorage.removeItem('firebase_blog_posts');
+};
+
+/**
  * Get blog posts with caching
  */
-export const getCachedBlogPosts = async () => {
+export const getCachedBlogPosts = async (forceRefresh = false) => {
+  if (forceRefresh) {
+    clearBlogPostsCache();
+  }
   const cacheKey = 'firebase_blog_posts';
   
   // Check cache first
@@ -71,8 +81,8 @@ export const getCachedBlogPosts = async () => {
   if (cached) {
     try {
       const { posts, timestamp } = JSON.parse(cached);
-      // Cache valid for 1 hour
-      if (Date.now() - timestamp < 60 * 60 * 1000) {
+      // Cache valid for 5 minutes (reduced from 1 hour for faster updates)
+      if (Date.now() - timestamp < 5 * 60 * 1000) {
         return posts;
       }
     } catch (e) {

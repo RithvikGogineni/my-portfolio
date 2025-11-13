@@ -2945,6 +2945,15 @@ a:hover {
     padding: 1.5rem;
   }
   
+  .blog-card-image-container {
+    height: 180px;
+  }
+  
+  .blog-post-cover-image-container {
+    height: 250px;
+    margin-bottom: 2rem;
+  }
+  
   .blog-title {
     font-size: 1.2rem;
   }

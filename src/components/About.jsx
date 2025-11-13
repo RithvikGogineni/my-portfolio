@@ -21,23 +21,40 @@ const About = () => {
   );
 
   useEffect(() => {
-    // Profile image animation
-    if (profileImageRef.current) {
-      gsap.fromTo(profileImageRef.current, 
-        { scale: 0, rotation: -180, opacity: 0 },
-        { 
-          scale: 1, 
-          rotation: 0, 
-          opacity: 1,
-          duration: 1.2,
-          ease: "back.out(1.7)",
-          scrollTrigger: {
-            trigger: profileImageRef.current,
-            start: "top 80%",
-            toggleActions: "play none none reverse"
+    // Profile image animation - wait for image to load
+    const animateProfileImage = () => {
+      if (profileImageRef.current && !profileImageLoading) {
+        gsap.fromTo(profileImageRef.current, 
+          { scale: 0, rotation: -180, opacity: 0 },
+          { 
+            scale: 1, 
+            rotation: 0, 
+            opacity: 1,
+            duration: 1.2,
+            ease: "back.out(1.7)",
+            scrollTrigger: {
+              trigger: profileImageRef.current,
+              start: "top 80%",
+              toggleActions: "play none none reverse"
+            }
           }
-        }
-      );
+        );
+      }
+    };
+
+    // Try to animate immediately if image is already loaded
+    if (!profileImageLoading) {
+      animateProfileImage();
+    }
+
+    // Also set up animation when image loads
+    const img = profileImageRef.current;
+    if (img) {
+      if (img.complete) {
+        animateProfileImage();
+      } else {
+        img.addEventListener('load', animateProfileImage, { once: true });
+      }
     }
 
     // Text animations
@@ -81,7 +98,7 @@ const About = () => {
         );
       }
     });
-  }, []);
+  }, [profileImageLoading]);
 
   const techStacks = [
     {

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { fadeInUp } from '../animations/framerVariants';
@@ -7,6 +7,26 @@ import { useFirebaseImage } from '../hooks/useFirebaseImage';
 
 const BlogPage = () => {
   const { posts: blogPosts, loading, error } = useBlogPosts();
+  const [selectedCategory, setSelectedCategory] = useState('All');
+
+  // Extract unique categories from posts (auto-updates based on Firestore)
+  const categories = useMemo(() => {
+    const uniqueCategories = new Set();
+    blogPosts.forEach(post => {
+      if (post.category) {
+        uniqueCategories.add(post.category);
+      }
+    });
+    return ['All', ...Array.from(uniqueCategories).sort()];
+  }, [blogPosts]);
+
+  // Filter posts based on selected category
+  const filteredPosts = useMemo(() => {
+    if (selectedCategory === 'All') {
+      return blogPosts;
+    }
+    return blogPosts.filter(post => post.category === selectedCategory);
+  }, [blogPosts, selectedCategory]);
 
   return (
     <main className="main-content">
@@ -42,11 +62,35 @@ const BlogPage = () => {
             </div>
           )}
           {!loading && !error && blogPosts.length > 0 && (
-            <div className="blog-grid">
-              {blogPosts.map((post) => (
-                <BlogCard key={post.id} post={post} />
-              ))}
-            </div>
+            <>
+              {/* Category Filters */}
+              <div className="blog-filters">
+                {categories.map((category) => (
+                  <motion.button
+                    key={category}
+                    className={`blog-filter-btn ${selectedCategory === category ? 'active' : ''}`}
+                    onClick={() => setSelectedCategory(category)}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {category}
+                  </motion.button>
+                ))}
+              </div>
+
+              {/* Blog Grid */}
+              {filteredPosts.length > 0 ? (
+                <div className="blog-grid">
+                  {filteredPosts.map((post) => (
+                    <BlogCard key={post.id} post={post} />
+                  ))}
+                </div>
+              ) : (
+                <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--color-text-muted)' }}>
+                  No posts found in the "{selectedCategory}" category.
+                </div>
+              )}
+            </>
           )}
         </div>
       </section>

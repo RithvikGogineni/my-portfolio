@@ -76,6 +76,7 @@ Each blog post document should have:
 | `title` | string | ✅ Yes | Blog post title |
 | `excerpt` | string | ✅ Yes | Short description (shown on listing page) |
 | `content` | string | ✅ Yes | **Markdown content** of the post (not HTML!) |
+| `coverImage` | string | ⚪ Optional | Firebase Storage path (e.g., `images/blog/my-post-cover.jpg`) |
 | `category` | string | ✅ Yes | One of: Robotics, Engineering, Mentorship, Design, General |
 | `date` | string | ✅ Yes | Publication date (YYYY-MM-DD) |
 | `readTime` | string | ✅ Yes | Estimated reading time (e.g., "5 min read") |
@@ -162,9 +163,26 @@ For the best experience, I can create a simple admin panel where you can:
 4. **Use categories** to organize your content
 5. **Set realistic read times** (average reading speed: 200-250 words/min)
 
-## Adding Images to Blog Posts
+## Adding Cover Images
 
-To add images to your Markdown posts:
+Cover images appear at the top of your blog post and on the blog listing cards.
+
+1. Upload your cover image to **Firebase Storage** in the `images/blog/` folder
+2. Recommended size: **1200x630px** (or similar aspect ratio) for best results
+3. In Firestore, add a `coverImage` field with the Firebase Storage path:
+
+```
+coverImage: "images/blog/my-post-cover.jpg"
+```
+
+The cover image will automatically:
+- Display at the top of the blog post page
+- Show on the blog card in the listing
+- Scale nicely on mobile devices
+
+## Adding Images Within Blog Posts
+
+To add images within your Markdown content:
 
 1. Upload your image to **Firebase Storage** in the `images/blog/` folder
 2. Get the image URL from Firebase Storage

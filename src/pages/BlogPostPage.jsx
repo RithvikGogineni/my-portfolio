@@ -5,11 +5,16 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { fadeInUp } from '../animations/framerVariants';
 import { useBlogPost } from '../hooks/useBlogPost';
+import { useFirebaseImage } from '../hooks/useFirebaseImage';
 
 const BlogPostPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { post, loading, error } = useBlogPost(id);
+  const { imageUrl: coverImageUrl, loading: coverImageLoading } = useFirebaseImage(
+    post?.coverImage || null,
+    null
+  );
 
   if (loading) {
     return (
@@ -53,6 +58,23 @@ const BlogPostPage = () => {
           >
             ← Back to Blog
           </motion.button>
+
+          {post.coverImage && (
+            <div className="blog-post-cover-image-container">
+              {coverImageLoading ? (
+                <div className="blog-cover-image-loading">
+                  <div className="loading-spinner"></div>
+                </div>
+              ) : (
+                <img 
+                  src={coverImageUrl || '/placeholder-blog.jpg'} 
+                  alt={post.title}
+                  className="blog-post-cover-image"
+                  loading="eager"
+                />
+              )}
+            </div>
+          )}
 
           <header className="blog-post-header">
             <span className="blog-post-category">{post.category}</span>

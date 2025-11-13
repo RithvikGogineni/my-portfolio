@@ -394,17 +394,6 @@ body {
   }
   
 
-  .cursor-particle {
-    position: fixed;
-    width: 4px;
-    height: 4px;
-    background: var(--color-accent-primary);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9997;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 0 10px var(--color-accent-primary);
-  }
 
   /* Hide default cursor on desktop */
   @media (min-width: 769px) {

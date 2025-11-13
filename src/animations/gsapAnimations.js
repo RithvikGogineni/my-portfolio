@@ -268,45 +268,6 @@ export const initCustomCursor = () => {
       transform: 'translate(-50%, -50%)'
     });
   });
-
-  // Particle trail effect
-  let particleCount = 0;
-  const createParticle = () => {
-    if (particleCount > 5) return; // Limit particles
-    
-    const particle = document.createElement('div');
-    particle.className = 'cursor-particle';
-    document.body.appendChild(particle);
-    particleCount++;
-
-    gsap.set(particle, {
-      x: mouseX,
-      y: mouseY,
-      scale: 0,
-      opacity: 0.8
-    });
-
-    gsap.to(particle, {
-      scale: 1,
-      opacity: 0,
-      duration: 0.6,
-      ease: 'power2.out',
-      onComplete: () => {
-        particle.remove();
-        particleCount--;
-      }
-    });
-  };
-
-  // Create particles on mouse move (throttled)
-  let lastParticleTime = 0;
-  document.addEventListener('mousemove', () => {
-    const now = Date.now();
-    if (now - lastParticleTime > 50) { // Throttle to 20fps
-      createParticle();
-      lastParticleTime = now;
-    }
-  });
 };
 
 // Scroll progress bar

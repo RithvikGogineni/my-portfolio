@@ -3530,6 +3530,8 @@ a:hover {
   background: var(--color-bg-secondary);
   position: relative;
   margin: 0;
+  display: block;
+  flex-shrink: 0;
 }
 
 .blog-card-image {

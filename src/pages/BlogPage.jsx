@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { fadeInUp } from '../animations/framerVariants';
@@ -56,10 +56,30 @@ const BlogPage = () => {
 
 // Blog Card Component with Cover Image
 const BlogCard = ({ post }) => {
-  const { imageUrl: coverImageUrl, loading: imageLoading } = useFirebaseImage(
+  const { imageUrl: coverImageUrl, loading: imageLoading, error: imageError } = useFirebaseImage(
     post.coverImage || null,
     null
   );
+
+  // Debug logging
+  useEffect(() => {
+    if (post.coverImage) {
+      console.log('Blog post cover image:', {
+        postId: post.id,
+        title: post.title,
+        coverImagePath: post.coverImage,
+        imageUrl: coverImageUrl,
+        loading: imageLoading,
+        error: imageError
+      });
+    } else {
+      console.log('Blog post has no coverImage:', {
+        postId: post.id,
+        title: post.title,
+        postFields: Object.keys(post)
+      });
+    }
+  }, [post.coverImage, coverImageUrl, imageLoading, imageError, post.id, post.title]);
 
   return (
     <Link to={`/blog/${post.id}`} className="blog-card-link">
@@ -76,13 +96,21 @@ const BlogCard = ({ post }) => {
               <div className="blog-image-loading">
                 <div className="loading-spinner"></div>
               </div>
-            ) : (
+            ) : coverImageUrl ? (
               <img 
-                src={coverImageUrl || '/placeholder-blog.jpg'} 
+                src={coverImageUrl} 
                 alt={post.title}
                 className="blog-card-image"
                 loading="lazy"
+                onError={(e) => {
+                  console.error('Failed to load cover image:', post.coverImage, e);
+                  e.target.style.display = 'none';
+                }}
               />
+            ) : (
+              <div className="blog-image-loading" style={{ color: 'var(--color-text-muted)' }}>
+                Image not found
+              </div>
             )}
           </div>
         )}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { fadeInUp } from '../animations/framerVariants';
@@ -44,20 +44,20 @@ const BlogPostPage = () => {
 
   return (
     <main className="main-content">
-      <motion.article
+      <m.article
         className="blog-post-page"
         initial="initial"
         animate="animate"
         variants={fadeInUp}
       >
         <div className="container">
-          <motion.button
+          <m.button
             className="back-button"
             onClick={() => navigate(-1)}
             whileHover={{ x: -6 }}
           >
             ← Back to Blog
-          </motion.button>
+          </m.button>
 
           {post.coverImage && (
             <div className="blog-post-cover-image-container">
@@ -113,7 +113,7 @@ const BlogPostPage = () => {
             </ReactMarkdown>
           </div>
         </div>
-      </motion.article>
+      </m.article>
     </main>
   );
 };

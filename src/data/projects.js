@@ -1,12 +1,23 @@
-// Projects data with Firebase Storage paths
-// Images are stored in Firebase Storage at: images/projects/{filename}
+// Projects data.
+// Images are imported so Vite fingerprints and serves them from the bundle:
+// they no longer depend on Firebase Storage being reachable.
+import fgcRobot from '../assets/images/fgc-robot.webp';
+import ftcRobot from '../assets/images/ftc-robot.webp';
+import medrehabWebsite from '../assets/images/medrehab-website.webp';
+import properConstructions from '../assets/images/proper-constructions.webp';
+import gorillaGym from '../assets/images/gorilla-gym.webp';
+import portfolioScreenshot from '../assets/images/portfolio-screenshot.webp';
+import ftcStarterGuide from '../assets/images/ftc-starter-guide.webp';
+
+// No local asset exists for these two yet.
+const placeholder = '/placeholder-image.svg';
 export const projects = [
   {
     id: 1,
     title: "FGC Eco-Equilibrium Robot",
     description:
       "Designed a high-precision flywheel shooter to launch biodiversity units into a 6ft goal using custom projectile calculations and advanced mechanical design.",
-    image: "images/projects/fgc-robot.png", // Firebase Storage path
+    image: fgcRobot,
     technologies: ["CAD Design", "Mechanical Engineering", "Physics Calculations"],
     category: "robotics",
     liveUrl: "#",
@@ -17,7 +28,7 @@ export const projects = [
     title: "FTC Jamaica Inspire Award Robot",
     description:
       "Led mechanical and programming teams to win National Inspire and Judge's Choice (Ochoa) Awards at FTC Worlds 2025.",
-    image: "images/projects/ftc-robot.png",
+    image: ftcRobot,
     technologies: ["FTC Systems", "Leadership", "Team Management"],
     category: "robotics",
     liveUrl: "#",
@@ -28,7 +39,7 @@ export const projects = [
     title: "MedRehab Professionals Website",
     description:
       "Developed responsive website for medical practice with focus on user accessibility and modern healthcare branding.",
-    image: "images/projects/medrehab-website.png",
+    image: medrehabWebsite,
     technologies: ["Web Development", "Branding", "Accessibility"],
     category: "web",
     liveUrl: "#",
@@ -39,7 +50,7 @@ export const projects = [
     title: "Proper Constructions Ltd. Portfolio",
     description:
       "Designed and deployed digital portfolio site for construction firm showcasing projects and services with modern UX.",
-    image: "images/projects/proper-constructions.png",
+    image: properConstructions,
     technologies: ["Freelance", "Client Work", "Brand Design"],
     category: "web",
     liveUrl: "#",
@@ -50,7 +61,7 @@ export const projects = [
     title: "Gorilla Gym & Club1962 Websites",
     description:
       "Created brand-aligned online platforms integrating modern, minimal UX design for fitness and entertainment venues.",
-    image: "images/projects/gorilla-gym.png",
+    image: gorillaGym,
     technologies: ["Web Design", "Freelance", "Brand Integration"],
     category: "design",
     liveUrl: "#",
@@ -61,7 +72,7 @@ export const projects = [
     title: "Personal Portfolio Website",
     description:
       "My personal portfolio showcasing robotics, design, and leadership through motion and interaction.",
-    image: "images/projects/portfolio-screenshot.png",
+    image: portfolioScreenshot,
     technologies: ["React", "Framer Motion", "GSAP", "CSS3"],
     category: "web",
     liveUrl: "#",
@@ -72,7 +83,7 @@ export const projects = [
     title: "Campion FTC Starter Guide",
     description:
       "Created a comprehensive guide for new FIRST Tech Challenge teams covering engineering design, control systems, and strategy fundamentals.",
-    image: "images/projects/ftc-starter-guide.png",
+    image: ftcStarterGuide,
     technologies: ["Technical Writing", "Education", "Engineering Design"],
     category: "robotics",
     liveUrl: "#",
@@ -83,7 +94,7 @@ export const projects = [
     title: "Autonomous Object Tracking System",
     description:
       "Developed an AI-powered object tracking prototype using OpenCV and TensorFlow, capable of following color and shape targets for robotics applications.",
-    image: "images/projects/object-tracking.png",
+    image: placeholder,
     technologies: ["Python", "Computer Vision", "Machine Learning"],
     category: "robotics",
     liveUrl: "#",
@@ -94,9 +105,53 @@ export const projects = [
     title: "Jarvis AI Assistant",
     description:
       "Developing a cross-platform AI assistant with natural language processing, speech recognition, face detection, and reinforcement learning capabilities.",
-    image: "images/projects/jarvis-ai.png",
+    image: placeholder,
     technologies: ["Python", "Objective-C", "Machine Learning", "Speech Recognition"],
     category: "robotics",
+    liveUrl: "#",
+    githubUrl: "#",
+  },
+  {
+    id: 10,
+    title: "Humanoid Robot",
+    description:
+      "Designed, CAD-modeled, fabricated, and assembled a 3D-printed humanoid robot from scratch, integrating mechanical structure, electronics, and onboard computing. Developed Raspberry Pi/ROS control and onboard LLM-powered conversational command response.",
+    image: placeholder,
+    technologies: ["Raspberry Pi", "ROS", "CAD", "3D Printing"],
+    category: "robotics",
+    liveUrl: "#",
+    githubUrl: "#",
+  },
+  {
+    id: 11,
+    title: "RehabOS",
+    description:
+      "AI-native clinic operating system deployed with Med Rehab Professionals in Kingston, supporting 8+ staff, 100+ patients, and 200+ sessions. Includes AI-assisted intake, clinical-history conflict detection, room/device tracking, exercise verification, automated WhatsApp/SMS follow-ups, and a 3-stage speech pipeline for Jamaican English and Patois.",
+    image: placeholder,
+    technologies: ["AI/LLM", "Speech Pipelines", "Playwright", "Healthcare"],
+    category: "web",
+    liveUrl: "#",
+    githubUrl: "#",
+  },
+  {
+    id: 12,
+    title: "Roamly",
+    description:
+      "Exploration and navigation app that generates routes from mood and time budget across drive, walk, run, and bike modes with turn-by-turn voice guidance. Routing runs on Deno/Supabase Edge Functions for API-key isolation and cross-user caching, with crowdsourced road-safety ratings and an Anthropic-powered multi-day trip planner.",
+    image: placeholder,
+    technologies: ["React Native", "TypeScript", "Supabase", "Mapbox"],
+    category: "web",
+    liveUrl: "#",
+    githubUrl: "#",
+  },
+  {
+    id: 13,
+    title: "NexusOS",
+    description:
+      "AI-native inventory platform for e-commerce SMBs, architected around specialist agents for restocking, demand forecasting, and supplier workflows, with supervisor/critic oversight, confidence scoring, and human-approval guardrails.",
+    image: placeholder,
+    technologies: ["Next.js", "TypeScript", "AI Agents"],
+    category: "web",
     liveUrl: "#",
     githubUrl: "#",
   },

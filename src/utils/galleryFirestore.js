@@ -6,8 +6,7 @@ import {
   doc,
   query, 
   orderBy,
-  where 
-} from 'firebase/firestore';
+} from 'firebase/firestore/lite';
 import { db } from '../config/firebase';
 
 /**
@@ -38,8 +37,9 @@ export const getGallerySections = async () => {
     return sections;
   } catch (error) {
     console.error('Error fetching gallery sections:', error);
-    // Return empty array instead of throwing
-    return [];
+    // Rethrow so the UI can distinguish "no sections yet" from "the read was
+    // rejected". Swallowing this made a permission-denied look like empty data.
+    throw error;
   }
 };
 

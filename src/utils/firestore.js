@@ -6,9 +6,7 @@ import {
   doc, 
   query, 
   orderBy, 
-  limit,
-  where 
-} from 'firebase/firestore';
+} from 'firebase/firestore/lite';
 import { db } from '../config/firebase';
 
 /**

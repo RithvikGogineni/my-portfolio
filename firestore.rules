@@ -1,0 +1,25 @@
+rules_version = '2';
+
+// Public portfolio content: anyone may read, nobody may write from the client.
+// Content is authored through the Firebase console / admin SDK.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Gallery sections — each doc holds { title, order, images: [filename, ...] }
+    match /gallerySections/{sectionId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Blog posts
+    match /blogPosts/{postId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Everything else stays locked.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

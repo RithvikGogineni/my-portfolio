@@ -1,40 +1,24 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
+import { m } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { staggerContainer, fadeInUp, cardVariants } from '../animations/framerVariants';
 import { projects as projectsData, categories as categoryDefs } from '../data/projects';
-import { useFirebaseImage } from '../hooks/useFirebaseImage';
 
-// Component to handle Firebase image loading
-const ProjectImage = ({ project }) => {
-  const { imageUrl, loading } = useFirebaseImage(
-    project.image,
-    project.image?.startsWith('/') ? project.image : null
-  );
-
-  if (loading) {
-    return (
-      <div className="project-image-loading">
-        <div className="loading-spinner"></div>
-      </div>
-    );
-  }
-
-  return (
-    <img 
-      src={imageUrl || '/placeholder-image.png'} 
-      alt={project.title}
-      className="project-image"
-      loading="lazy"
-      decoding="async"
-      onError={(e) => {
-        e.target.src = '/placeholder-image.png';
-      }}
-    />
-  );
-};
+// project.image is a bundled asset URL (see data/projects.js) — no fetch needed.
+const ProjectImage = ({ project }) => (
+  <img
+    src={project.image}
+    alt={project.title}
+    className="project-image"
+    loading="lazy"
+    decoding="async"
+    onError={(e) => {
+      e.target.src = '/placeholder-image.svg';
+    }}
+  />
+);
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -44,9 +28,12 @@ const Projects = () => {
   const filterButtonsRef = useRef([]);
   const [activeFilter, setActiveFilter] = useState('all');
 
-  const filteredProjects = activeFilter === 'all' 
-    ? projectsData 
-    : projectsData.filter(p => p.category === activeFilter);
+  const filteredProjects = useMemo(() => 
+    activeFilter === 'all' 
+      ? projectsData 
+      : projectsData.filter(p => p.category === activeFilter),
+    [activeFilter]
+  );
 
   useEffect(() => {
     // Reset refs array
@@ -158,7 +145,7 @@ const Projects = () => {
   return (
     <section ref={sectionRef} className="projects-section section" id="projects">
       <div className="container">
-        <motion.div
+        <m.div
           className="projects-content"
           variants={staggerContainer}
           initial="initial"
@@ -166,20 +153,20 @@ const Projects = () => {
           viewport={{ once: true }}
         >
           {/* Section Header */}
-          <motion.div className="section-header" variants={fadeInUp}>
+          <m.div className="section-header" variants={fadeInUp}>
             <h2 className="section-title">My Projects</h2>
             <p className="section-subtitle">
               A collection of projects that showcase my skills and passion for development
             </p>
-          </motion.div>
+          </m.div>
 
           {/* Filter Buttons */}
-          <motion.div 
+          <m.div 
             className="project-filters"
             variants={fadeInUp}
           >
             {categoryDefs.map((c, index) => (
-              <motion.button
+              <m.button
                 key={c.id}
                 ref={el => filterButtonsRef.current[index] = el}
                 className={`filter-btn ${activeFilter === c.id ? 'active' : ''}`}
@@ -188,18 +175,31 @@ const Projects = () => {
                 whileTap={{ scale: 0.95 }}
               >
                 {c.label}
-              </motion.button>
+              </m.button>
             ))}
-          </motion.div>
+          </m.div>
 
           {/* Projects Grid */}
-          <motion.div 
-            className="projects-grid"
-            variants={staggerContainer}
-            key={activeFilter}
-          >
-            {filteredProjects.map((project, index) => (
-              <motion.div
+          {filteredProjects.length === 0 ? (
+            <m.div 
+              className="projects-empty"
+              variants={fadeInUp}
+              style={{
+                textAlign: 'center',
+                padding: '4rem 2rem',
+                color: 'var(--color-text-muted)'
+              }}
+            >
+              <p>No projects found in this category.</p>
+            </m.div>
+          ) : (
+            <m.div 
+              className="projects-grid"
+              variants={staggerContainer}
+              key={activeFilter}
+            >
+              {filteredProjects.map((project, index) => (
+              <m.div
                 key={project.id}
                 ref={el => projectCardsRef.current[index] = el}
                 className="project-card"
@@ -231,11 +231,12 @@ const Projects = () => {
                     </div>
                   </div>
                 </Link>
-              </motion.div>
+              </m.div>
             ))}
-          </motion.div>
+            </m.div>
+          )}
 
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

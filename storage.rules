@@ -1,0 +1,17 @@
+rules_version = '2';
+
+// Portfolio images are public assets: world-readable, client-writes denied.
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // images/gallery/<section>/<file>, images/projects/<file>, blog covers, ...
+    match /images/{allPaths=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

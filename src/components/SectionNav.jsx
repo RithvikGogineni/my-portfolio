@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -69,7 +69,7 @@ const SectionNav = () => {
   if (!isVisible) return null;
 
   return (
-    <motion.div
+    <m.div
       className="section-nav"
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
@@ -77,20 +77,25 @@ const SectionNav = () => {
     >
       <nav className="section-nav-list">
         {sections.map((section, index) => (
-          <motion.button
+          <m.button
             key={section.id}
             className={`section-nav-item ${activeSection === section.id ? 'active' : ''}`}
             onClick={() => scrollToSection(section.id)}
-            whileHover={{ scale: 1.2, x: -4 }}
-            whileTap={{ scale: 0.9 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
             title={section.label}
           >
             <span className="section-nav-dot"></span>
-            <span className="section-nav-label">{section.label}</span>
-          </motion.button>
+            <span 
+              className="section-nav-label"
+              onClick={() => scrollToSection(section.id)}
+            >
+              {section.label}
+            </span>
+          </m.button>
         ))}
       </nav>
-    </motion.div>
+    </m.div>
   );
 };
 

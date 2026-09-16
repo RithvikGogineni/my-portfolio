@@ -1,22 +1,13 @@
-// Project Card component with Firebase image loading
+// Project Card component. project.image is a bundled asset URL (see
+// data/projects.js), so there is no network round-trip and no loading state.
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { useFirebaseImage } from '../hooks/useFirebaseImage';
+import { m } from 'framer-motion';
 
 const ProjectCard = ({ project, index }) => {
-  const { imageUrl, loading } = useFirebaseImage(
-    project.image,
-    // Fallback to local path if Firebase fails
-    project.image?.startsWith('/') ? project.image : null
-  );
-
   return (
-    <motion.div
+    <m.div
       className="project-card"
-      ref={(el) => {
-        // This ref will be handled by parent component for animations
-      }}
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -25,23 +16,16 @@ const ProjectCard = ({ project, index }) => {
     >
       <Link to={`/projects/${project.id}`} className="project-link">
         <div className="project-image-container">
-          {loading ? (
-            <div className="project-image-loading">
-              <div className="loading-spinner"></div>
-            </div>
-          ) : (
-            <img
-              src={imageUrl || '/placeholder-image.png'}
-              alt={project.title}
-              className="project-image"
-              loading="lazy"
-              decoding="async"
-              onError={(e) => {
-                // Fallback if image fails to load
-                e.target.src = '/placeholder-image.png';
-              }}
-            />
-          )}
+          <img
+            src={project.image}
+            alt={project.title}
+            className="project-image"
+            loading="lazy"
+            decoding="async"
+            onError={(e) => {
+              e.target.src = '/placeholder-image.svg';
+            }}
+          />
           <div className="project-overlay">
             <span className="project-overlay-text">View Details</span>
           </div>
@@ -57,7 +41,7 @@ const ProjectCard = ({ project, index }) => {
           </div>
         </div>
       </Link>
-    </motion.div>
+    </m.div>
   );
 };
 

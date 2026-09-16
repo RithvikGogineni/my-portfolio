@@ -1,13 +1,101 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
+import { m } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { FaEye } from 'react-icons/fa';
 import { staggerContainer, fadeInUp } from '../animations/framerVariants';
 import { useFirebaseImage } from '../hooks/useFirebaseImage';
 import { useGallerySections } from '../hooks/useGallerySections';
 
 gsap.registerPlugin(ScrollTrigger);
+
+// Gallery Image Item Component
+// NOTE: must stay at module scope. Declaring it inside Gallery gives it a new
+// component identity on every render, which remounts the whole grid and
+// restarts every image fetch from scratch.
+const GalleryImageItem = React.memo(React.forwardRef(({ sectionId, filename, index, onImageClick }, ref) => {
+  const imagePath = `images/gallery/${sectionId}/${filename}`;
+  const { imageUrl, loading, error } = useFirebaseImage(imagePath);
+
+  // the <img> itself can still 404 after we resolve a URL
+  const [broken, setBroken] = useState(false);
+  useEffect(() => { setBroken(false); }, [imageUrl]);
+
+  const handleClick = useCallback(() => {
+    if (imageUrl) {
+      onImageClick(imageUrl, filename);
+    }
+  }, [imageUrl, filename, onImageClick]);
+
+  return (
+    <m.div
+      ref={ref}
+      className="gallery-item"
+      variants={fadeInUp}
+      data-image={imageUrl}
+      data-filename={filename}
+      onClick={handleClick}
+    >
+      <div className="gallery-image-container">
+        {loading ? (
+          <div className="gallery-image-loading">
+            <div className="loading-spinner"></div>
+            <p style={{ fontSize: '0.75rem', marginTop: '0.5rem', opacity: 0.7 }}>
+              Loading...
+            </p>
+          </div>
+        ) : error ? (
+          <div className="gallery-image-error" style={{
+            padding: '2rem',
+            textAlign: 'center',
+            color: 'var(--color-accent-secondary)',
+            fontSize: '0.875rem'
+          }}>
+            <p>Failed to load</p>
+            <p style={{ fontSize: '0.75rem', opacity: 0.7, marginTop: '0.25rem' }}>
+              {filename}
+            </p>
+          </div>
+        ) : imageUrl && !broken ? (
+          <>
+            <img 
+              src={imageUrl} 
+              alt={filename || 'Gallery image'}
+              className="gallery-image"
+              loading={index < 3 ? 'eager' : 'lazy'}
+              fetchPriority={index < 3 ? 'high' : 'auto'}
+              decoding="async"
+              onError={() => {
+                if (import.meta.env.DEV) {
+                  console.error('Image load error for:', filename, imageUrl);
+                }
+                setBroken(true);
+              }}
+            />
+            <div className="gallery-overlay">
+              <div className="gallery-content-overlay">
+                <div className="gallery-zoom-icon"><FaEye /></div>
+                <p className="gallery-view-text">View Details</p>
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="gallery-image-error" style={{
+            padding: '2rem',
+            textAlign: 'center',
+            color: 'var(--color-text-muted)',
+            fontSize: '0.875rem'
+          }}>
+            <p>No image URL</p>
+          </div>
+        )}
+      </div>
+    </m.div>
+  );
+}));
+
+GalleryImageItem.displayName = 'GalleryImageItem';
 
 const Gallery = () => {
   const sectionRef = useRef(null);
@@ -34,18 +122,30 @@ const Gallery = () => {
     }
   }, [gallerySections, activeSection]);
   
-  // Get active section data
-  const activeSectionData = gallerySections.find(s => s.id === activeSection);
+  // Get active section data (memoized)
+  const activeSectionData = useMemo(() => 
+    gallerySections.find(s => s.id === activeSection),
+    [gallerySections, activeSection]
+  );
   
-  // Get images for active section
-  const sectionImageFilenames = activeSectionData?.images || [];
+  // Get images for active section (memoized)
+  const sectionImageFilenames = useMemo(() => 
+    activeSectionData?.images || [],
+    [activeSectionData]
+  );
   
   // Pagination state - show 6 images initially on home page, all on gallery page
   const [visibleCount, setVisibleCount] = useState(6);
-  const imagesToShow = isGalleryPage 
-    ? sectionImageFilenames  // Show all images on gallery page
-    : sectionImageFilenames.slice(0, visibleCount);  // Show 6 on home page
-  const hasMore = !isGalleryPage && sectionImageFilenames.length > visibleCount;
+  const imagesToShow = useMemo(() => 
+    isGalleryPage 
+      ? sectionImageFilenames  // Show all images on gallery page
+      : sectionImageFilenames.slice(0, visibleCount),  // Show 6 on home page
+    [isGalleryPage, sectionImageFilenames, visibleCount]
+  );
+  const hasMore = useMemo(() => 
+    !isGalleryPage && sectionImageFilenames.length > visibleCount,
+    [isGalleryPage, sectionImageFilenames.length, visibleCount]
+  );
   
   // Reset visible count when section changes (only on home page)
   useEffect(() => {
@@ -54,14 +154,14 @@ const Gallery = () => {
     }
   }, [activeSection, isGalleryPage]);
   
-  const handleShowMore = () => {
+  const handleShowMore = useCallback(() => {
     // Only redirect to gallery page (button only shows on home page)
     navigate('/gallery');
-  };
+  }, [navigate]);
   
-  // Debug logging
+  // Debug logging (only in development)
   useEffect(() => {
-    if (activeSection) {
+    if (import.meta.env.DEV && activeSection) {
       console.log('Active section:', activeSection);
       console.log('Active section data:', activeSectionData);
       console.log('Image filenames:', sectionImageFilenames);
@@ -120,15 +220,20 @@ const Gallery = () => {
     // Track scroll velocity for dynamic animation speed
     let lastScrollY = window.scrollY;
     let scrollVelocity = 0;
-    let velocityUpdateInterval = null;
     
+    // Driven by the scroll event rather than a 60fps setInterval: this only
+    // does work when the page actually moves, and costs nothing when idle.
     const updateVelocity = () => {
       const currentScrollY = window.scrollY;
       scrollVelocity = Math.abs(currentScrollY - lastScrollY);
       lastScrollY = currentScrollY;
     };
     
-    velocityUpdateInterval = setInterval(updateVelocity, 16); // ~60fps
+    window.addEventListener('scroll', updateVelocity, { passive: true });
+    
+    // Hover listeners are registered per item below; tracked so cleanup can
+    // remove them instead of leaking a new pair on every effect re-run.
+    const hoverCleanups = [];
     
     // Gallery items animation with scroll-velocity-based speed
     // Only animate visible items
@@ -181,7 +286,7 @@ const Gallery = () => {
         const overlay = item.querySelector('.gallery-overlay');
 
         if (image && overlay) {
-          item.addEventListener('mouseenter', () => {
+          const onEnter = () => {
             gsap.to(image, {
               scale: 1.1,
               duration: 0.3,
@@ -193,9 +298,9 @@ const Gallery = () => {
               duration: 0.3,
               ease: [0.25, 0.46, 0.45, 0.94]
             });
-          });
+          };
 
-          item.addEventListener('mouseleave', () => {
+          const onLeave = () => {
             gsap.to(image, {
               scale: 1,
               duration: 0.3,
@@ -207,6 +312,13 @@ const Gallery = () => {
               duration: 0.3,
               ease: [0.25, 0.46, 0.45, 0.94]
             });
+          };
+
+          item.addEventListener('mouseenter', onEnter);
+          item.addEventListener('mouseleave', onLeave);
+          hoverCleanups.push(() => {
+            item.removeEventListener('mouseenter', onEnter);
+            item.removeEventListener('mouseleave', onLeave);
           });
         }
       }
@@ -214,9 +326,8 @@ const Gallery = () => {
     
     // Cleanup
     return () => {
-      if (velocityUpdateInterval) {
-        clearInterval(velocityUpdateInterval);
-      }
+      window.removeEventListener('scroll', updateVelocity);
+      hoverCleanups.forEach((fn) => fn());
       // Kill all ScrollTriggers for gallery items
       galleryItemsRef.current.forEach((item) => {
         if (item) {
@@ -230,7 +341,7 @@ const Gallery = () => {
     };
   }, [imagesToShow]);
 
-  const openImageDetail = (imageUrl, filename) => {
+  const openImageDetail = useCallback((imageUrl, filename) => {
     if (!imageUrl || !filename) return;
     
     const metadata = imageMetadata[filename] || {};
@@ -255,9 +366,9 @@ const Gallery = () => {
     
     // Prevent body scroll when panel is open
     document.body.style.overflow = 'hidden';
-  };
+  }, [imageMetadata]);
 
-  const closeImageDetail = () => {
+  const closeImageDetail = useCallback(() => {
     if (detailPanelRef.current) {
       gsap.to(detailPanelRef.current, {
         x: '100%',
@@ -272,7 +383,7 @@ const Gallery = () => {
       setSelectedImage(null);
       document.body.style.overflow = '';
     }
-  };
+  }, []);
   
   // Close panel on escape key
   useEffect(() => {
@@ -283,118 +394,25 @@ const Gallery = () => {
     };
     window.addEventListener('keydown', handleEscape);
     return () => window.removeEventListener('keydown', handleEscape);
-  }, [selectedImage]);
+  }, [selectedImage, closeImageDetail]);
 
-// Gallery Image Item Component
-const GalleryImageItem = React.forwardRef(({ sectionId, filename, index, onImageClick }, ref) => {
-  const imagePath = `images/gallery/${sectionId}/${filename}`;
-  const { imageUrl, loading, error } = useFirebaseImage(imagePath);
-
-  // Debug logging for first few images
-  useEffect(() => {
-    if (index < 3) {
-      console.log(`Image ${index} (${filename}):`, {
-        imagePath,
-        imageUrl,
-        loading,
-        error: error?.message
-      });
-    }
-  }, [imagePath, imageUrl, loading, error, filename, index]);
-
-  const handleClick = () => {
-    if (imageUrl) {
-      onImageClick(imageUrl, filename);
-    }
-  };
-
-  return (
-    <motion.div
-      ref={ref}
-      className="gallery-item"
-      variants={fadeInUp}
-      data-image={imageUrl}
-      data-filename={filename}
-      onClick={handleClick}
-    >
-      <div className="gallery-image-container">
-        {loading ? (
-          <div className="gallery-image-loading">
-            <div className="loading-spinner"></div>
-            <p style={{ fontSize: '0.75rem', marginTop: '0.5rem', opacity: 0.7 }}>
-              Loading...
-            </p>
-          </div>
-        ) : error ? (
-          <div className="gallery-image-error" style={{
-            padding: '2rem',
-            textAlign: 'center',
-            color: 'var(--color-accent-secondary)',
-            fontSize: '0.875rem'
-          }}>
-            <p>Failed to load</p>
-            <p style={{ fontSize: '0.75rem', opacity: 0.7, marginTop: '0.25rem' }}>
-              {filename}
-            </p>
-          </div>
-        ) : imageUrl ? (
-          <>
-            <img 
-              src={imageUrl} 
-              alt={filename || 'Gallery image'}
-              className="gallery-image"
-              loading="lazy"
-              decoding="async"
-              onError={(e) => {
-                console.error('Image load error for:', filename, imageUrl);
-                e.target.src = '/placeholder-image.png';
-              }}
-              onLoad={() => {
-                if (index < 3) {
-                  console.log(`Image ${index} loaded successfully:`, filename);
-                }
-              }}
-            />
-            <div className="gallery-overlay">
-              <div className="gallery-content-overlay">
-                <div className="gallery-zoom-icon">👁️</div>
-                <p className="gallery-view-text">View Details</p>
-              </div>
-            </div>
-          </>
-        ) : (
-          <div className="gallery-image-error" style={{
-            padding: '2rem',
-            textAlign: 'center',
-            color: 'var(--color-text-muted)',
-            fontSize: '0.875rem'
-          }}>
-            <p>No image URL</p>
-          </div>
-        )}
-      </div>
-    </motion.div>
-  );
-});
-
-GalleryImageItem.displayName = 'GalleryImageItem';
 
   return (
     <section ref={sectionRef} className="gallery-section section" id="gallery">
       <div className="container">
-        <motion.div
+        <m.div
           className="gallery-content"
           variants={staggerContainer}
           initial="initial"
           animate="animate"
         >
           {/* Section Header */}
-          <motion.div className="section-header" variants={fadeInUp}>
+          <m.div className="section-header" variants={fadeInUp}>
             <h2 className="section-title">Project Gallery</h2>
             <p className="section-subtitle">
               Visual showcase of my work and creative process
             </p>
-          </motion.div>
+          </m.div>
 
           {/* Section Tabs */}
           {sectionsLoading ? (
@@ -403,10 +421,20 @@ GalleryImageItem.displayName = 'GalleryImageItem';
             </div>
           ) : sectionsError ? (
             <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--color-accent-primary)' }}>
-              Error loading gallery sections. Please check your Firestore setup.
+              {sectionsError?.code === 'permission-denied' ? (
+                <>
+                  <p>Gallery is locked by Firestore security rules.</p>
+                  <p style={{ fontSize: '0.8rem', opacity: 0.7, marginTop: '0.5rem' }}>
+                    Deploy the rules in <code>firestore.rules</code> with{' '}
+                    <code>firebase deploy --only firestore:rules,storage</code>.
+                  </p>
+                </>
+              ) : (
+                <p>Error loading gallery sections. Please check your Firestore setup.</p>
+              )}
             </div>
           ) : gallerySections.length > 0 ? (
-            <motion.div 
+            <m.div 
               className="gallery-section-tabs"
               variants={fadeInUp}
             >
@@ -419,7 +447,7 @@ GalleryImageItem.displayName = 'GalleryImageItem';
                   {section.title || section.id}
                 </button>
               ))}
-            </motion.div>
+            </m.div>
           ) : (
             <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--color-text-muted)' }}>
               No gallery sections found. Add sections to Firestore.
@@ -428,7 +456,7 @@ GalleryImageItem.displayName = 'GalleryImageItem';
 
           {/* Active Section Info */}
           {activeSectionData && (
-            <motion.div 
+            <m.div 
               className="gallery-section-info"
               variants={fadeInUp}
               key={`section-info-${activeSection}`}
@@ -437,13 +465,13 @@ GalleryImageItem.displayName = 'GalleryImageItem';
               {activeSectionData.description && (
                 <p className="gallery-section-description">{activeSectionData.description}</p>
               )}
-            </motion.div>
+            </m.div>
           )}
 
           {/* Gallery Grid */}
           {activeSection ? (
             <>
-              <motion.div 
+              <m.div 
                 className="gallery-grid"
                 variants={staggerContainer}
                 key={`gallery-grid-${activeSection}`}
@@ -473,11 +501,11 @@ GalleryImageItem.displayName = 'GalleryImageItem';
                     </p>
                   </div>
                 )}
-              </motion.div>
+              </m.div>
               
               {/* Show More Button - Only on home page */}
               {hasMore && (
-                <motion.div
+                <m.div
                   className="gallery-show-more"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -489,14 +517,14 @@ GalleryImageItem.displayName = 'GalleryImageItem';
                   >
                     View Full Gallery
                   </button>
-                </motion.div>
+                </m.div>
               )}
             </>
-          ) : (
+          ) : sectionsLoading ? (
             <div className="gallery-empty-state">
               <p>Loading gallery sections...</p>
             </div>
-          )}
+          ) : null}
 
           {/* Image Detail Panel */}
           {selectedImage && (
@@ -510,7 +538,7 @@ GalleryImageItem.displayName = 'GalleryImageItem';
                   }
                 }}
               ></div>
-              <motion.div
+              <m.div
                 ref={detailPanelRef}
                 className="gallery-detail-panel"
                 initial={{ x: '100%' }}
@@ -534,10 +562,10 @@ GalleryImageItem.displayName = 'GalleryImageItem';
                     <p className="gallery-detail-description">{selectedImage.description}</p>
                   </div>
                 </div>
-              </motion.div>
+              </m.div>
             </>
           )}
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

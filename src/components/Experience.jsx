@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { staggerContainer, fadeInUp, timelineVariants, timelineDotVariants, timelineLineVariants } from '../animations/framerVariants';
+import { staggerContainer, fadeInUp, timelineVariants, timelineDotVariants } from '../animations/framerVariants';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -95,55 +95,82 @@ const Experience = () => {
   const experiences = [
     {
       id: 1,
-      title: "Vice-Captain",
-      company: "FTC Jamaica",
-      period: "2024 - 2025",
-      description: "Led award-winning robotics team to National and Worlds recognition, winning Inspire Award and Judge's Choice (Ochoa) Award at FTC Worlds 2025.",
-      technologies: ["FTC Systems", "Leadership", "Team Management", "Robotics"],
+      title: "Captain",
+      company: "FIRST Tech Challenge \u2014 Team 16075, Jamaica",
+      period: "2024 - 2026",
+      description: "Captain (2025-26) and Vice-Captain (2024-25). Lead mechanical integration and iterative development of competition robots \u2014 intake, transfer, launching, autonomous systems, competition debugging, and engineering documentation. Helped earn the Jamaica Inspire Award and Judges' Choice (Ochoa) Award at the 2025 FIRST Championship.",
+      technologies: ["FTC Systems", "Mechanical Integration", "Autonomous", "Leadership"],
       type: "work"
     },
     {
       id: 2,
-      title: "Robotics Club President",
-      company: "Campion College",
-      period: "2025 - 2026",
-      description: "Directed team builds, workshops, and community STEM outreach programs. Organized robotics competitions and mentored younger students.",
-      technologies: ["Leadership", "Mentorship", "STEM Education", "Event Planning"],
+      title: "Lead Engineer",
+      company: "FIRST Global Challenge \u2014 Team Jamaica",
+      period: "2025",
+      description: "Led robot design, mechanical integration, testing, and competition iteration for Jamaica's national team at the Eco-Equilibrium challenge in Panama. Finished on the 3rd-place finalist alliance and earned 3rd place for the Katherine Johnson Award for engineering documentation.",
+      technologies: ["Robot Design", "Mechanical Integration", "Testing", "Documentation"],
       type: "work"
     },
     {
       id: 3,
-      title: "Aeronautics Club President",
+      title: "Robotics Club President",
       company: "Campion College",
       period: "2024 - 2026",
-      description: "Managed model flight design projects and student engagement in aerospace engineering. Led workshops on aerodynamics and flight principles.",
-      technologies: ["Aerospace", "Engineering", "Project Management", "Education"],
+      description: "President (2025-26), Vice-President (2024-25). Led technical workshops for 30 members, directed team builds, and ran community STEM outreach programs.",
+      technologies: ["Leadership", "Mentorship", "STEM Education", "Event Planning"],
       type: "work"
     },
     {
       id: 4,
-      title: "Robotics Teacher",
-      company: "Halls of Learning & Vaz Prep",
+      title: "Aeronautics Club President",
+      company: "Campion College",
       period: "2022 - 2026",
-      description: "Taught STEM fundamentals to primary students, emphasizing problem-solving and teamwork. Developed curriculum for robotics education.",
-      technologies: ["Teaching", "STEM Education", "Curriculum Development", "Mentorship"],
+      description: "President (2023-26), Secretary (2022-23). Managed model flight design projects and student engagement in aerospace engineering, and led workshops on aerodynamics and flight principles. Also served as Vice-President of the Motorsport Club (2025-26).",
+      technologies: ["Aerospace", "Engineering", "Project Management", "Education"],
       type: "work"
     },
     {
       id: 5,
-      title: "Freelance Developer & Designer",
-      company: "Self-Employed",
-      period: "2023 - 2026",
-      description: "Built websites and brand identities for clients including MedRehab Professionals and Proper Constructions Ltd. Focused on modern UX and accessibility.",
-      technologies: ["Web Development", "Brand Design", "Client Work", "UX/UI"],
+      title: "Robotics Teacher",
+      company: "Vaz Preparatory School",
+      period: "2025 - 2026",
+      description: "Designed and taught hands-on robotics lessons for 30+ students in Grades 1-6, introducing engineering, programming, and iterative problem-solving.",
+      technologies: ["Teaching", "STEM Education", "Curriculum Development"],
       type: "work"
     },
     {
       id: 6,
-      title: "High School Education",
+      title: "Robotics Teacher",
+      company: "Halls of Learning / Supreme Ventures Foundation",
+      period: "2022 - 2025",
+      description: "Progressed from teaching assistant to instructor. Taught 80+ students, including underserved youth and children in care, and mentored teams for national robotics competitions.",
+      technologies: ["Teaching", "Mentorship", "STEM Education", "Outreach"],
+      type: "work"
+    },
+    {
+      id: 7,
+      title: "Freelance Web Developer & Designer",
+      company: "Self-Employed",
+      period: "2023 - Present",
+      description: "Designed and developed websites and digital branding for Med Rehab Professionals, Proper Constructions Ltd., Gorilla Gym, and Club1962. Focused on modern UX and accessibility.",
+      technologies: ["Web Development", "Brand Design", "Client Work", "UX/UI"],
+      type: "work"
+    },
+    {
+      id: 8,
+      title: "B.S. Mechanical Engineering & Robotics Engineering",
+      company: "Worcester Polytechnic Institute (WPI)",
+      period: "Expected May 2030",
+      description: "Pursuing a dual focus in Mechanical Engineering and Robotics Engineering in Worcester, MA.",
+      technologies: ["Mechanical Engineering", "Robotics Engineering"],
+      type: "education"
+    },
+    {
+      id: 9,
+      title: "CAPE Sixth Form",
       company: "Campion College",
-      period: "Expected Graduation: 2026",
-      description: "Pursuing CAPE qualifications in Mathematics, Physics, and Economics. SAT Score: 1460 (Math 760, English 700). Active in robotics and STEM programs.",
+      period: "2019 - 2026",
+      description: "Pure Mathematics, Physics, and Economics. 2nd Honors Award (2023-24, 2025-26). SAT Score: 1460 (Math 760, English 700).",
       technologies: ["Mathematics", "Physics", "Economics", "Academic Excellence"],
       type: "education"
     }
@@ -152,7 +179,7 @@ const Experience = () => {
   return (
     <section ref={sectionRef} className="experience-section section" id="experience">
       <div className="container">
-        <motion.div
+        <m.div
           className="experience-content"
           variants={staggerContainer}
           initial="initial"
@@ -160,33 +187,33 @@ const Experience = () => {
           viewport={{ once: true }}
         >
           {/* Section Header */}
-          <motion.div className="section-header" variants={fadeInUp}>
+          <m.div className="section-header" variants={fadeInUp}>
             <h2 className="section-title">Experience & Education</h2>
             <p className="section-subtitle">
               My journey through professional development and continuous learning
             </p>
-          </motion.div>
+          </m.div>
 
           {/* Timeline */}
           <div ref={timelineRef} className="timeline-container">
             <div className="timeline-line" ref={timelineLineRef}></div>
             
             {experiences.map((experience, index) => (
-              <motion.div
+              <m.div
                 key={experience.id}
                 ref={el => experienceItemsRef.current[index] = el}
                 className={`timeline-item ${index % 2 === 0 ? 'left' : 'right'}`}
                 variants={timelineVariants}
               >
                 <div className="timeline-dot-container">
-                  <motion.div
+                  <m.div
                     ref={el => timelineDotsRef.current[index] = el}
                     className={`timeline-dot ${experience.type}`}
                     variants={timelineDotVariants}
-                  ></motion.div>
+                  ></m.div>
                 </div>
                 
-                <motion.div 
+                <m.div 
                   className="timeline-content"
                   whileHover={{ scale: 1.02 }}
                   transition={{ duration: 0.3 }}
@@ -208,13 +235,13 @@ const Experience = () => {
                       </span>
                     ))}
                   </div>
-                </motion.div>
-              </motion.div>
+                </m.div>
+              </m.div>
             ))}
           </div>
 
           {/* Skills Summary */}
-          <motion.div 
+          <m.div 
             className="skills-summary"
             variants={fadeInUp}
           >
@@ -256,8 +283,8 @@ const Experience = () => {
                 </div>
               </div>
             </div>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       </div>
     </section>
   );

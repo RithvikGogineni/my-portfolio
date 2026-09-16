@@ -7,9 +7,21 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'animation-vendor': ['framer-motion', 'gsap'],
+        // Matched by module path, not package name: the string form only
+        // matches a package's exact entry point, so deep imports such as
+        // `react-dom/client` leaked into the app chunk and invalidated ~90kB
+        // of otherwise-cacheable vendor code on every deploy.
+        manualChunks(id) {
+          if (!id.includes('node_modules')) return
+          if (/node_modules\/(react|react-dom|react-router|react-router-dom|scheduler)\//.test(id)) {
+            return 'react-vendor'
+          }
+          if (/node_modules\/(framer-motion|motion-dom|motion-utils|gsap)\//.test(id)) {
+            return 'animation-vendor'
+          }
+          if (/node_modules\/(@firebase|firebase|idb)\//.test(id)) {
+            return 'firebase-vendor'
+          }
         },
       },
     },

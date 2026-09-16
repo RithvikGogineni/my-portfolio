@@ -1,12 +1,12 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { fadeInUp } from '../animations/framerVariants';
 import About from '../components/About';
 
 const AboutPage = () => {
   return (
     <main className="main-content">
-      <motion.div
+      <m.div
         className="page-hero"
         initial="initial"
         animate="animate"
@@ -18,7 +18,7 @@ const AboutPage = () => {
             Engineering student passionate about robotics, innovation, and mentorship
           </p>
         </div>
-      </motion.div>
+      </m.div>
       <About />
     </main>
   );

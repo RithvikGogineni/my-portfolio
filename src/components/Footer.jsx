@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { FaGithub, FaLinkedin, FaTwitter, FaInstagram } from 'react-icons/fa';
 import { staggerContainer, fadeInUp } from '../animations/framerVariants';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -59,10 +60,9 @@ const Footer = () => {
   }, []);
 
   const scrollToTop = () => {
-    gsap.to(window, {
-      scrollTo: { y: 0 },
-      duration: 1,
-      ease: [0.25, 0.46, 0.45, 0.94]
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
     });
   };
 
@@ -90,16 +90,16 @@ const Footer = () => {
   };
 
   const socialLinks = [
-    { name: 'GitHub', icon: '🐙', url: 'https://github.com' },
-    { name: 'LinkedIn', icon: '💼', url: 'https://linkedin.com' },
-    { name: 'Twitter', icon: '🐦', url: 'https://twitter.com' },
-    { name: 'Instagram', icon: '📸', url: 'https://instagram.com' }
+    { name: 'GitHub', icon: FaGithub, url: 'https://github.com' },
+    { name: 'LinkedIn', icon: FaLinkedin, url: 'https://linkedin.com' },
+    { name: 'Twitter', icon: FaTwitter, url: 'https://twitter.com' },
+    { name: 'Instagram', icon: FaInstagram, url: 'https://instagram.com' }
   ];
 
   return (
     <footer ref={footerRef} className="footer">
       <div className="container">
-        <motion.div
+        <m.div
           className="footer-content"
           variants={staggerContainer}
           initial="initial"
@@ -108,7 +108,7 @@ const Footer = () => {
         >
           {/* Main Footer Content */}
           <div className="footer-main">
-            <motion.div 
+            <m.div 
               ref={el => footerElementsRef.current[0] = el}
               className="footer-brand"
               variants={fadeInUp}
@@ -120,7 +120,7 @@ const Footer = () => {
               </p>
               <div className="footer-social">
                 {socialLinks.map((social, index) => (
-                  <motion.a
+                  <m.a
                     key={social.name}
                     href={social.url}
                     className="footer-social-link"
@@ -129,15 +129,15 @@ const Footer = () => {
                     whileHover={{ scale: 1.2 }}
                     whileTap={{ scale: 0.9 }}
                   >
-                    <span className="social-emoji">{social.icon}</span>
-                  </motion.a>
+                    {social.icon && React.createElement(social.icon, { className: "social-icon" })}
+                  </m.a>
                 ))}
               </div>
-            </motion.div>
+            </m.div>
 
             {/* Footer Links */}
             {Object.entries(footerLinks).map(([category, links], categoryIndex) => (
-              <motion.div 
+              <m.div 
                 key={category}
                 ref={el => footerElementsRef.current[categoryIndex + 1] = el}
                 className="footer-links"
@@ -153,12 +153,12 @@ const Footer = () => {
                     </li>
                   ))}
                 </ul>
-              </motion.div>
+              </m.div>
             ))}
           </div>
 
           {/* Footer Bottom */}
-          <motion.div 
+          <m.div 
             ref={el => footerElementsRef.current[4] = el}
             className="footer-bottom"
             variants={fadeInUp}
@@ -173,12 +173,12 @@ const Footer = () => {
                 <a href="#" className="footer-bottom-link">Cookie Policy</a>
               </div>
             </div>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       </div>
 
       {/* Back to Top Button */}
-      <motion.button
+      <m.button
         className="back-to-top"
         onClick={scrollToTop}
         initial={{ opacity: 0, scale: 0.8 }}
@@ -186,7 +186,7 @@ const Footer = () => {
         whileTap={{ scale: 0.9 }}
       >
         <span className="back-to-top-icon">↑</span>
-      </motion.button>
+      </m.button>
     </footer>
   );
 };

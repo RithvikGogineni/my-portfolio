@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useMemo, useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef, useMemo, useState } from 'react';
+import { m } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -41,28 +41,28 @@ const Blog = () => {
   return (
     <section ref={sectionRef} className="blog-section section" id="blog">
       <div className="container">
-        <motion.div
+        <m.div
           className="blog-content"
           variants={staggerContainer}
           initial="initial"
           animate="animate"
         >
           {/* Section Header */}
-          <motion.div className="section-header" variants={fadeInUp}>
+          <m.div className="section-header" variants={fadeInUp}>
             <h2 className="section-title">Blog</h2>
             <p className="section-subtitle">
               Thoughts on robotics, engineering, mentorship, and building things that matter
             </p>
-          </motion.div>
+          </m.div>
 
           {/* Category Filters */}
           {!loading && !error && blogPosts.length > 0 && (
-            <motion.div 
+            <m.div 
               className="blog-filters"
               variants={fadeInUp}
             >
               {categories.map((category) => (
-                <motion.button
+                <m.button
                   key={category}
                   className={`blog-filter-btn ${selectedCategory === category ? 'active' : ''}`}
                   onClick={() => setSelectedCategory(category)}
@@ -70,9 +70,9 @@ const Blog = () => {
                   whileTap={{ scale: 0.95 }}
                 >
                   {category}
-                </motion.button>
+                </m.button>
               ))}
-            </motion.div>
+            </m.div>
           )}
 
           {/* Loading State */}
@@ -98,14 +98,14 @@ const Blog = () => {
 
           {/* Blog Grid */}
           {!loading && !error && displayedPosts.length > 0 && (
-            <motion.div 
+            <m.div 
               className="blog-grid"
               variants={staggerContainer}
             >
               {displayedPosts.map((post) => (
                 <BlogCard key={post.id} post={post} />
               ))}
-            </motion.div>
+            </m.div>
           )}
 
           {/* No Posts in Category */}
@@ -117,16 +117,16 @@ const Blog = () => {
 
           {/* View All Link */}
           {!loading && !error && blogPosts.length > 6 && (
-            <motion.div 
+            <m.div 
               style={{ textAlign: 'center', marginTop: '3rem' }}
               variants={fadeInUp}
             >
               <Link to="/blog" className="btn btn-primary">
                 View All Posts →
               </Link>
-            </motion.div>
+            </m.div>
           )}
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );
@@ -141,7 +141,7 @@ const BlogCard = ({ post }) => {
 
   return (
     <Link to={`/blog/${post.id}`} className="blog-card-link">
-      <motion.article
+      <m.article
         className="blog-card"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -182,7 +182,7 @@ const BlogCard = ({ post }) => {
             <span className="blog-read-more">Read more →</span>
           </div>
         </div>
-      </motion.article>
+      </m.article>
     </Link>
   );
 };

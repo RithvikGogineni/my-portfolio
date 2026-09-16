@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 const fadeUp = {
@@ -18,67 +18,67 @@ const Hero = () => {
     <section className="hero-section" id="home">
       <div className="container hero-container">
         <div className="hero-intro">
-          <motion.span
+          <m.span
             className="hero-kicker"
             initial={fadeUp.hidden}
             animate={fadeUp.visible}
           >
             Rithvik Gogineni
-          </motion.span>
+          </m.span>
 
-          <motion.h1
+          <m.h1
             className="hero-title"
             initial={fadeUp.hidden}
             animate={fadeUp.visible}
             transition={{ duration: 0.8, ease: 'easeOut', delay: 0.1 }}
           >
             Robotics Innovator & STEM Leader
-          </motion.h1>
+          </m.h1>
 
-          <motion.p
+          <m.p
             className="hero-description"
             initial={fadeUp.hidden}
             animate={fadeUp.visible}
             transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
           >
             I create purposeful robotics systems and mentor young engineers to think boldly, build creatively, and drive technological innovation across Jamaica’s growing STEM landscape.
-          </motion.p>
+          </m.p>
 
-          <motion.div
+          <m.div
             className="hero-actions"
             initial={fadeUp.hidden}
             animate={fadeUp.visible}
             transition={{ duration: 0.8, ease: 'easeOut', delay: 0.3 }}
           >
             <Link to="/projects" className="btn btn-primary">
-              <motion.span
+              <m.span
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.98 }}
                 style={{ display: 'inline-block' }}
               >
                 Explore Projects
-              </motion.span>
+              </m.span>
             </Link>
 
             <Link to="/contact" className="btn btn-text">
-              <motion.span
+              <m.span
                 whileHover={{ x: 6 }}
                 style={{ display: 'inline-block' }}
               >
                 Let's collaborate
-              </motion.span>
+              </m.span>
             </Link>
-          </motion.div>
+          </m.div>
         </div>
 
-        <motion.div
+        <m.div
           className="hero-summary"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0, transition: { duration: 0.8, ease: 'easeOut', delay: 0.35 } }}
         >
           <div className="summary-card">
             <span className="summary-label">Currently</span>
-            <p className="summary-text">Vice-Captain, FTC Jamaica · Robotics mentor · STEM Student at Campion College</p>
+            <p className="summary-text">Captain, FTC Jamaica · Robotics mentor · Mechanical &amp; Robotics Engineering at WPI</p>
           </div>
           <div className="summary-divider"></div>
           <div className="summary-stats">
@@ -89,7 +89,7 @@ const Hero = () => {
               </div>
             ))}
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

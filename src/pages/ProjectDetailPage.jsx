@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { fadeInUp } from '../animations/framerVariants';
 import { projects } from '../data/projects';
 
@@ -22,20 +22,20 @@ const ProjectDetailPage = () => {
 
   return (
     <main className="main-content">
-      <motion.div
+      <m.div
         className="project-detail-hero"
         initial="initial"
         animate="animate"
         variants={fadeInUp}
       >
         <div className="container">
-          <motion.button
+          <m.button
             className="back-button"
             onClick={() => navigate(-1)}
             whileHover={{ x: -6 }}
           >
             ← Back
-          </motion.button>
+          </m.button>
           
           <div className="project-detail-header">
             <div className="project-detail-image">
@@ -62,7 +62,7 @@ const ProjectDetailPage = () => {
 
               <div className="project-detail-actions">
                 {project.liveUrl !== '#' && (
-                  <motion.a
+                  <m.a
                     href={project.liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -71,10 +71,10 @@ const ProjectDetailPage = () => {
                     whileTap={{ scale: 0.95 }}
                   >
                     View Live Demo →
-                  </motion.a>
+                  </m.a>
                 )}
                 {project.githubUrl !== '#' && (
-                  <motion.a
+                  <m.a
                     href={project.githubUrl}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -83,13 +83,13 @@ const ProjectDetailPage = () => {
                     whileTap={{ scale: 0.95 }}
                   >
                     View on GitHub ↗
-                  </motion.a>
+                  </m.a>
                 )}
               </div>
             </div>
           </div>
         </div>
-      </motion.div>
+      </m.div>
 
       <section className="section project-detail-content">
         <div className="container">

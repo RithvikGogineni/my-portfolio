@@ -1,6 +1,6 @@
 // React hook for loading blog posts from Firestore
 import { useState, useEffect, useCallback } from 'react';
-import { getCachedBlogPosts, clearBlogPostsCache } from '../utils/firestore';
+import { getCachedBlogPosts } from '../utils/firestore';
 
 /**
  * Hook to load blog posts from Firestore

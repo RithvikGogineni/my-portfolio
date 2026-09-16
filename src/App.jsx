@@ -1,10 +1,11 @@
 import React, { useEffect, Suspense, lazy } from 'react';
-import { motion } from 'framer-motion';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { LazyMotion, domAnimation, m } from 'framer-motion';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import { initCustomCursor, initScrollProgress } from './animations/gsapAnimations';
+import ErrorBoundary from './components/ErrorBoundary';
+import { initScrollProgress } from './animations/gsapAnimations';
 import { pageVariants } from './animations/framerVariants';
 import './index.css';
 
@@ -33,10 +34,39 @@ const PageLoader = () => (
   </div>
 );
 
+// Component to handle scroll to top on route change
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    // Small delay to ensure DOM is ready
+    const scrollToTop = () => {
+      // Try Lenis first if available (for smooth scrolling library)
+      if (window.lenis) {
+        window.lenis.scrollTo(0, { immediate: true });
+      } else {
+        // Fallback to native scroll
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+      }
+    };
+
+    // Immediate scroll
+    scrollToTop();
+    
+    // Also scroll after a tiny delay to catch any async rendering
+    const timeoutId = setTimeout(scrollToTop, 0);
+    
+    return () => clearTimeout(timeoutId);
+  }, [pathname]);
+
+  return null;
+};
+
 function App() {
   useEffect(() => {
-    // Initialize custom cursor and scroll progress
-    initCustomCursor();
+    // Initialize scroll progress
     initScrollProgress();
     
     // Initialize smooth scrolling
@@ -54,6 +84,9 @@ function App() {
         infinite: false,
       });
 
+      // Store Lenis instance globally for ScrollToTop component
+      window.lenis = lenis;
+
       function raf(time) {
         lenis.raf(time);
         requestAnimationFrame(raf);
@@ -66,44 +99,51 @@ function App() {
   }, []);
 
   return (
-    <ThemeProvider>
-      <BrowserRouter>
-        <motion.div
-          className="App"
-          initial="initial"
-          animate="in"
-          exit="out"
-          variants={pageVariants}
-        >
-          {/* Navbar */}
-          <Navbar />
+    <ErrorBoundary>
+      {/* LazyMotion + the `m` component ship only the animation features this
+          site uses (animations, variants, exit, hover/tap, whileInView) instead
+          of the full `motion` bundle. No layout or drag animations are used, so
+          `domAnimation` is sufficient; `strict` makes a stray `motion.*` throw
+          rather than silently pulling the full bundle back in. */}
+      <LazyMotion features={domAnimation} strict>
+      <ThemeProvider>
+        <BrowserRouter>
+          <ScrollToTop />
+          <m.div
+            className="App"
+            initial="initial"
+            animate="in"
+            exit="out"
+            variants={pageVariants}
+          >
+            {/* Navbar */}
+            <Navbar />
 
-          {/* Custom Cursor */}
-          <div className="custom-cursor"></div>
+            {/* Scroll Progress Bar */}
+            <div className="scroll-progress"></div>
 
-          {/* Scroll Progress Bar */}
-          <div className="scroll-progress"></div>
+            {/* Routes */}
+            <Suspense fallback={<PageLoader />}>
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/projects" element={<ProjectsPage />} />
+                <Route path="/projects/:id" element={<ProjectDetailPage />} />
+                <Route path="/experience" element={<ExperiencePage />} />
+                <Route path="/skills" element={<SkillsPage />} />
+                <Route path="/gallery" element={<GalleryPage />} />
+                <Route path="/blog" element={<BlogPage />} />
+                <Route path="/blog/:id" element={<BlogPostPage />} />
+                <Route path="/contact" element={<ContactPage />} />
+              </Routes>
+            </Suspense>
 
-          {/* Routes */}
-          <Suspense fallback={<PageLoader />}>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/projects" element={<ProjectsPage />} />
-              <Route path="/projects/:id" element={<ProjectDetailPage />} />
-              <Route path="/experience" element={<ExperiencePage />} />
-              <Route path="/skills" element={<SkillsPage />} />
-              <Route path="/gallery" element={<GalleryPage />} />
-              <Route path="/blog" element={<BlogPage />} />
-              <Route path="/blog/:id" element={<BlogPostPage />} />
-              <Route path="/contact" element={<ContactPage />} />
-            </Routes>
-          </Suspense>
-
-          <Footer />
-        </motion.div>
-      </BrowserRouter>
-    </ThemeProvider>
+            <Footer />
+          </m.div>
+        </BrowserRouter>
+      </ThemeProvider>
+      </LazyMotion>
+    </ErrorBoundary>
   );
 }
 

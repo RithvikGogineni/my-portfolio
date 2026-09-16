@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { FaTrophy, FaStar, FaMicrophone, FaChalkboardTeacher, FaChess, FaLightbulb } from 'react-icons/fa';
 import { staggerContainer, fadeInUp, confettiVariants } from '../animations/framerVariants';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -79,7 +80,7 @@ const Achievements = () => {
       id: 1,
       title: "FTC National Inspire Award",
       description: "Led FTC Jamaica team to win the prestigious National Inspire Award, recognizing excellence in robotics design, engineering, and team spirit.",
-      icon: "🏆",
+      icon: FaTrophy,
       year: "2025",
       category: "Award"
     },
@@ -87,7 +88,7 @@ const Achievements = () => {
       id: 2,
       title: "FTC Judge's Choice (Ochoa) Award",
       description: "Received Judge's Choice Award at FTC Worlds 2025, highlighting exceptional innovation and technical excellence in robotics competition.",
-      icon: "🌟",
+      icon: FaStar,
       year: "2025",
       category: "Recognition"
     },
@@ -95,7 +96,7 @@ const Achievements = () => {
       id: 3,
       title: "OUCC Winner",
       description: "Achieved first place in the Outstanding University Computer Competition, demonstrating excellence in programming and problem-solving.",
-      icon: "🎤",
+      icon: FaMicrophone,
       year: "2021 & 2022",
       category: "Competition"
     },
@@ -103,7 +104,7 @@ const Achievements = () => {
       id: 4,
       title: "FLL Jamaica Representative",
       description: "Represented Jamaica at FIRST Lego League competition in Massachusetts, showcasing robotics skills on an international stage.",
-      icon: "👨‍🏫",
+      icon: FaChalkboardTeacher,
       year: "2017",
       category: "International"
     },
@@ -111,7 +112,7 @@ const Achievements = () => {
       id: 5,
       title: "Chess U1800 Champion",
       description: "Won St. Andrew Parish Chess Championship in U1800 category, demonstrating strategic thinking and competitive excellence.",
-      icon: "⭐",
+      icon: FaChess,
       year: "2022",
       category: "Competition"
     },
@@ -119,7 +120,7 @@ const Achievements = () => {
       id: 6,
       title: "Grade 2 Piano Distinction",
       description: "Achieved distinction in Grade 2 Piano examination from ABRSM UK, showcasing dedication to musical excellence and discipline.",
-      icon: "💡",
+      icon: FaLightbulb,
       year: "2023",
       category: "Arts"
     }
@@ -135,7 +136,7 @@ const Achievements = () => {
   return (
     <section ref={sectionRef} className="achievements-section section" id="achievements">
       <div className="container">
-        <motion.div
+        <m.div
           className="achievements-content"
           variants={staggerContainer}
           initial="initial"
@@ -143,20 +144,20 @@ const Achievements = () => {
           viewport={{ once: true }}
         >
           {/* Section Header */}
-          <motion.div className="section-header" variants={fadeInUp}>
+          <m.div className="section-header" variants={fadeInUp}>
             <h2 className="section-title">Achievements & Recognition</h2>
             <p className="section-subtitle">
               Celebrating milestones and accomplishments in my journey
             </p>
-          </motion.div>
+          </m.div>
 
           {/* Achievements Grid */}
-          <motion.div 
+          <m.div 
             className="achievements-grid"
             variants={staggerContainer}
           >
             {achievements.map((achievement, index) => (
-              <motion.div
+              <m.div
                 key={achievement.id}
                 ref={el => achievementCardsRef.current[index] = el}
                 className="achievement-card"
@@ -167,7 +168,7 @@ const Achievements = () => {
                 {/* Confetti Elements */}
                 <div className="confetti-container">
                   {[...Array(6)].map((_, confettiIndex) => (
-                    <motion.div
+                    <m.div
                       key={confettiIndex}
                       ref={el => confettiRefs.current[index * 6 + confettiIndex] = el}
                       className="confetti"
@@ -178,11 +179,13 @@ const Achievements = () => {
                       }}
                     >
                       🎉
-                    </motion.div>
+                    </m.div>
                   ))}
                 </div>
 
-                <div className="achievement-icon">{achievement.icon}</div>
+                <div className="achievement-icon">
+                  {achievement.icon && React.createElement(achievement.icon)}
+                </div>
                 
                 <div className="achievement-content">
                   <div className="achievement-header">
@@ -198,19 +201,19 @@ const Achievements = () => {
                 </div>
 
                 <div className="achievement-glow"></div>
-              </motion.div>
+              </m.div>
             ))}
-          </motion.div>
+          </m.div>
 
           {/* Stats Section */}
-          <motion.div 
+          <m.div 
             className="achievement-stats"
             variants={fadeInUp}
           >
             <h3 className="stats-title">Impact Numbers</h3>
             <div className="stats-grid">
               {stats.map((stat, index) => (
-                <motion.div
+                <m.div
                   key={stat.label}
                   className="stat-item"
                   variants={fadeInUp}
@@ -219,13 +222,13 @@ const Achievements = () => {
                 >
                   <div className="stat-number">{stat.number}</div>
                   <div className="stat-label">{stat.label}</div>
-                </motion.div>
+                </m.div>
               ))}
             </div>
-          </motion.div>
+          </m.div>
 
           {/* Testimonial */}
-          <motion.div 
+          <m.div 
             className="testimonial"
             variants={fadeInUp}
           >
@@ -243,8 +246,8 @@ const Achievements = () => {
                 </div>
               </div>
             </div>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       </div>
     </section>
   );

@@ -1,12 +1,12 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { fadeInUp } from '../animations/framerVariants';
 import Gallery from '../components/Gallery';
 
 const GalleryPage = () => {
   return (
     <main className="main-content">
-      <motion.div
+      <m.div
         className="page-hero"
         initial="initial"
         animate="animate"
@@ -18,7 +18,7 @@ const GalleryPage = () => {
             Visual showcase of robotics builds, 3D designs, and creative moments
           </p>
         </div>
-      </motion.div>
+      </m.div>
       <Gallery />
     </main>
   );

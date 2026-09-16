@@ -4,7 +4,7 @@
 
 import { initializeApp } from 'firebase/app';
 import { getStorage } from 'firebase/storage';
-import { getFirestore } from 'firebase/firestore';
+import { getFirestore } from 'firebase/firestore/lite';
 
 // Your web app's Firebase configuration
 // TODO: Replace with your actual Firebase config

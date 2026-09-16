@@ -1,12 +1,12 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { fadeInUp } from '../animations/framerVariants';
 import Skills from '../components/Skills';
 
 const SkillsPage = () => {
   return (
     <main className="main-content">
-      <motion.div
+      <m.div
         className="page-hero"
         initial="initial"
         animate="animate"
@@ -18,7 +18,7 @@ const SkillsPage = () => {
             Technical capabilities and soft skills developed through years of practice
           </p>
         </div>
-      </motion.div>
+      </m.div>
       <Skills />
     </main>
   );

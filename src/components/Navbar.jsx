@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Link, useLocation } from 'react-router-dom';
@@ -15,47 +15,70 @@ const Navbar = () => {
 
   useEffect(() => {
     const triggers = [];
+    
+    const updateNavbarBackground = (isScrolled) => {
+      if (!navbarRef.current) return;
+      const isLightMode = document.documentElement.getAttribute('data-theme') === 'light';
+      
+      if (isScrolled) {
+        gsap.to(navbarRef.current, {
+          backgroundColor: isLightMode ? "rgba(255, 255, 255, 0.95)" : "rgba(11, 11, 13, 0.95)",
+          backdropFilter: "blur(20px)",
+          borderBottomColor: isLightMode ? "rgba(0, 0, 0, 0.1)" : "rgba(255, 255, 255, 0.1)",
+          duration: 0.4,
+          ease: "power2.out"
+        });
+      } else {
+        gsap.to(navbarRef.current, {
+          backgroundColor: "transparent",
+          backdropFilter: "none",
+          borderBottomColor: "transparent",
+          duration: 0.4,
+          ease: "power2.out"
+        });
+      }
+    };
+    
     // Navbar background animation on scroll
     if (navbarRef.current) {
       triggers.push(ScrollTrigger.create({
         trigger: "body",
         start: "top -100px",
-        onEnter: () => {
-          gsap.to(navbarRef.current, {
-            backgroundColor: "rgba(11, 11, 13, 0.95)",
-            backdropFilter: "blur(20px)",
-            borderBottomColor: "rgba(255, 255, 255, 0.1)",
-            duration: 0.4,
-            ease: "power2.out"
-          });
-        },
-        onLeaveBack: () => {
-          gsap.to(navbarRef.current, {
-            backgroundColor: "transparent",
-            backdropFilter: "none",
-            borderBottomColor: "transparent",
-            duration: 0.4,
-            ease: "power2.out"
-          });
-        }
+        onEnter: () => updateNavbarBackground(true),
+        onLeaveBack: () => updateNavbarBackground(false)
       }));
     }
+    
+    // Listen for theme changes
+    const observer = new MutationObserver(() => {
+      const isScrolled = window.scrollY > 100;
+      updateNavbarBackground(isScrolled);
+    });
+    
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme']
+    });
 
-    // Active section detection
+    // Active section detection (only on home page where sections exist)
     const sections = ['home', 'about', 'projects', 'experience', 'skills', 'gallery', 'blog', 'contact'];
     
     sections.forEach(section => {
-      triggers.push(ScrollTrigger.create({
-        trigger: `#${section}`,
-        start: "top 50%",
-        end: "bottom 50%",
-        onEnter: () => setActiveSection(section),
-        onEnterBack: () => setActiveSection(section)
-      }));
+      const element = document.getElementById(section);
+      if (element) {
+        triggers.push(ScrollTrigger.create({
+          trigger: `#${section}`,
+          start: "top 50%",
+          end: "bottom 50%",
+          onEnter: () => setActiveSection(section),
+          onEnterBack: () => setActiveSection(section)
+        }));
+      }
     });
 
     return () => {
       triggers.forEach(trigger => trigger.kill());
+      observer.disconnect();
     };
   }, []);
 
@@ -72,6 +95,13 @@ const Navbar = () => {
   }, [location]);
 
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
   const navItems = [
     { id: 'home', label: 'Home' },
     { id: 'about', label: 'About' },
@@ -84,7 +114,7 @@ const Navbar = () => {
   ];
 
   return (
-    <motion.nav
+    <m.nav
       ref={navbarRef}
       className="navbar"
       initial={{ y: -100 }}
@@ -93,14 +123,14 @@ const Navbar = () => {
     >
       <div className="navbar-container">
         {/* Logo */}
-        <Link to="/" className="navbar-logo">
-          <motion.span
+        <Link to="/" className="navbar-logo" onClick={scrollToTop}>
+          <m.span
             className="logo-text"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             Rithvik Gogineni
-          </motion.span>
+          </m.span>
         </Link>
 
         {/* Desktop Navigation */}
@@ -110,6 +140,7 @@ const Navbar = () => {
               key={item.id}
               to={item.id === 'home' ? '/' : `/${item.id}`}
               className={`nav-link ${activeSection === item.id ? 'active' : ''}`}
+              onClick={scrollToTop}
             >
               {item.label}
             </Link>
@@ -118,7 +149,7 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Menu Button */}
-        <motion.button
+        <m.button
           className="mobile-menu-btn"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           whileTap={{ scale: 0.95 }}
@@ -128,13 +159,13 @@ const Navbar = () => {
             <span></span>
             <span></span>
           </span>
-        </motion.button>
+        </m.button>
       </div>
 
       {/* Mobile Menu */}
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.div
+          <m.div
             className="mobile-menu"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
@@ -147,7 +178,10 @@ const Navbar = () => {
                   key={item.id}
                   to={item.id === 'home' ? '/' : `/${item.id}`}
                   className={`mobile-nav-link ${activeSection === item.id ? 'active' : ''}`}
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    scrollToTop();
+                  }}
                 >
                   {item.label}
                 </Link>
@@ -156,10 +190,10 @@ const Navbar = () => {
                 <ThemeToggle />
               </div>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
-    </motion.nav>
+    </m.nav>
   );
 };
 

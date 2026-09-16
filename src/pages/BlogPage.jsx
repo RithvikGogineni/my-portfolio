@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { fadeInUp } from '../animations/framerVariants';
 import { useBlogPosts } from '../hooks/useBlogPosts';
@@ -30,7 +30,7 @@ const BlogPage = () => {
 
   return (
     <main className="main-content">
-      <motion.div
+      <m.div
         className="page-hero"
         initial="initial"
         animate="animate"
@@ -42,7 +42,7 @@ const BlogPage = () => {
             Thoughts on robotics, engineering, mentorship, and building things that matter
           </p>
         </div>
-      </motion.div>
+      </m.div>
 
       <section className="section">
         <div className="container">
@@ -66,7 +66,7 @@ const BlogPage = () => {
               {/* Category Filters */}
               <div className="blog-filters">
                 {categories.map((category) => (
-                  <motion.button
+                  <m.button
                     key={category}
                     className={`blog-filter-btn ${selectedCategory === category ? 'active' : ''}`}
                     onClick={() => setSelectedCategory(category)}
@@ -74,7 +74,7 @@ const BlogPage = () => {
                     whileTap={{ scale: 0.95 }}
                   >
                     {category}
-                  </motion.button>
+                  </m.button>
                 ))}
               </div>
 
@@ -127,7 +127,7 @@ const BlogCard = ({ post }) => {
 
   return (
     <Link to={`/blog/${post.id}`} className="blog-card-link">
-      <motion.article
+      <m.article
         className="blog-card"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -173,7 +173,7 @@ const BlogCard = ({ post }) => {
             <span className="blog-read-more">Read more →</span>
           </div>
         </div>
-      </motion.article>
+      </m.article>
     </Link>
   );
 };

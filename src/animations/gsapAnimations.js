@@ -257,10 +257,10 @@ export const initCustomCursor = () => {
     });
   });
 
-  // Smooth cursor animation
+  // Smooth cursor animation - faster response
   gsap.ticker.add(() => {
-    cursorX += (mouseX - cursorX) * 0.2;
-    cursorY += (mouseY - cursorY) * 0.2;
+    cursorX += (mouseX - cursorX) * 0.6;
+    cursorY += (mouseY - cursorY) * 0.6;
     
     gsap.set(cursor, { 
       x: cursorX, 

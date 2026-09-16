@@ -1,9 +1,13 @@
 import React, { useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { FaBullseye, FaRocket, FaHandshake } from 'react-icons/fa';
 import { staggerContainer, fadeInUp, fadeInLeft, fadeInRight, scaleIn } from '../animations/framerVariants';
 import { useFirebaseImage } from '../hooks/useFirebaseImage';
+// Imported (not a raw "/src/assets/..." string) so Vite rewrites it to the
+// hashed build asset. The literal path only resolves during `vite dev`.
+import profilePhoto from '../assets/images/profile-photo.webp';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,7 +21,7 @@ const About = () => {
   // Note: profile-photo.jpg is currently in images/projects/ folder
   const { imageUrl: profileImageUrl, loading: profileImageLoading } = useFirebaseImage(
     "images/projects/profile-photo.jpg", // Firebase Storage path
-    "/src/assets/images/profile-photo.jpg" // Fallback to local path
+    profilePhoto // Fallback to the bundled local asset
   );
 
   useEffect(() => {
@@ -130,7 +134,7 @@ const About = () => {
   return (
     <section ref={sectionRef} className="about-section section" id="about">
       <div className="container">
-        <motion.div
+        <m.div
           className="about-content"
           variants={staggerContainer}
           initial="initial"
@@ -138,16 +142,16 @@ const About = () => {
           viewport={{ once: true }}
         >
           {/* Section Header */}
-          <motion.div className="section-header" variants={fadeInUp}>
+          <m.div className="section-header" variants={fadeInUp}>
             <h2 className="section-title">About Me</h2>
             <p className="section-subtitle">
               Engineering student passionate about robotics, innovation, and mentorship
             </p>
-          </motion.div>
+          </m.div>
 
           <div className="about-grid">
             {/* Profile Image */}
-            <motion.div 
+            <m.div 
               className="about-image-container"
               variants={fadeInLeft}
             >
@@ -157,52 +161,56 @@ const About = () => {
                     <div className="loading-spinner"></div>
                   </div>
                 ) : (
-                  <motion.img
+                  <m.img
                     ref={profileImageRef}
-                    src={profileImageUrl || "/src/assets/images/profile-photo.jpg"}
+                    src={profileImageUrl || profilePhoto}
                     alt="Rithvik Gogineni - Robotics Innovator and STEM Leader"
                     className="profile-image"
                     whileHover={{ scale: 1.05 }}
                     transition={{ duration: 0.3 }}
                     onError={(e) => {
                       // Fallback if Firebase image fails to load
-                      e.target.src = "/src/assets/images/profile-photo.jpg";
+                      e.target.src = profilePhoto;
                     }}
                   />
                 )}
                 <div className="profile-image-bg"></div>
                 <div className="profile-image-glow"></div>
               </div>
-            </motion.div>
+            </m.div>
 
             {/* About Text */}
-            <motion.div 
+            <m.div 
               className="about-text"
               variants={fadeInRight}
             >
-              <motion.p 
+              <m.p 
                 ref={el => textRefs.current[0] = el}
                 className="about-description"
               >
-                I’m an engineering student and lifelong robotics enthusiast from Kingston, Jamaica, driven by a passion for innovation, mentorship, and purposeful design. With over 12 years of experience in competitive robotics, I currently serve as the Vice-Captain of Jamaica’s National Inspire Award–winning FTC team, where I lead initiatives that merge creativity, engineering, and teamwork to push the boundaries of what’s possible.
-              </motion.p>
+                I’m a Mechanical &amp; Robotics Engineering student at Worcester Polytechnic Institute and a lifelong robotics enthusiast from Kingston, Jamaica, driven by a passion for innovation, mentorship, and purposeful design. With over 12 years of experience in competitive robotics, I captain Jamaica’s National Inspire Award–winning FTC team and served as lead engineer for Team Jamaica at the FIRST Global Challenge, where I lead initiatives that merge creativity, engineering, and teamwork to push the boundaries of what’s possible.
+              </m.p>
 
-              <motion.p 
+              <m.p 
                 ref={el => textRefs.current[1] = el}
                 className="about-description"
               >
-                Beyond competition, I’m deeply committed to empowering the next generation of innovators. I mentor students across local schools, guiding them in mechanical design, coding, and problem-solving — helping them discover the same excitement for STEM that shaped my own journey.
+                Beyond competition, I'm deeply committed to empowering the next generation of innovators. I mentor students across local schools, guiding them in mechanical design, coding, and problem-solving — helping them discover the same excitement for STEM that shaped my own journey.
+              </m.p>
 
-At my core, I’m an engineer who loves to build — not just machines, but ideas, teams, and communities. Whether designing complex mechanisms, writing code, or exploring emerging technologies, I’m always seeking new ways to learn, improve, and make an impact.
-
-              </motion.p>
-
-              <motion.div 
+              <m.p 
                 ref={el => textRefs.current[2] = el}
+                className="about-description"
+              >
+                At my core, I'm an engineer who loves to build — not just machines, but ideas, teams, and communities. Whether designing complex mechanisms, writing code, or exploring emerging technologies, I'm always seeking new ways to learn, improve, and make an impact.
+              </m.p>
+
+              <m.div 
+                ref={el => textRefs.current[3] = el}
                 className="about-highlights"
               >
                 <div className="highlight-item">
-                  <div className="highlight-icon">🎯</div>
+                  <div className="highlight-icon"><FaBullseye /></div>
                   <div className="highlight-text">
                     <h4>Engineering Innovator</h4>
                     <p>I love tackling complex challenges and finding elegant solutions</p>
@@ -210,7 +218,7 @@ At my core, I’m an engineer who loves to build — not just machines, but idea
                 </div>
                 
                 <div className="highlight-item">
-                  <div className="highlight-icon">🚀</div>
+                  <div className="highlight-icon"><FaRocket /></div>
                   <div className="highlight-text">
                     <h4>Lifelong Builder</h4>
                     <p>Always exploring new technologies and improving my skills</p>
@@ -218,18 +226,18 @@ At my core, I’m an engineer who loves to build — not just machines, but idea
                 </div>
                 
                 <div className="highlight-item">
-                  <div className="highlight-icon">🤝</div>
+                  <div className="highlight-icon"><FaHandshake /></div>
                   <div className="highlight-text">
                     <h4>Collaborative Leader</h4>
                     <p>Collaborative approach with strong communication skills</p>
                   </div>
                 </div>
-              </motion.div>
-            </motion.div>
+              </m.div>
+            </m.div>
           </div>
 
           {/* Skills Section */}
-          <motion.div 
+          <m.div 
             className="skills-section"
             variants={fadeInUp}
             // Removed any background color, border, or box shadow styles from skills-section
@@ -238,7 +246,7 @@ At my core, I’m an engineer who loves to build — not just machines, but idea
             <p className="skills-caption">Focused on building resilient robotics systems with thoughtful software and design.</p>
             <div className="tech-stack-grid">
               {techStacks.map((stack, index) => (
-                <motion.div
+                <m.div
                   key={stack.title}
                   ref={el => techStackRefs.current[index] = el}
                   className="tech-stack-card"
@@ -251,18 +259,18 @@ At my core, I’m an engineer who loves to build — not just machines, but idea
                       <li key={item}>{item}</li>
                     ))}
                   </ul>
-                </motion.div>
+                </m.div>
               ))}
             </div>
-          </motion.div>
+          </m.div>
 
           {/* Achievements */}
-          <motion.div 
+          <m.div 
             className="achievements-grid"
             variants={staggerContainer}
           >
             {achievements.map((achievement, index) => (
-              <motion.div 
+              <m.div 
                 key={achievement.label}
                 className="achievement-item"
                 variants={scaleIn}
@@ -271,10 +279,10 @@ At my core, I’m an engineer who loves to build — not just machines, but idea
               >
                 <div className="achievement-number">{achievement.number}</div>
                 <div className="achievement-label">{achievement.label}</div>
-              </motion.div>
+              </m.div>
             ))}
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       </div>
     </section>
   );

@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { FaGithub, FaLinkedin, FaTwitter, FaEnvelope, FaPhone, FaMapMarkerAlt } from 'react-icons/fa';
 import { staggerContainer, fadeInUp, fadeInLeft, fadeInRight } from '../animations/framerVariants';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -133,37 +134,37 @@ const Contact = () => {
   };
 
   const socialLinks = [
-    { name: 'GitHub', icon: '🐙', url: 'https://github.com' },
-    { name: 'LinkedIn', icon: '💼', url: 'https://linkedin.com/in/rithvik-gogineni-ba2a8330b' },
-    { name: 'Twitter', icon: '🐦', url: 'https://twitter.com' },
-    { name: 'Email', icon: '📧', url: 'mailto:goginenirithvik@gmail.com' }
+    { name: 'GitHub', icon: FaGithub, url: 'https://github.com' },
+    { name: 'LinkedIn', icon: FaLinkedin, url: 'https://linkedin.com/in/rithvik-gogineni-ba2a8330b' },
+    { name: 'Twitter', icon: FaTwitter, url: 'https://twitter.com' },
+    { name: 'Email', icon: FaEnvelope, url: 'mailto:goginenirithvik@gmail.com' }
   ];
 
   return (
     <section ref={sectionRef} className="contact-section section" id="contact">
       <div className="container">
-        <motion.div
+        <m.div
           className="contact-content"
           variants={staggerContainer}
           initial="initial"
           animate="animate"
         >
           {/* Section Header */}
-          <motion.div className="section-header" variants={fadeInUp}>
+          <m.div className="section-header" variants={fadeInUp}>
             <h2 className="section-title">Get In Touch</h2>
             <p className="section-subtitle">
               Ready to work together? Let's discuss your next project
             </p>
-          </motion.div>
+          </m.div>
 
           <div className="contact-grid">
             {/* Contact Form */}
-            <motion.div 
+            <m.div 
               className="contact-form-container"
               variants={fadeInLeft}
             >
               <form ref={formRef} className="contact-form" onSubmit={handleSubmit}>
-                <motion.div 
+                <m.div 
                   ref={el => inputRefs.current[0] = el}
                   className="form-group"
                 >
@@ -175,9 +176,9 @@ const Contact = () => {
                     required 
                     placeholder="Your Name"
                   />
-                </motion.div>
+                </m.div>
 
-                <motion.div 
+                <m.div 
                   ref={el => inputRefs.current[1] = el}
                   className="form-group"
                 >
@@ -189,9 +190,9 @@ const Contact = () => {
                     required 
                     placeholder="your.email@example.com"
                   />
-                </motion.div>
+                </m.div>
 
-                <motion.div 
+                <m.div 
                   ref={el => inputRefs.current[2] = el}
                   className="form-group"
                 >
@@ -203,9 +204,9 @@ const Contact = () => {
                     required 
                     placeholder="Project Inquiry"
                   />
-                </motion.div>
+                </m.div>
 
-                <motion.div 
+                <m.div 
                   ref={el => inputRefs.current[3] = el}
                   className="form-group"
                 >
@@ -217,9 +218,9 @@ const Contact = () => {
                     required 
                     placeholder="Tell me about your project..."
                   ></textarea>
-                </motion.div>
+                </m.div>
 
-                <motion.button 
+                <m.button 
                   type="submit" 
                   className="btn btn-primary btn-magnetic"
                   whileHover={{ scale: 1.05 }}
@@ -227,12 +228,12 @@ const Contact = () => {
                 >
                   Send Message
                   <span className="btn-arrow">→</span>
-                </motion.button>
+                </m.button>
               </form>
-            </motion.div>
+            </m.div>
 
             {/* Contact Info */}
-            <motion.div 
+            <m.div 
               className="contact-info"
               variants={fadeInRight}
             >
@@ -246,7 +247,7 @@ const Contact = () => {
 
                 <div className="contact-methods">
                   <div className="contact-method">
-                    <div className="method-icon">📧</div>
+                    <div className="method-icon"><FaEnvelope /></div>
                     <div className="method-content">
                       <h4>Email</h4>
                       <p>goginenirithvik@gmail.com</p>
@@ -254,7 +255,7 @@ const Contact = () => {
                   </div>
 
                   <div className="contact-method">
-                    <div className="method-icon">📱</div>
+                    <div className="method-icon"><FaPhone /></div>
                     <div className="method-content">
                       <h4>Phone</h4>
                       <p>(876) 307-9999</p>
@@ -262,7 +263,7 @@ const Contact = () => {
                   </div>
 
                   <div className="contact-method">
-                    <div className="method-icon">📍</div>
+                    <div className="method-icon"><FaMapMarkerAlt /></div>
                     <div className="method-content">
                       <h4>Location</h4>
                       <p>Kingston, Jamaica</p>
@@ -274,7 +275,7 @@ const Contact = () => {
                   <h4 className="social-title">Follow Me</h4>
                   <div className="social-icons">
                     {socialLinks.map((social, index) => (
-                      <motion.a
+                      <m.a
                         key={social.name}
                         ref={el => socialIconsRef.current[index] = el}
                         href={social.url}
@@ -284,16 +285,16 @@ const Contact = () => {
                         whileHover={{ scale: 1.2 }}
                         whileTap={{ scale: 0.9 }}
                       >
-                        <span className="social-emoji">{social.icon}</span>
+                        {social.icon && React.createElement(social.icon, { className: "social-icon-svg" })}
                         <span className="social-name">{social.name}</span>
-                      </motion.a>
+                      </m.a>
                     ))}
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </m.div>
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

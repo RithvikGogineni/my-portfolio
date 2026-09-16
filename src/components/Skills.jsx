@@ -1,7 +1,13 @@
 import React, { useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { 
+  FaRobot, FaCog, FaWrench, FaTrophy, FaBolt,
+  FaCode, FaPython, FaJava, FaPalette, FaTheaterMasks, FaImage, FaCube, FaGem, FaBullseye, FaStar,
+  FaChess, FaGraduationCap, FaRaspberryPi, FaMicrochip, FaBrain, FaDatabase, FaPrint, FaReact, FaVial
+} from 'react-icons/fa';
+import { SiTypescript, SiSupabase, SiPostgresql, SiRos, SiVercel } from 'react-icons/si';
 import { staggerContainer, fadeInUp, iconVariants, progressVariants } from '../animations/framerVariants';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -98,39 +104,51 @@ const Skills = () => {
 
   const skillCategories = [
     {
-      title: "Robotics & Engineering",
-      icon: "🤖",
+      title: "Robotics & Hardware",
+      icon: FaRobot,
       skills: [
-        { name: "CAD Design", level: 95, icon: "📐" },
-        { name: "Fusion 360", level: 90, icon: "⚙️" },
-        { name: "SolidWorks", level: 85, icon: "🔧" },
-        { name: "VEX Systems", level: 90, icon: "🎮" },
-        { name: "FTC Systems", level: 95, icon: "🏆" },
-        { name: "Mechanical Design", level: 88, icon: "⚡" }
+        { name: "ROS", level: 85, icon: SiRos },
+        { name: "Raspberry Pi", level: 88, icon: FaRaspberryPi },
+        { name: "Arduino", level: 85, icon: FaMicrochip },
+        { name: "REV Robotics", level: 95, icon: FaTrophy },
+        { name: "3D Printing", level: 90, icon: FaPrint },
+        { name: "Mechanical Design", level: 90, icon: FaBolt }
       ]
     },
     {
-      title: "Programming",
-      icon: "💻",
+      title: "CAD & Programming",
+      icon: FaCode,
       skills: [
-        { name: "Python", level: 90, icon: "🐍" },
-        { name: "Java", level: 85, icon: "☕" },
-        { name: "JavaScript", level: 80, icon: "🟨" },
-        { name: "C#", level: 88, icon: "🔷" },
-        { name: "Flutter", level: 75, icon: "📱" },
-        { name: "HTML & CSS", level: 85, icon: "🌐" }
+        { name: "Fusion 360", level: 92, icon: FaCog },
+        { name: "Onshape", level: 85, icon: FaWrench },
+        { name: "Python", level: 90, icon: FaPython },
+        { name: "TypeScript", level: 88, icon: SiTypescript },
+        { name: "Java", level: 85, icon: FaJava },
+        { name: "SQL", level: 80, icon: FaDatabase }
+      ]
+    },
+    {
+      title: "Software & AI",
+      icon: FaBrain,
+      skills: [
+        { name: "React Native", level: 85, icon: FaReact },
+        { name: "Supabase", level: 85, icon: SiSupabase },
+        { name: "PostgreSQL", level: 80, icon: SiPostgresql },
+        { name: "LLM Agents", level: 88, icon: FaBrain },
+        { name: "Playwright", level: 78, icon: FaVial },
+        { name: "Vercel & Git", level: 88, icon: SiVercel }
       ]
     },
     {
       title: "Design & Creativity",
-      icon: "🎨",
+      icon: FaPalette,
       skills: [
-        { name: "Blender", level: 80, icon: "🎭" },
-        { name: "Photoshop", level: 85, icon: "🖼️" },
-        { name: "3D Modeling", level: 88, icon: "📦" },
-        { name: "Web Design", level: 82, icon: "💎" },
-        { name: "Branding", level: 78, icon: "🎯" },
-        { name: "UI/UX", level: 75, icon: "✨" }
+        { name: "Blender", level: 80, icon: FaTheaterMasks },
+        { name: "Photoshop", level: 85, icon: FaImage },
+        { name: "3D Modeling", level: 88, icon: FaCube },
+        { name: "Web Design", level: 82, icon: FaGem },
+        { name: "Branding", level: 78, icon: FaBullseye },
+        { name: "UI/UX", level: 75, icon: FaStar }
       ]
     }
   ];
@@ -147,7 +165,7 @@ const Skills = () => {
   return (
     <section ref={sectionRef} className="skills-section section" id="skills">
       <div className="container">
-        <motion.div
+        <m.div
           className="skills-content"
           variants={staggerContainer}
           initial="initial"
@@ -155,17 +173,17 @@ const Skills = () => {
           viewport={{ once: true }}
         >
           {/* Section Header */}
-          <motion.div className="section-header" variants={fadeInUp}>
+          <m.div className="section-header" variants={fadeInUp}>
             <h2 className="section-title">Skills & Expertise</h2>
             <p className="section-subtitle">
               Technical skills and soft skills that drive my success
             </p>
-          </motion.div>
+          </m.div>
 
           {/* Technical Skills */}
           <div className="technical-skills">
             {skillCategories.map((category, categoryIndex) => (
-              <motion.div
+              <m.div
                 key={category.title}
                 ref={el => skillCardsRef.current[categoryIndex] = el}
                 className="skill-category-card"
@@ -174,20 +192,20 @@ const Skills = () => {
                 transition={{ duration: 0.3 }}
               >
                 <div className="category-header">
-                  <motion.div
+                  <m.div
                     ref={el => skillIconsRef.current[categoryIndex] = el}
                     className="category-icon"
                     variants={iconVariants}
                     whileHover="hover"
                   >
-                    {category.icon}
-                  </motion.div>
+                    {category.icon && React.createElement(category.icon)}
+                  </m.div>
                   <h3 className="category-title">{category.title}</h3>
                 </div>
 
                 <div className="skills-grid">
                   {category.skills.map((skill, skillIndex) => (
-                    <motion.div
+                    <m.div
                       key={skill.name}
                       className="skill-item"
                       variants={fadeInUp}
@@ -195,37 +213,39 @@ const Skills = () => {
                       transition={{ duration: 0.3 }}
                     >
                       <div className="skill-header">
-                        <div className="skill-icon">{skill.icon}</div>
+                        <div className="skill-icon">
+                          {skill.icon && React.createElement(skill.icon)}
+                        </div>
                         <span className="skill-name">{skill.name}</span>
                         <span className="skill-level">{skill.level}%</span>
                       </div>
                       
                       <div className="progress-container">
                         <div className="progress-bar">
-                          <motion.div
+                          <m.div
                             ref={el => progressBarsRef.current[categoryIndex * 6 + skillIndex] = el}
                             className="progress-fill"
                             data-width={`${skill.level}%`}
                             variants={progressVariants}
-                          ></motion.div>
+                          ></m.div>
                         </div>
                       </div>
-                    </motion.div>
+                    </m.div>
                   ))}
                 </div>
-              </motion.div>
+              </m.div>
             ))}
           </div>
 
           {/* Soft Skills */}
-          <motion.div 
+          <m.div 
             className="soft-skills"
             variants={fadeInUp}
           >
             <h3 className="soft-skills-title">Soft Skills</h3>
             <div className="soft-skills-grid">
               {softSkills.map((skill, index) => (
-                <motion.div
+                <m.div
                   key={skill.name}
                   className="soft-skill-item"
                   variants={fadeInUp}
@@ -238,67 +258,67 @@ const Skills = () => {
                   </div>
                   
                   <div className="soft-skill-progress">
-                    <motion.div
+                    <m.div
                       className="soft-skill-bar"
                       initial={{ width: 0 }}
                       whileInView={{ width: `${skill.level}%` }}
                       viewport={{ once: true }}
                       transition={{ duration: 1.5, delay: index * 0.1 }}
-                    ></motion.div>
+                    ></m.div>
                   </div>
-                </motion.div>
+                </m.div>
               ))}
             </div>
-          </motion.div>
+          </m.div>
 
           {/* Certifications */}
-          <motion.div 
+          <m.div 
             className="certifications"
             variants={fadeInUp}
           >
             <h3 className="certifications-title">Certifications</h3>
             <div className="certifications-grid">
-              <motion.div
+              <m.div
                 className="certification-item"
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.3 }}
               >
-                <div className="cert-icon">🏆</div>
+                <div className="cert-icon"><FaTrophy /></div>
                 <div className="cert-content">
                   <h4>FTC National Inspire Award</h4>
                   <p>FIRST Tech Challenge</p>
                   <span className="cert-date">2025</span>
                 </div>
-              </motion.div>
+              </m.div>
               
-              <motion.div
+              <m.div
                 className="certification-item"
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.3 }}
               >
-                <div className="cert-icon">🎓</div>
+                <div className="cert-icon"><FaGraduationCap /></div>
                 <div className="cert-content">
                   <h4>Grade 2 Piano Distinction</h4>
                   <p>ABRSM UK</p>
                   <span className="cert-date">2023</span>
                 </div>
-              </motion.div>
+              </m.div>
               
-              <motion.div
+              <m.div
                 className="certification-item"
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.3 }}
               >
-                <div className="cert-icon">♟️</div>
+                <div className="cert-icon"><FaChess /></div>
                 <div className="cert-content">
                   <h4>Chess U1800 Champion</h4>
                   <p>St. Andrew Parish</p>
                   <span className="cert-date">2022</span>
                 </div>
-              </motion.div>
+              </m.div>
             </div>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       </div>
     </section>
   );

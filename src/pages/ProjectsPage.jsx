@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { fadeInUp } from '../animations/framerVariants';
 import { projects as projectsData, categories as categoryDefs } from '../data/projects';
@@ -13,7 +13,7 @@ const ProjectsPage = () => {
 
   return (
     <main className="main-content">
-      <motion.div
+      <m.div
         className="page-hero"
         initial="initial"
         animate="animate"
@@ -25,14 +25,14 @@ const ProjectsPage = () => {
             Robotics systems, web development, and design work that showcase innovation and problem-solving
           </p>
         </div>
-      </motion.div>
+      </m.div>
 
       <section className="section">
         <div className="container">
           {/* Filter Buttons */}
           <div className="project-filters centered">
             {categoryDefs.map((c) => (
-              <motion.button
+              <m.button
                 key={c.id}
                 className={`filter-btn ${activeFilter === c.id ? 'active' : ''}`}
                 onClick={() => setActiveFilter(c.id)}
@@ -40,14 +40,14 @@ const ProjectsPage = () => {
                 whileTap={{ scale: 0.95 }}
               >
                 {c.label}
-              </motion.button>
+              </m.button>
             ))}
           </div>
 
           {/* Projects Grid */}
           <div className="projects-grid centered-grid">
             {filteredProjects.map((project) => (
-              <motion.div
+              <m.div
                 key={project.id}
                 className="project-card"
                 initial={{ opacity: 0, y: 20 }}
@@ -71,7 +71,7 @@ const ProjectsPage = () => {
                     </div>
                   </div>
                 </Link>
-              </motion.div>
+              </m.div>
             ))}
           </div>
         </div>

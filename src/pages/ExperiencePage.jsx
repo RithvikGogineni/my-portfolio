@@ -1,12 +1,12 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { fadeInUp } from '../animations/framerVariants';
 import Experience from '../components/Experience';
 
 const ExperiencePage = () => {
   return (
     <main className="main-content">
-      <motion.div
+      <m.div
         className="page-hero"
         initial="initial"
         animate="animate"
@@ -18,7 +18,7 @@ const ExperiencePage = () => {
             My journey through robotics, leadership, and continuous learning
           </p>
         </div>
-      </motion.div>
+      </m.div>
       <Experience />
     </main>
   );

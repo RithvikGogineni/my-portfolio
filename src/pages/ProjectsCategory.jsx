@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { projects, categories } from '../data/projects';
 
 const ProjectsCategory = () => {
@@ -17,7 +17,7 @@ const ProjectsCategory = () => {
   return (
     <section className="section" id="projects">
       <div className="container">
-        <motion.div
+        <m.div
           className="section-header centered"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -25,7 +25,7 @@ const ProjectsCategory = () => {
         >
           <h2 className="section-title">Projects — {activeCategory.label}</h2>
           <p className="section-subtitle">Explore by category</p>
-        </motion.div>
+        </m.div>
 
         <div className="projects-filter centered">
           {categories.map((c) => (
@@ -37,7 +37,7 @@ const ProjectsCategory = () => {
 
         <div className="projects-grid centered-grid">
           {filtered.map((project) => (
-            <motion.div
+            <m.div
               key={project.id}
               className="project-card"
               initial={{ opacity: 0, y: 20 }}
@@ -59,7 +59,7 @@ const ProjectsCategory = () => {
                   ))}
                 </div>
               </div>
-            </motion.div>
+            </m.div>
           ))}
         </div>
       </div>

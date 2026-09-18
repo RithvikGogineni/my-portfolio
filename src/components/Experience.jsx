@@ -142,7 +142,7 @@ const Experience = () => {
       id: 6,
       title: "Robotics Teacher",
       company: "Halls of Learning / Supreme Ventures Foundation",
-      period: "2022 - 2025",
+      period: "2021 - 2025",
       description: "Progressed from teaching assistant to instructor. Taught 80+ students, including underserved youth and children in care, and mentored teams for national robotics competitions.",
       technologies: ["Teaching", "Mentorship", "STEM Education", "Outreach"],
       type: "work"
@@ -152,7 +152,7 @@ const Experience = () => {
       title: "Freelance Web Developer & Designer",
       company: "Self-Employed",
       period: "2023 - Present",
-      description: "Designed and developed websites and digital branding for Med Rehab Professionals, Proper Constructions Ltd., Gorilla Gym, and Club1962. Focused on modern UX and accessibility.",
+      description: "Built websites and digital branding for Med Rehab Professionals (medrehabphysio.com), Proper Constructions Ltd., Gorilla Gym, and Club1962. Focused on modern UX and accessibility.",
       technologies: ["Web Development", "Brand Design", "Client Work", "UX/UI"],
       type: "work"
     },
@@ -170,7 +170,7 @@ const Experience = () => {
       title: "CAPE Sixth Form",
       company: "Campion College",
       period: "2019 - 2026",
-      description: "Pure Mathematics, Physics, and Economics. 2nd Honors Award (2023-24, 2025-26). SAT Score: 1460 (Math 760, English 700).",
+      description: "Pure Mathematics, Physics, and Economics. Second Honours Award (2023-24, 2025-26).",
       technologies: ["Mathematics", "Physics", "Economics", "Academic Excellence"],
       type: "education"
     }
@@ -248,38 +248,39 @@ const Experience = () => {
             <h3 className="summary-title">Key Skills & Expertise</h3>
             <div className="skills-categories">
               <div className="skill-category">
-                <h4>Frontend Development</h4>
+                <h4>Robotics, Hardware & CAD</h4>
                 <div className="skill-items">
-                  <span className="skill-item">React</span>
-                  <span className="skill-item">Vue.js</span>
-                  <span className="skill-item">JavaScript</span>
-                  <span className="skill-item">TypeScript</span>
-                  <span className="skill-item">CSS3</span>
-                  <span className="skill-item">SASS</span>
+                  <span className="skill-item">ROS</span>
+                  <span className="skill-item">Raspberry Pi</span>
+                  <span className="skill-item">Arduino</span>
+                  <span className="skill-item">REV Robotics</span>
+                  <span className="skill-item">3D Printing</span>
+                  <span className="skill-item">Fusion 360</span>
+                  <span className="skill-item">Onshape</span>
                 </div>
               </div>
-              
+
               <div className="skill-category">
-                <h4>Backend Development</h4>
+                <h4>Programming & Software</h4>
                 <div className="skill-items">
-                  <span className="skill-item">Node.js</span>
-                  <span className="skill-item">Express</span>
                   <span className="skill-item">Python</span>
-                  <span className="skill-item">MongoDB</span>
+                  <span className="skill-item">TypeScript/JavaScript</span>
+                  <span className="skill-item">Java</span>
+                  <span className="skill-item">React Native</span>
+                  <span className="skill-item">Supabase</span>
                   <span className="skill-item">PostgreSQL</span>
-                  <span className="skill-item">Redis</span>
+                  <span className="skill-item">Vercel</span>
                 </div>
               </div>
-              
+
               <div className="skill-category">
-                <h4>DevOps & Tools</h4>
+                <h4>AI/ML</h4>
                 <div className="skill-items">
-                  <span className="skill-item">AWS</span>
-                  <span className="skill-item">Docker</span>
-                  <span className="skill-item">Git</span>
-                  <span className="skill-item">CI/CD</span>
-                  <span className="skill-item">Linux</span>
-                  <span className="skill-item">Nginx</span>
+                  <span className="skill-item">OpenAI & Anthropic APIs</span>
+                  <span className="skill-item">LLM Agents</span>
+                  <span className="skill-item">Speech-to-Text Pipelines</span>
+                  <span className="skill-item">AI Evaluation</span>
+                  <span className="skill-item">Multi-Armed Bandits</span>
                 </div>
               </div>
             </div>

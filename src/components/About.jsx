@@ -20,7 +20,7 @@ const About = () => {
   // Load profile image from Firebase Storage
   // Note: profile-photo.jpg is currently in images/projects/ folder
   const { imageUrl: profileImageUrl, loading: profileImageLoading } = useFirebaseImage(
-    "images/projects/profile-photo.jpg", // Firebase Storage path
+    "images/projects/professional_photo.jpg", // Firebase Storage path
     profilePhoto // Fallback to the bundled local asset
   );
 
@@ -120,13 +120,13 @@ const About = () => {
   ];
 
   const achievements = [
-    { number: '12+', label: 'Years Robotics Experience' },
-  { number: '200+', label: 'Students Mentored' },
+    { number: '5', label: 'Years Teaching Robotics' },
+  { number: '110+', label: 'Students Taught' },
   { number: '100%', label: 'Innovation Focus' },
   { number: 'Robotics and Chess', label: 'National and International Awards' },
   { number: 'Captain', label: 'FTC Jamaica Inspire Award–Winning Team' },
-  { number: '50+', label: 'Community Outreach Projects' },
-  { number: 'Top 1%', label: 'National STEM Competitions' },
+  { number: '30', label: 'Robotics Club Members Led' },
+  { number: '3rd', label: 'Katherine Johnson Award, FIRST Global 2025' },
   { number: 'Multiple', label: 'Regional Design & Engineering Awards' },
   { number: 'Leader', label: 'STEM Mentorship and Innovation Programs' }
   ];
@@ -188,7 +188,7 @@ const About = () => {
                 ref={el => textRefs.current[0] = el}
                 className="about-description"
               >
-                I’m a Mechanical &amp; Robotics Engineering student at Worcester Polytechnic Institute and a lifelong robotics enthusiast from Kingston, Jamaica, driven by a passion for innovation, mentorship, and purposeful design. With over 12 years of experience in competitive robotics, I captain Jamaica’s National Inspire Award–winning FTC team and served as lead engineer for Team Jamaica at the FIRST Global Challenge, where I lead initiatives that merge creativity, engineering, and teamwork to push the boundaries of what’s possible.
+                I’m a Mechanical &amp; Robotics Engineering student at Worcester Polytechnic Institute and a lifelong robotics enthusiast from Kingston, Jamaica, driven by a passion for innovation, mentorship, and purposeful design. I captain Jamaica’s Inspire Award–winning FTC Team 16075 and served as lead engineer for Team Jamaica at the FIRST Global Challenge, where I lead initiatives that merge creativity, engineering, and teamwork to push the boundaries of what’s possible.
               </m.p>
 
               <m.p 

@@ -25,3 +25,5 @@ dist-ssr
 
 # Firebase config (if you want to keep it private, uncomment below)
 # src/config/firebase.js
+.vercel
+.env*.local

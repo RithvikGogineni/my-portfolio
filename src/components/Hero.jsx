@@ -9,8 +9,8 @@ const fadeUp = {
 
 const Hero = () => {
   const stats = [
-    { value: '12+', label: 'Years in Robotics' },
-    { value: '200+', label: 'Students Mentored' },
+    { value: '5', label: 'Years Teaching Robotics' },
+    { value: '110+', label: 'Students Taught' },
     { value: '6', label: 'Major Awards' }
   ];
 

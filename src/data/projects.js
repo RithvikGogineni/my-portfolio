@@ -8,8 +8,11 @@ import properConstructions from '../assets/images/proper-constructions.webp';
 import gorillaGym from '../assets/images/gorilla-gym.webp';
 import portfolioScreenshot from '../assets/images/portfolio-screenshot.webp';
 import ftcStarterGuide from '../assets/images/ftc-starter-guide.webp';
+import rehabos from '../assets/images/rehabos.webp';
+import roamly from '../assets/images/roamly.webp';
+import nexusos from '../assets/images/nexusos.webp';
 
-// No local asset exists for these two yet.
+// No local asset exists for these yet.
 const placeholder = '/placeholder-image.svg';
 export const projects = [
   {
@@ -38,11 +41,11 @@ export const projects = [
     id: 3,
     title: "MedRehab Professionals Website",
     description:
-      "Developed responsive website for medical practice with focus on user accessibility and modern healthcare branding.",
+      "Designed and built the website and digital branding for Med Rehab Professionals, a physiotherapy and rehabilitation clinic in Kingston, Jamaica — warm, family-first healthcare branding with online booking, services, conditions, and 3D foot scan pages.",
     image: medrehabWebsite,
-    technologies: ["Web Development", "Branding", "Accessibility"],
+    technologies: ["Web Development", "Branding", "Healthcare", "Accessibility"],
     category: "web",
-    liveUrl: "#",
+    liveUrl: "https://www.medrehabphysio.com/",
     githubUrl: "#",
   },
   {
@@ -127,7 +130,7 @@ export const projects = [
     title: "RehabOS",
     description:
       "AI-native clinic operating system deployed with Med Rehab Professionals in Kingston, supporting 8+ staff, 100+ patients, and 200+ sessions. Includes AI-assisted intake, clinical-history conflict detection, room/device tracking, exercise verification, automated WhatsApp/SMS follow-ups, and a 3-stage speech pipeline for Jamaican English and Patois.",
-    image: placeholder,
+    image: rehabos,
     technologies: ["AI/LLM", "Speech Pipelines", "Playwright", "Healthcare"],
     category: "web",
     liveUrl: "#",
@@ -138,7 +141,7 @@ export const projects = [
     title: "Roamly",
     description:
       "Exploration and navigation app that generates routes from mood and time budget across drive, walk, run, and bike modes with turn-by-turn voice guidance. Routing runs on Deno/Supabase Edge Functions for API-key isolation and cross-user caching, with crowdsourced road-safety ratings and an Anthropic-powered multi-day trip planner.",
-    image: placeholder,
+    image: roamly,
     technologies: ["React Native", "TypeScript", "Supabase", "Mapbox"],
     category: "web",
     liveUrl: "#",
@@ -149,7 +152,7 @@ export const projects = [
     title: "NexusOS",
     description:
       "AI-native inventory platform for e-commerce SMBs, architected around specialist agents for restocking, demand forecasting, and supplier workflows, with supervisor/critic oversight, confidence scoring, and human-approval guardrails.",
-    image: placeholder,
+    image: nexusos,
     technologies: ["Next.js", "TypeScript", "AI Agents"],
     category: "web",
     liveUrl: "#",

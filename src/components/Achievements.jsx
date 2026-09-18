@@ -127,8 +127,8 @@ const Achievements = () => {
   ];
 
   const stats = [
-    { number: "12+", label: "Years Robotics Experience" },
-    { number: "20+", label: "Students Mentored" },
+    { number: "5", label: "Years Teaching Robotics" },
+    { number: "110+", label: "Students Taught" },
     { number: "100%", label: "Innovation Focus" },
     { number: "6+", label: "Major Awards" }
   ];

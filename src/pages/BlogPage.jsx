@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { m } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { fadeInUp } from '../animations/framerVariants';
+import { reveal as fadeInUp } from '../animations/variants';
 import { useBlogPosts } from '../hooks/useBlogPosts';
 import { useFirebaseImage } from '../hooks/useFirebaseImage';
 
@@ -32,8 +32,8 @@ const BlogPage = () => {
     <main className="main-content">
       <m.div
         className="page-hero"
-        initial="initial"
-        animate="animate"
+        initial="hidden"
+        animate="show"
         variants={fadeInUp}
       >
         <div className="container">
@@ -51,14 +51,9 @@ const BlogPage = () => {
               Loading blog posts...
             </div>
           )}
-          {error && (
-            <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--color-accent-primary)' }}>
-              Error loading blog posts. Please try again later.
-            </div>
-          )}
-          {!loading && !error && blogPosts.length === 0 && (
+          {!loading && (error || blogPosts.length === 0) && (
             <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--color-text-muted)' }}>
-              No blog posts yet. Check back soon!
+              Posts are on the way. Check back soon.
             </div>
           )}
           {!loading && !error && blogPosts.length > 0 && (

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { m } from 'framer-motion';
-import { fadeInUp } from '../animations/framerVariants';
+import { reveal as fadeInUp, stagger } from '../animations/variants';
 import { projects } from '../data/projects';
 
 const ProjectDetailPage = () => {
@@ -24,8 +24,8 @@ const ProjectDetailPage = () => {
     <main className="main-content">
       <m.div
         className="project-detail-hero"
-        initial="initial"
-        animate="animate"
+        initial="hidden"
+        animate="show"
         variants={fadeInUp}
       >
         <div className="container">
@@ -49,10 +49,11 @@ const ProjectDetailPage = () => {
             <div className="project-detail-info">
               <span className="project-category-badge">{project.category}</span>
               <h1 className="project-detail-title">{project.title}</h1>
+              {project.role && <p className="project-detail-role">{project.role}</p>}
               <p className="project-detail-description">{project.description}</p>
               
               <div className="project-detail-technologies">
-                <h3>Technologies Used</h3>
+                <h2>Technologies Used</h2>
                 <div className="tech-tags-list">
                   {project.technologies.map((tech) => (
                     <span key={tech} className="tech-tag">{tech}</span>
@@ -67,10 +68,8 @@ const ProjectDetailPage = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn btn-primary"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
                   >
-                    View Live Demo →
+                    Visit live site ↗
                   </m.a>
                 )}
                 {project.githubUrl !== '#' && (
@@ -79,8 +78,6 @@ const ProjectDetailPage = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn btn-secondary"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
                   >
                     View on GitHub ↗
                   </m.a>
@@ -91,32 +88,26 @@ const ProjectDetailPage = () => {
         </div>
       </m.div>
 
-      <section className="section project-detail-content">
-        <div className="container">
-          <div className="project-detail-body">
-            <h2>Project Overview</h2>
-            <p>
-              This project represents a significant milestone in my journey as a robotics engineer and developer. 
-              Through careful planning, iterative design, and collaborative problem-solving, I was able to deliver 
-              a solution that meets both technical requirements and user needs.
-            </p>
-            
-            <h3>Key Features</h3>
-            <ul>
-              <li>Advanced mechanical design optimized for performance</li>
-              <li>Robust control systems with real-time feedback</li>
-              <li>User-friendly interface and documentation</li>
-              <li>Scalable architecture for future enhancements</li>
-            </ul>
-
-            <h3>Challenges & Solutions</h3>
-            <p>
-              One of the main challenges was balancing precision with speed. Through extensive testing and 
-              iteration, I developed a solution that maintains accuracy while meeting performance targets.
-            </p>
+      {project.highlights && (
+        <section className="section project-detail-content">
+          <div className="container">
+            <m.div
+              className="project-detail-body"
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true }}
+              variants={stagger(0.08)}
+            >
+              <m.h2 variants={fadeInUp}>What I did</m.h2>
+              <ul>
+                {project.highlights.map((item) => (
+                  <m.li key={item} variants={fadeInUp}>{item}</m.li>
+                ))}
+              </ul>
+            </m.div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </main>
   );
 };

@@ -1,68 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { m } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useActiveSection } from '../hooks/useActiveSection';
 
-gsap.registerPlugin(ScrollTrigger);
+const sections = [
+  { id: 'home', label: 'Home' },
+  { id: 'about', label: 'About' },
+  { id: 'projects', label: 'Projects' },
+  { id: 'experience', label: 'Experience' },
+  { id: 'skills', label: 'Skills' },
+  { id: 'achievements', label: 'Achievements' },
+  { id: 'contact', label: 'Contact' }
+];
+const ids = sections.map((s) => s.id);
 
 const SectionNav = () => {
   const location = useLocation();
-  const [activeSection, setActiveSection] = useState('home');
-  const [isVisible, setIsVisible] = useState(false);
-
-  const sections = [
-    { id: 'home', label: 'Home' },
-    { id: 'about', label: 'About' },
-    { id: 'projects', label: 'Projects' },
-    { id: 'experience', label: 'Experience' },
-    { id: 'skills', label: 'Skills' },
-    { id: 'achievements', label: 'Achievements' },
-    { id: 'gallery', label: 'Gallery' },
-    { id: 'blog', label: 'Blog' },
-    { id: 'contact', label: 'Contact' }
-  ];
-
-  // Only show on home page
-  useEffect(() => {
-    setIsVisible(location.pathname === '/');
-  }, [location.pathname]);
-
-  // Track active section on scroll
-  useEffect(() => {
-    if (!isVisible) return;
-
-    const triggers = [];
-    
-    sections.forEach(section => {
-      const element = document.getElementById(section.id);
-      if (element) {
-        triggers.push(ScrollTrigger.create({
-          trigger: element,
-          start: "top 60%",
-          end: "bottom 40%",
-          onEnter: () => setActiveSection(section.id),
-          onEnterBack: () => setActiveSection(section.id)
-        }));
-      }
-    });
-
-    return () => {
-      triggers.forEach(trigger => trigger.kill());
-    };
-  }, [isVisible]);
+  const isVisible = location.pathname === '/';
+  const activeSection = useActiveSection(ids, isVisible);
 
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
-    if (element) {
-      const offset = 80; // Account for navbar
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
+    if (!element) return;
+    // Let Lenis drive the scroll when it's running, so the two don't fight.
+    if (window.lenis) {
+      window.lenis.scrollTo(element, { offset: -80 });
+    } else {
+      window.scrollTo({ top: element.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' });
     }
   };
 
@@ -71,28 +35,23 @@ const SectionNav = () => {
   return (
     <m.div
       className="section-nav"
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.5, delay: 0.5 }}
+      // opacity only: the element's CSS transform centers it vertically
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5, delay: 0.8 }}
     >
       <nav className="section-nav-list">
         {sections.map((section, index) => (
-          <m.button
+          <button
             key={section.id}
             className={`section-nav-item ${activeSection === section.id ? 'active' : ''}`}
             onClick={() => scrollToSection(section.id)}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            title={section.label}
+            aria-label={`Jump to ${section.label}`}
+            aria-current={activeSection === section.id ? 'true' : undefined}
           >
             <span className="section-nav-dot"></span>
-            <span 
-              className="section-nav-label"
-              onClick={() => scrollToSection(section.id)}
-            >
-              {section.label}
-            </span>
-          </m.button>
+            <span className="section-nav-label">{section.label}</span>
+          </button>
         ))}
       </nav>
     </m.div>

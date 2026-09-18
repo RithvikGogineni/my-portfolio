@@ -1,16 +1,15 @@
 import React, { useEffect, Suspense, lazy } from 'react';
-import { LazyMotion, domAnimation, m } from 'framer-motion';
+import { LazyMotion, domAnimation, m, MotionConfig, useScroll, useSpring } from 'framer-motion';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ErrorBoundary from './components/ErrorBoundary';
-import { initScrollProgress } from './animations/gsapAnimations';
-import { pageVariants } from './animations/framerVariants';
 import './index.css';
 
-// Lazy load pages for better performance
-const HomePage = lazy(() => import('./pages/HomePage'));
+// Home is the landing page, so it ships in the main bundle: lazy-loading it
+// added a second round-trip before the hero could paint. Other pages stay lazy.
+import HomePage from './pages/HomePage';
 const AboutPage = lazy(() => import('./pages/AboutPage'));
 const ProjectsPage = lazy(() => import('./pages/ProjectsPage'));
 const ProjectDetailPage = lazy(() => import('./pages/ProjectDetailPage'));
@@ -64,12 +63,35 @@ const ScrollToTop = () => {
   return null;
 };
 
+// Thin bar at the top that tracks page scroll. Spring-smoothed, transform-only.
+const ScrollProgress = () => {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 200, damping: 40, restDelta: 0.001 });
+  return <m.div className="scroll-progress" style={{ scaleX }} aria-hidden="true" />;
+};
+
+// Fades page content in on route changes only, never on first load, so the
+// first paint isn't held back behind an opacity animation.
+const RouteFade = ({ children }) => {
+  const { pathname } = useLocation();
+  const first = React.useRef(true);
+  useEffect(() => { first.current = false; }, []);
+  return (
+    <m.div
+      key={pathname}
+      initial={first.current ? false : { opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.35, ease: 'easeOut' }}
+    >
+      {children}
+    </m.div>
+  );
+};
+
 function App() {
   useEffect(() => {
-    // Initialize scroll progress
-    initScrollProgress();
-    
-    // Initialize smooth scrolling
+    // Smooth scrolling, skipped for people who prefer reduced motion.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const initSmoothScroll = async () => {
       const { default: Lenis } = await import('lenis');
       const lenis = new Lenis({
@@ -106,24 +128,18 @@ function App() {
           `domAnimation` is sufficient; `strict` makes a stray `motion.*` throw
           rather than silently pulling the full bundle back in. */}
       <LazyMotion features={domAnimation} strict>
+      <MotionConfig reducedMotion="user">
       <ThemeProvider>
         <BrowserRouter>
           <ScrollToTop />
-          <m.div
-            className="App"
-            initial="initial"
-            animate="in"
-            exit="out"
-            variants={pageVariants}
-          >
+          <div className="App">
             {/* Navbar */}
             <Navbar />
 
-            {/* Scroll Progress Bar */}
-            <div className="scroll-progress"></div>
+            <ScrollProgress />
 
-            {/* Routes */}
             <Suspense fallback={<PageLoader />}>
+              <RouteFade>
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/about" element={<AboutPage />} />
@@ -136,12 +152,14 @@ function App() {
                 <Route path="/blog/:id" element={<BlogPostPage />} />
                 <Route path="/contact" element={<ContactPage />} />
               </Routes>
+              </RouteFade>
             </Suspense>
 
             <Footer />
-          </m.div>
+          </div>
         </BrowserRouter>
       </ThemeProvider>
+      </MotionConfig>
       </LazyMotion>
     </ErrorBoundary>
   );

@@ -1,87 +1,29 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { m, AnimatePresence } from 'framer-motion';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Link, useLocation } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
+import { EASE } from '../animations/variants';
 
-gsap.registerPlugin(ScrollTrigger);
+export const RESUME_URL = '/Rithvik-Gogineni-Resume.pdf';
 
 const Navbar = () => {
-  const navbarRef = useRef(null);
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const [scrolled, setScrolled] = useState(false);
 
+  // Solid background once the page has scrolled; styling lives in CSS
+  // (.navbar.scrolled) so it follows the theme without JS.
   useEffect(() => {
-    const triggers = [];
-    
-    const updateNavbarBackground = (isScrolled) => {
-      if (!navbarRef.current) return;
-      const isLightMode = document.documentElement.getAttribute('data-theme') === 'light';
-      
-      if (isScrolled) {
-        gsap.to(navbarRef.current, {
-          backgroundColor: isLightMode ? "rgba(255, 255, 255, 0.95)" : "rgba(11, 11, 13, 0.95)",
-          backdropFilter: "blur(20px)",
-          borderBottomColor: isLightMode ? "rgba(0, 0, 0, 0.1)" : "rgba(255, 255, 255, 0.1)",
-          duration: 0.4,
-          ease: "power2.out"
-        });
-      } else {
-        gsap.to(navbarRef.current, {
-          backgroundColor: "transparent",
-          backdropFilter: "none",
-          borderBottomColor: "transparent",
-          duration: 0.4,
-          ease: "power2.out"
-        });
-      }
-    };
-    
-    // Navbar background animation on scroll
-    if (navbarRef.current) {
-      triggers.push(ScrollTrigger.create({
-        trigger: "body",
-        start: "top -100px",
-        onEnter: () => updateNavbarBackground(true),
-        onLeaveBack: () => updateNavbarBackground(false)
-      }));
-    }
-    
-    // Listen for theme changes
-    const observer = new MutationObserver(() => {
-      const isScrolled = window.scrollY > 100;
-      updateNavbarBackground(isScrolled);
-    });
-    
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-theme']
-    });
-
-    // Active section detection (only on home page where sections exist)
-    const sections = ['home', 'about', 'projects', 'experience', 'skills', 'gallery', 'blog', 'contact'];
-    
-    sections.forEach(section => {
-      const element = document.getElementById(section);
-      if (element) {
-        triggers.push(ScrollTrigger.create({
-          trigger: `#${section}`,
-          start: "top 50%",
-          end: "bottom 50%",
-          onEnter: () => setActiveSection(section),
-          onEnterBack: () => setActiveSection(section)
-        }));
-      }
-    });
-
-    return () => {
-      triggers.forEach(trigger => trigger.kill());
-      observer.disconnect();
-    };
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location.pathname]);
 
   useEffect(() => {
     // Set active section based on current route
@@ -108,29 +50,15 @@ const Navbar = () => {
     { id: 'projects', label: 'Projects' },
     { id: 'experience', label: 'Experience' },
     { id: 'skills', label: 'Skills' },
-    { id: 'gallery', label: 'Gallery' },
-    { id: 'blog', label: 'Blog' },
     { id: 'contact', label: 'Contact' }
   ];
 
   return (
-    <m.nav
-      ref={navbarRef}
-      className="navbar"
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-    >
+    <nav className={`navbar ${scrolled || isMenuOpen ? 'scrolled' : ''}`}>
       <div className="navbar-container">
         {/* Logo */}
         <Link to="/" className="navbar-logo" onClick={scrollToTop}>
-          <m.span
-            className="logo-text"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Rithvik Gogineni
-          </m.span>
+          <span className="logo-text">Rithvik Gogineni</span>
         </Link>
 
         {/* Desktop Navigation */}
@@ -145,21 +73,25 @@ const Navbar = () => {
               {item.label}
             </Link>
           ))}
+          <a href={RESUME_URL} className="nav-resume" target="_blank" rel="noopener noreferrer">
+            Resume
+          </a>
           <ThemeToggle />
         </div>
 
         {/* Mobile Menu Button */}
-        <m.button
+        <button
           className="mobile-menu-btn"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          whileTap={{ scale: 0.95 }}
+          aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={isMenuOpen}
         >
           <span className={`hamburger ${isMenuOpen ? 'active' : ''}`}>
             <span></span>
             <span></span>
             <span></span>
           </span>
-        </m.button>
+        </button>
       </div>
 
       {/* Mobile Menu */}
@@ -167,15 +99,23 @@ const Navbar = () => {
         {isMenuOpen && (
           <m.div
             className="mobile-menu"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.3, ease: EASE }}
           >
-            <div className="mobile-menu-content">
-              {navItems.map((item, index) => (
-                <Link
+            <m.div
+              className="mobile-menu-content"
+              initial="hidden"
+              animate="show"
+              variants={{ hidden: {}, show: { transition: { staggerChildren: 0.04, delayChildren: 0.05 } } }}
+            >
+              {navItems.map((item) => (
+                <m.div
                   key={item.id}
+                  variants={{ hidden: { opacity: 0, x: -12 }, show: { opacity: 1, x: 0, transition: { duration: 0.35, ease: EASE } } }}
+                >
+                <Link
                   to={item.id === 'home' ? '/' : `/${item.id}`}
                   className={`mobile-nav-link ${activeSection === item.id ? 'active' : ''}`}
                   onClick={() => {
@@ -185,15 +125,19 @@ const Navbar = () => {
                 >
                   {item.label}
                 </Link>
+                </m.div>
               ))}
+              <a href={RESUME_URL} className="mobile-nav-link" target="_blank" rel="noopener noreferrer">
+                Resume ↗
+              </a>
               <div className="mobile-theme-toggle">
                 <ThemeToggle />
               </div>
-            </div>
+            </m.div>
           </m.div>
         )}
       </AnimatePresence>
-    </m.nav>
+    </nav>
   );
 };
 

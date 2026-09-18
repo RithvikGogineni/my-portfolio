@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { m } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { fadeInUp } from '../animations/framerVariants';
+import { reveal as fadeInUp } from '../animations/variants';
 import { useBlogPost } from '../hooks/useBlogPost';
 import { useFirebaseImage } from '../hooks/useFirebaseImage';
 
@@ -46,8 +46,8 @@ const BlogPostPage = () => {
     <main className="main-content">
       <m.article
         className="blog-post-page"
-        initial="initial"
-        animate="animate"
+        initial="hidden"
+        animate="show"
         variants={fadeInUp}
       >
         <div className="container">

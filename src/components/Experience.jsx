@@ -1,96 +1,16 @@
-import React, { useEffect, useRef } from 'react';
-import { m } from 'framer-motion';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { staggerContainer, fadeInUp, timelineVariants, timelineDotVariants } from '../animations/framerVariants';
-
-gsap.registerPlugin(ScrollTrigger);
+import React, { useRef } from 'react';
+import { m, useScroll, useSpring } from 'framer-motion';
+import { Reveal, RevealItem, SectionHeader } from '../animations/motion';
+import { EASE } from '../animations/variants';
 
 const Experience = () => {
-  const sectionRef = useRef(null);
   const timelineRef = useRef(null);
-  const experienceItemsRef = useRef([]);
-  const timelineLineRef = useRef(null);
-  const timelineDotsRef = useRef([]);
-
-  useEffect(() => {
-    // Timeline line animation
-    if (timelineLineRef.current) {
-      gsap.fromTo(timelineLineRef.current,
-        { scaleY: 0 },
-        {
-          scaleY: 1,
-          duration: 2,
-          ease: [0.25, 0.46, 0.45, 0.94],
-          scrollTrigger: {
-            trigger: timelineRef.current,
-            start: "top 70%",
-            end: "bottom 30%",
-            toggleActions: "play none none reverse"
-          }
-        }
-      );
-    }
-
-    // Timeline dots animation
-    timelineDotsRef.current.forEach((dot, index) => {
-      if (dot) {
-        gsap.fromTo(dot,
-          { scale: 0, opacity: 0 },
-          {
-            scale: 1,
-            opacity: 1,
-            duration: 0.5,
-            ease: "back.out(1.7)",
-            delay: index * 0.2,
-            scrollTrigger: {
-              trigger: dot,
-              start: "top 80%",
-              toggleActions: "play none none reverse"
-            }
-          }
-        );
-      }
-    });
-
-    // Experience items animation
-    experienceItemsRef.current.forEach((item, index) => {
-      if (item) {
-        gsap.fromTo(item,
-          { x: index % 2 === 0 ? -100 : 100, opacity: 0 },
-          {
-            x: 0,
-            opacity: 1,
-            duration: 0.8,
-            ease: [0.25, 0.46, 0.45, 0.94],
-            delay: index * 0.2,
-            scrollTrigger: {
-              trigger: item,
-              start: "top 85%",
-              toggleActions: "play none none reverse"
-            }
-          }
-        );
-
-        // Hover effects
-        item.addEventListener('mouseenter', () => {
-          gsap.to(item, {
-            scale: 1.02,
-            duration: 0.3,
-            ease: [0.25, 0.46, 0.45, 0.94]
-          });
-        });
-
-        item.addEventListener('mouseleave', () => {
-          gsap.to(item, {
-            scale: 1,
-            duration: 0.3,
-            ease: [0.25, 0.46, 0.45, 0.94]
-          });
-        });
-      }
-    });
-  }, []);
+  // The timeline line draws itself as you scroll through the section.
+  const { scrollYProgress } = useScroll({
+    target: timelineRef,
+    offset: ['start 75%', 'end 60%'],
+  });
+  const lineScale = useSpring(scrollYProgress, { stiffness: 120, damping: 30, restDelta: 0.001 });
 
   const experiences = [
     {
@@ -177,46 +97,42 @@ const Experience = () => {
   ];
 
   return (
-    <section ref={sectionRef} className="experience-section section" id="experience">
+    <section className="experience-section section" id="experience">
       <div className="container">
-        <m.div
-          className="experience-content"
-          variants={staggerContainer}
-          initial="initial"
-          whileInView="animate"
-          viewport={{ once: true }}
-        >
-          {/* Section Header */}
-          <m.div className="section-header" variants={fadeInUp}>
-            <h2 className="section-title">Experience & Education</h2>
-            <p className="section-subtitle">
-              My journey through professional development and continuous learning
-            </p>
-          </m.div>
+        <div className="experience-content">
+          <SectionHeader
+            title="Experience & Education"
+            subtitle="Competition robotics, teaching, and building software people use"
+          />
 
           {/* Timeline */}
           <div ref={timelineRef} className="timeline-container">
-            <div className="timeline-line" ref={timelineLineRef}></div>
-            
+            <m.div className="timeline-line" style={{ scaleY: lineScale }} aria-hidden="true" />
+
             {experiences.map((experience, index) => (
               <m.div
                 key={experience.id}
-                ref={el => experienceItemsRef.current[index] = el}
                 className={`timeline-item ${index % 2 === 0 ? 'left' : 'right'}`}
-                variants={timelineVariants}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, margin: '0px 0px -15% 0px' }}
               >
                 <div className="timeline-dot-container">
                   <m.div
-                    ref={el => timelineDotsRef.current[index] = el}
                     className={`timeline-dot ${experience.type}`}
-                    variants={timelineDotVariants}
+                    variants={{
+                      hidden: { scale: 0 },
+                      show: { scale: 1, transition: { duration: 0.5, ease: EASE } },
+                    }}
                   ></m.div>
                 </div>
-                
-                <m.div 
+
+                <m.div
                   className="timeline-content"
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.3 }}
+                  variants={{
+                    hidden: { opacity: 0, x: index % 2 === 0 ? -24 : 24 },
+                    show: { opacity: 1, x: 0, transition: { duration: 0.7, ease: EASE, delay: 0.1 } },
+                  }}
                 >
                   <div className="timeline-header">
                     <h3 className="timeline-title">{experience.title}</h3>
@@ -240,13 +156,9 @@ const Experience = () => {
             ))}
           </div>
 
-          {/* Skills Summary */}
-          <m.div 
-            className="skills-summary"
-            variants={fadeInUp}
-          >
-            <h3 className="summary-title">Key Skills & Expertise</h3>
-            <div className="skills-categories">
+          <Reveal className="skills-summary">
+            <RevealItem as="h3" className="summary-title">Key Skills & Expertise</RevealItem>
+            <RevealItem className="skills-categories">
               <div className="skill-category">
                 <h4>Robotics, Hardware & CAD</h4>
                 <div className="skill-items">
@@ -283,9 +195,9 @@ const Experience = () => {
                   <span className="skill-item">Multi-Armed Bandits</span>
                 </div>
               </div>
-            </div>
-          </m.div>
-        </m.div>
+            </RevealItem>
+          </Reveal>
+        </div>
       </div>
     </section>
   );

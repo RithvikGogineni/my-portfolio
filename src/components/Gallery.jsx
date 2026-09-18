@@ -1,14 +1,12 @@
-import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
-import { m } from 'framer-motion';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import { m, AnimatePresence } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { FaEye } from 'react-icons/fa';
-import { staggerContainer, fadeInUp } from '../animations/framerVariants';
+import { reveal as fadeInUp, stagger, EASE } from '../animations/variants';
+const staggerContainer = stagger(0.06);
 import { useFirebaseImage } from '../hooks/useFirebaseImage';
 import { useGallerySections } from '../hooks/useGallerySections';
 
-gsap.registerPlugin(ScrollTrigger);
 
 // Gallery Image Item Component
 // NOTE: must stay at module scope. Declaring it inside Gallery gives it a new
@@ -98,9 +96,6 @@ const GalleryImageItem = React.memo(React.forwardRef(({ sectionId, filename, ind
 GalleryImageItem.displayName = 'GalleryImageItem';
 
 const Gallery = () => {
-  const sectionRef = useRef(null);
-  const galleryItemsRef = useRef([]);
-  const detailPanelRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -213,133 +208,6 @@ const Gallery = () => {
     }
   }, [activeSection]);
 
-  useEffect(() => {
-    // Reset refs array based on visible images
-    galleryItemsRef.current = galleryItemsRef.current.slice(0, imagesToShow.length);
-    
-    // Track scroll velocity for dynamic animation speed
-    let lastScrollY = window.scrollY;
-    let scrollVelocity = 0;
-    
-    // Driven by the scroll event rather than a 60fps setInterval: this only
-    // does work when the page actually moves, and costs nothing when idle.
-    const updateVelocity = () => {
-      const currentScrollY = window.scrollY;
-      scrollVelocity = Math.abs(currentScrollY - lastScrollY);
-      lastScrollY = currentScrollY;
-    };
-    
-    window.addEventListener('scroll', updateVelocity, { passive: true });
-    
-    // Hover listeners are registered per item below; tracked so cleanup can
-    // remove them instead of leaking a new pair on every effect re-run.
-    const hoverCleanups = [];
-    
-    // Gallery items animation with scroll-velocity-based speed
-    // Only animate visible items
-    imagesToShow.forEach((filename, index) => {
-      const item = galleryItemsRef.current[index];
-      if (item) {
-        // Calculate dynamic duration based on scroll velocity
-        const baseDuration = 0.8;
-        const minDuration = 0.3;
-        const maxDuration = 1.5;
-        
-        // Higher velocity = faster animation (shorter duration)
-        const velocityFactor = Math.min(scrollVelocity / 10, 1); // Normalize to 0-1
-        const dynamicDuration = baseDuration * (1 - velocityFactor * 0.5);
-        const clampedDuration = Math.max(minDuration, Math.min(maxDuration, dynamicDuration));
-        
-        gsap.fromTo(item,
-          { scale: 0, opacity: 0, rotation: -10 },
-          {
-            scale: 1,
-            opacity: 1,
-            rotation: 0,
-            duration: clampedDuration,
-            ease: "back.out(1.7)",
-            delay: index * 0.1,
-            scrollTrigger: {
-              trigger: item,
-              start: "top 85%",
-              toggleActions: "play none none reverse",
-              onEnter: () => {
-                // Recalculate duration based on current scroll velocity
-                const currentVelocity = scrollVelocity;
-                const vFactor = Math.min(currentVelocity / 10, 1);
-                const dynDuration = baseDuration * (1 - vFactor * 0.5);
-                const clamped = Math.max(minDuration, Math.min(maxDuration, dynDuration));
-                gsap.to(item, {
-                  scale: 1,
-                  opacity: 1,
-                  rotation: 0,
-                  duration: clamped,
-                  ease: "back.out(1.7)"
-                });
-              }
-            }
-          }
-        );
-
-        // Hover effects
-        const image = item.querySelector('.gallery-image');
-        const overlay = item.querySelector('.gallery-overlay');
-
-        if (image && overlay) {
-          const onEnter = () => {
-            gsap.to(image, {
-              scale: 1.1,
-              duration: 0.3,
-              ease: [0.25, 0.46, 0.45, 0.94]
-            });
-            
-            gsap.to(overlay, {
-              opacity: 1,
-              duration: 0.3,
-              ease: [0.25, 0.46, 0.45, 0.94]
-            });
-          };
-
-          const onLeave = () => {
-            gsap.to(image, {
-              scale: 1,
-              duration: 0.3,
-              ease: [0.25, 0.46, 0.45, 0.94]
-            });
-            
-            gsap.to(overlay, {
-              opacity: 0,
-              duration: 0.3,
-              ease: [0.25, 0.46, 0.45, 0.94]
-            });
-          };
-
-          item.addEventListener('mouseenter', onEnter);
-          item.addEventListener('mouseleave', onLeave);
-          hoverCleanups.push(() => {
-            item.removeEventListener('mouseenter', onEnter);
-            item.removeEventListener('mouseleave', onLeave);
-          });
-        }
-      }
-    });
-    
-    // Cleanup
-    return () => {
-      window.removeEventListener('scroll', updateVelocity);
-      hoverCleanups.forEach((fn) => fn());
-      // Kill all ScrollTriggers for gallery items
-      galleryItemsRef.current.forEach((item) => {
-        if (item) {
-          ScrollTrigger.getAll().forEach(trigger => {
-            if (trigger.vars && trigger.vars.trigger === item) {
-              trigger.kill();
-            }
-          });
-        }
-      });
-    };
-  }, [imagesToShow]);
 
   const openImageDetail = useCallback((imageUrl, filename) => {
     if (!imageUrl || !filename) return;
@@ -352,37 +220,13 @@ const Gallery = () => {
       description: metadata.description || "No description available."
     });
     
-    // Animate panel in
-    if (detailPanelRef.current) {
-      gsap.fromTo(detailPanelRef.current,
-        { x: '100%' },
-        {
-          x: 0,
-          duration: 0.4,
-          ease: [0.25, 0.46, 0.45, 0.94]
-        }
-      );
-    }
-    
     // Prevent body scroll when panel is open
     document.body.style.overflow = 'hidden';
   }, [imageMetadata]);
 
   const closeImageDetail = useCallback(() => {
-    if (detailPanelRef.current) {
-      gsap.to(detailPanelRef.current, {
-        x: '100%',
-        duration: 0.4,
-        ease: [0.25, 0.46, 0.45, 0.94],
-        onComplete: () => {
-          setSelectedImage(null);
-          document.body.style.overflow = '';
-        }
-      });
-    } else {
-      setSelectedImage(null);
-      document.body.style.overflow = '';
-    }
+    setSelectedImage(null);
+    document.body.style.overflow = '';
   }, []);
   
   // Close panel on escape key
@@ -397,14 +241,19 @@ const Gallery = () => {
   }, [selectedImage, closeImageDetail]);
 
 
+  // Until the gallery has content, the home page skips the section entirely
+  // and the gallery page shows a short note instead of setup instructions.
+  const nothingToShow = !sectionsLoading && (sectionsError || gallerySections.length === 0);
+  if (nothingToShow && !isGalleryPage) return null;
+
   return (
-    <section ref={sectionRef} className="gallery-section section" id="gallery">
+    <section className="gallery-section section" id="gallery">
       <div className="container">
         <m.div
           className="gallery-content"
           variants={staggerContainer}
-          initial="initial"
-          animate="animate"
+          initial="hidden"
+          animate="show"
         >
           {/* Section Header */}
           <m.div className="section-header" variants={fadeInUp}>
@@ -419,19 +268,9 @@ const Gallery = () => {
             <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--color-text-muted)' }}>
               Loading gallery sections...
             </div>
-          ) : sectionsError ? (
-            <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--color-accent-primary)' }}>
-              {sectionsError?.code === 'permission-denied' ? (
-                <>
-                  <p>Gallery is locked by Firestore security rules.</p>
-                  <p style={{ fontSize: '0.8rem', opacity: 0.7, marginTop: '0.5rem' }}>
-                    Deploy the rules in <code>firestore.rules</code> with{' '}
-                    <code>firebase deploy --only firestore:rules,storage</code>.
-                  </p>
-                </>
-              ) : (
-                <p>Error loading gallery sections. Please check your Firestore setup.</p>
-              )}
+          ) : nothingToShow ? (
+            <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--color-text-muted)' }}>
+              Photos are on the way. In the meantime, see the <a href="/projects">projects</a>.
             </div>
           ) : gallerySections.length > 0 ? (
             <m.div 
@@ -448,11 +287,7 @@ const Gallery = () => {
                 </button>
               ))}
             </m.div>
-          ) : (
-            <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--color-text-muted)' }}>
-              No gallery sections found. Add sections to Firestore.
-            </div>
-          )}
+          ) : null}
 
           {/* Active Section Info */}
           {activeSectionData && (
@@ -474,6 +309,9 @@ const Gallery = () => {
               <m.div 
                 className="gallery-grid"
                 variants={staggerContainer}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, margin: '0px 0px -10% 0px' }}
                 key={`gallery-grid-${activeSection}`}
               >
                 {imagesToShow.length > 0 ? (
@@ -483,22 +321,12 @@ const Gallery = () => {
                       index={index}
                       sectionId={activeSection}
                       filename={filename}
-                      ref={el => {
-                        if (el) {
-                          galleryItemsRef.current[index] = el;
-                        }
-                      }}
                       onImageClick={(imageUrl, filename) => openImageDetail(imageUrl, filename)}
                     />
                   ))
                 ) : (
                   <div className="gallery-empty-state">
                     <p>No images in this section yet.</p>
-                    <p className="gallery-empty-hint">
-                      Add image filenames to the `images` array in Firestore for the "{activeSection}" section.
-                      <br />
-                      Then upload the actual image files to Firebase Storage at: <code>images/gallery/{activeSection}/</code>
-                    </p>
                   </div>
                 )}
               </m.div>
@@ -527,9 +355,14 @@ const Gallery = () => {
           ) : null}
 
           {/* Image Detail Panel */}
+          <AnimatePresence>
           {selectedImage && (
             <>
-              <div 
+              <m.div
+                key="overlay"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 className="gallery-detail-overlay" 
                 onClick={(e) => {
                   // Only close if clicking the overlay itself, not children
@@ -537,16 +370,17 @@ const Gallery = () => {
                     closeImageDetail();
                   }
                 }}
-              ></div>
+              ></m.div>
               <m.div
-                ref={detailPanelRef}
+                key="panel"
                 className="gallery-detail-panel"
                 initial={{ x: '100%' }}
                 animate={{ x: 0 }}
                 exit={{ x: '100%' }}
+                transition={{ duration: 0.45, ease: EASE }}
                 onClick={(e) => e.stopPropagation()}
               >
-                <button className="gallery-detail-close" onClick={closeImageDetail}>×</button>
+                <button className="gallery-detail-close" onClick={closeImageDetail} aria-label="Close">×</button>
                 
                 <div className="gallery-detail-content">
                   <div className="gallery-detail-image-container">
@@ -565,6 +399,7 @@ const Gallery = () => {
               </m.div>
             </>
           )}
+          </AnimatePresence>
         </m.div>
       </div>
     </section>

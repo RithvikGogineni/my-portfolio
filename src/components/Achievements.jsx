@@ -1,80 +1,8 @@
-import React, { useEffect, useRef } from 'react';
-import { m } from 'framer-motion';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React from 'react';
 import { FaTrophy, FaStar, FaMicrophone, FaChalkboardTeacher, FaChess, FaLightbulb } from 'react-icons/fa';
-import { staggerContainer, fadeInUp, confettiVariants } from '../animations/framerVariants';
-
-gsap.registerPlugin(ScrollTrigger);
+import { Reveal, RevealItem, SectionHeader } from '../animations/motion';
 
 const Achievements = () => {
-  const sectionRef = useRef(null);
-  const achievementCardsRef = useRef([]);
-  const confettiRefs = useRef([]);
-
-  useEffect(() => {
-    // Achievement cards animation
-    achievementCardsRef.current.forEach((card, index) => {
-      if (card) {
-        gsap.fromTo(card,
-          { y: 100, opacity: 0, scale: 0.8 },
-          {
-            y: 0,
-            opacity: 1,
-            scale: 1,
-            duration: 0.8,
-            ease: "back.out(1.7)",
-            delay: index * 0.2,
-            scrollTrigger: {
-              trigger: card,
-              start: "top 85%",
-              toggleActions: "play none none reverse"
-            }
-          }
-        );
-
-        // Confetti animation on scroll
-        const confetti = confettiRefs.current[index];
-        if (confetti) {
-          ScrollTrigger.create({
-            trigger: card,
-            start: "top 80%",
-            onEnter: () => {
-              gsap.to(confetti, {
-                opacity: [0, 1, 0],
-                scale: [0, 1, 0],
-                y: [-50, 50],
-                rotation: "random(-180, 180)",
-                duration: 2,
-                ease: [0.25, 0.46, 0.45, 0.94],
-                stagger: 0.1
-              });
-            }
-          });
-        }
-
-        // Hover effects
-        card.addEventListener('mouseenter', () => {
-          gsap.to(card, {
-            scale: 1.05,
-            boxShadow: "0 20px 40px rgba(255, 107, 107, 0.3)",
-            duration: 0.3,
-            ease: [0.25, 0.46, 0.45, 0.94]
-          });
-        });
-
-        card.addEventListener('mouseleave', () => {
-          gsap.to(card, {
-            scale: 1,
-            boxShadow: "0 8px 40px rgba(0, 0, 0, 0.2)",
-            duration: 0.3,
-            ease: [0.25, 0.46, 0.45, 0.94]
-          });
-        });
-      }
-    });
-  }, []);
-
   const achievements = [
     {
       id: 1,
@@ -126,128 +54,39 @@ const Achievements = () => {
     }
   ];
 
-  const stats = [
-    { number: "5", label: "Years Teaching Robotics" },
-    { number: "110+", label: "Students Taught" },
-    { number: "100%", label: "Innovation Focus" },
-    { number: "6+", label: "Major Awards" }
-  ];
 
   return (
-    <section ref={sectionRef} className="achievements-section section" id="achievements">
+    <section className="achievements-section section" id="achievements">
       <div className="container">
-        <m.div
-          className="achievements-content"
-          variants={staggerContainer}
-          initial="initial"
-          whileInView="animate"
-          viewport={{ once: true }}
-        >
-          {/* Section Header */}
-          <m.div className="section-header" variants={fadeInUp}>
-            <h2 className="section-title">Achievements & Recognition</h2>
-            <p className="section-subtitle">
-              Celebrating milestones and accomplishments in my journey
-            </p>
-          </m.div>
+        <div className="achievements-content">
+          <SectionHeader
+            title="Achievements & Recognition"
+            subtitle="Awards from competition robotics, programming, and beyond"
+          />
 
-          {/* Achievements Grid */}
-          <m.div 
-            className="achievements-grid"
-            variants={staggerContainer}
-          >
-            {achievements.map((achievement, index) => (
-              <m.div
-                key={achievement.id}
-                ref={el => achievementCardsRef.current[index] = el}
-                className="achievement-card"
-                variants={fadeInUp}
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.3 }}
-              >
-                {/* Confetti Elements */}
-                <div className="confetti-container">
-                  {[...Array(6)].map((_, confettiIndex) => (
-                    <m.div
-                      key={confettiIndex}
-                      ref={el => confettiRefs.current[index * 6 + confettiIndex] = el}
-                      className="confetti"
-                      variants={confettiVariants}
-                      style={{
-                        left: `${Math.random() * 100}%`,
-                        animationDelay: `${Math.random() * 2}s`
-                      }}
-                    >
-                      🎉
-                    </m.div>
-                  ))}
-                </div>
-
-                <div className="achievement-icon">
+          <Reveal className="achievements-grid" step={0.08}>
+            {achievements.map((achievement) => (
+              <RevealItem key={achievement.id} className="achievement-card">
+                <div className="achievement-icon" aria-hidden="true">
                   {achievement.icon && React.createElement(achievement.icon)}
                 </div>
-                
+
                 <div className="achievement-content">
                   <div className="achievement-header">
                     <h3 className="achievement-title">{achievement.title}</h3>
                     <span className="achievement-year">{achievement.year}</span>
                   </div>
-                  
                   <p className="achievement-description">{achievement.description}</p>
-                  
                   <div className="achievement-category">
                     <span className="category-badge">{achievement.category}</span>
                   </div>
                 </div>
 
                 <div className="achievement-glow"></div>
-              </m.div>
+              </RevealItem>
             ))}
-          </m.div>
-
-          {/* Stats Section */}
-          <m.div 
-            className="achievement-stats"
-            variants={fadeInUp}
-          >
-            <h3 className="stats-title">Impact Numbers</h3>
-            <div className="stats-grid">
-              {stats.map((stat, index) => (
-                <m.div
-                  key={stat.label}
-                  className="stat-item"
-                  variants={fadeInUp}
-                  whileHover={{ scale: 1.1 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <div className="stat-number">{stat.number}</div>
-                  <div className="stat-label">{stat.label}</div>
-                </m.div>
-              ))}
-            </div>
-          </m.div>
-
-          {/* Testimonial */}
-          <m.div 
-            className="testimonial"
-            variants={fadeInUp}
-          >
-            <div className="testimonial-content">
-              <div className="quote-icon">"</div>
-              <blockquote className="testimonial-text">
-                Rithvik's leadership and innovative approach to robotics has been exceptional. 
-                His ability to mentor students and drive team success makes him a standout 
-                in the STEM community. His dedication to excellence is truly inspiring.
-              </blockquote>
-              <div className="testimonial-author">
-                <div className="author-info">
-                  <div className="author-name">Dr. Maria Rodriguez</div>
-                  <div className="author-title">STEM Education Coordinator, FTC Jamaica</div>
-                </div>
-              </div>
-            </div>
-          </m.div>
-        </m.div>
+          </Reveal>
+        </div>
       </div>
     </section>
   );

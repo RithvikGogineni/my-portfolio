@@ -1,16 +1,13 @@
-import React, { useRef, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { m } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { staggerContainer, fadeInUp } from '../animations/framerVariants';
+import { reveal as fadeInUp, stagger } from '../animations/variants';
+
+const staggerContainer = stagger(0.08);
 import { useBlogPosts } from '../hooks/useBlogPosts';
 import { useFirebaseImage } from '../hooks/useFirebaseImage';
 
-gsap.registerPlugin(ScrollTrigger);
-
 const Blog = () => {
-  const sectionRef = useRef(null);
   const { posts: blogPosts, loading, error } = useBlogPosts();
   const [selectedCategory, setSelectedCategory] = useState('All');
 
@@ -38,14 +35,18 @@ const Blog = () => {
     return filteredPosts.slice(0, 6);
   }, [filteredPosts]);
 
+  // Home page skips the section until there are posts to show.
+  if (!loading && (error || blogPosts.length === 0)) return null;
+
   return (
-    <section ref={sectionRef} className="blog-section section" id="blog">
+    <section className="blog-section section" id="blog">
       <div className="container">
         <m.div
           className="blog-content"
           variants={staggerContainer}
-          initial="initial"
-          animate="animate"
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: '0px 0px -10% 0px' }}
         >
           {/* Section Header */}
           <m.div className="section-header" variants={fadeInUp}>
@@ -82,20 +83,6 @@ const Blog = () => {
             </div>
           )}
 
-          {/* Error State */}
-          {error && (
-            <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--color-accent-primary)' }}>
-              Error loading blog posts. Please try again later.
-            </div>
-          )}
-
-          {/* Empty State */}
-          {!loading && !error && blogPosts.length === 0 && (
-            <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--color-text-muted)' }}>
-              No blog posts yet. Check back soon!
-            </div>
-          )}
-
           {/* Blog Grid */}
           {!loading && !error && displayedPosts.length > 0 && (
             <m.div 
@@ -109,7 +96,7 @@ const Blog = () => {
           )}
 
           {/* No Posts in Category */}
-          {!loading && !error && displayedPosts.length === 0 && filteredPosts.length === 0 && (
+          {!loading && !error && blogPosts.length > 0 && displayedPosts.length === 0 && (
             <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--color-text-muted)' }}>
               No posts found in the "{selectedCategory}" category.
             </div>

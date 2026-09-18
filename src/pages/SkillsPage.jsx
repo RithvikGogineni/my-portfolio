@@ -1,6 +1,6 @@
 import React from 'react';
 import { m } from 'framer-motion';
-import { fadeInUp } from '../animations/framerVariants';
+import { reveal as fadeInUp } from '../animations/variants';
 import Skills from '../components/Skills';
 
 const SkillsPage = () => {
@@ -8,8 +8,8 @@ const SkillsPage = () => {
     <main className="main-content">
       <m.div
         className="page-hero"
-        initial="initial"
-        animate="animate"
+        initial="hidden"
+        animate="show"
         variants={fadeInUp}
       >
         <div className="container">

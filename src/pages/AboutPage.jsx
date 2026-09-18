@@ -1,6 +1,6 @@
 import React from 'react';
 import { m } from 'framer-motion';
-import { fadeInUp } from '../animations/framerVariants';
+import { reveal as fadeInUp } from '../animations/variants';
 import About from '../components/About';
 
 const AboutPage = () => {
@@ -8,14 +8,14 @@ const AboutPage = () => {
     <main className="main-content">
       <m.div
         className="page-hero"
-        initial="initial"
-        animate="animate"
+        initial="hidden"
+        animate="show"
         variants={fadeInUp}
       >
         <div className="container">
           <h1 className="page-title">About Me</h1>
           <p className="page-subtitle">
-            Engineering student passionate about robotics, innovation, and mentorship
+            Mechanical & Robotics Engineering student at WPI
           </p>
         </div>
       </m.div>

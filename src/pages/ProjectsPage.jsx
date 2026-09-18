@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { m } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { fadeInUp } from '../animations/framerVariants';
+import { reveal as fadeInUp } from '../animations/variants';
 import { projects as projectsData, categories as categoryDefs } from '../data/projects';
 
 const ProjectsPage = () => {
@@ -15,8 +15,8 @@ const ProjectsPage = () => {
     <main className="main-content">
       <m.div
         className="page-hero"
-        initial="initial"
-        animate="animate"
+        initial="hidden"
+        animate="show"
         variants={fadeInUp}
       >
         <div className="container">

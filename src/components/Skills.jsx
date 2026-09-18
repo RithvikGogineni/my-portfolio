@@ -1,107 +1,27 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { m } from 'framer-motion';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { 
   FaRobot, FaCog, FaWrench, FaTrophy, FaBolt,
   FaCode, FaPython, FaJava, FaPalette, FaTheaterMasks, FaImage, FaCube, FaGem, FaBullseye, FaStar,
   FaChess, FaGraduationCap, FaRaspberryPi, FaMicrochip, FaBrain, FaDatabase, FaPrint, FaReact, FaVial
 } from 'react-icons/fa';
 import { SiTypescript, SiSupabase, SiPostgresql, SiRos, SiVercel } from 'react-icons/si';
-import { staggerContainer, fadeInUp, iconVariants, progressVariants } from '../animations/framerVariants';
+import { Reveal, RevealItem, SectionHeader } from '../animations/motion';
+import { EASE } from '../animations/variants';
 
-gsap.registerPlugin(ScrollTrigger);
+// Bars fill with a transform (scaleX) rather than width, so no layout work.
+const Bar = ({ level, className, delay = 0 }) => (
+  <m.div
+    className={className}
+    style={{ width: '100%', transformOrigin: 'left center' }}
+    initial={{ scaleX: 0 }}
+    whileInView={{ scaleX: level / 100 }}
+    viewport={{ once: true, margin: '0px 0px -10% 0px' }}
+    transition={{ duration: 1.1, ease: EASE, delay }}
+  />
+);
 
 const Skills = () => {
-  const sectionRef = useRef(null);
-  const skillIconsRef = useRef([]);
-  const progressBarsRef = useRef([]);
-  const skillCardsRef = useRef([]);
-
-  useEffect(() => {
-    // Skill icons animation
-    skillIconsRef.current.forEach((icon, index) => {
-      if (icon) {
-        gsap.fromTo(icon,
-          { scale: 0, rotation: -180, opacity: 0 },
-          {
-            scale: 1,
-            rotation: 0,
-            opacity: 1,
-            duration: 0.6,
-            ease: "back.out(1.7)",
-            delay: index * 0.1,
-            scrollTrigger: {
-              trigger: icon,
-              start: "top 85%",
-              toggleActions: "play none none reverse"
-            }
-          }
-        );
-
-        // Hover effects
-        icon.addEventListener('mouseenter', () => {
-          gsap.to(icon, {
-            scale: 1.2,
-            rotation: 5,
-            duration: 0.3,
-            ease: [0.25, 0.46, 0.45, 0.94]
-          });
-        });
-
-        icon.addEventListener('mouseleave', () => {
-          gsap.to(icon, {
-            scale: 1,
-            rotation: 0,
-            duration: 0.3,
-            ease: [0.25, 0.46, 0.45, 0.94]
-          });
-        });
-      }
-    });
-
-    // Progress bars animation
-    progressBarsRef.current.forEach((bar, index) => {
-      if (bar) {
-        gsap.fromTo(bar,
-          { width: "0%" },
-          {
-            width: bar.dataset.width || "100%",
-            duration: 2,
-            ease: [0.25, 0.46, 0.45, 0.94],
-            delay: index * 0.2,
-            scrollTrigger: {
-              trigger: bar,
-              start: "top 80%",
-              toggleActions: "play none none reverse"
-            }
-          }
-        );
-      }
-    });
-
-    // Skill cards animation
-    skillCardsRef.current.forEach((card, index) => {
-      if (card) {
-        gsap.fromTo(card,
-          { y: 50, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            ease: [0.25, 0.46, 0.45, 0.94],
-            delay: index * 0.1,
-            scrollTrigger: {
-              trigger: card,
-              start: "top 85%",
-              toggleActions: "play none none reverse"
-            }
-          }
-        );
-      }
-    });
-  }, []);
-
   const skillCategories = [
     {
       title: "Robotics & Hardware",
@@ -163,57 +83,29 @@ const Skills = () => {
   ];
 
   return (
-    <section ref={sectionRef} className="skills-section section" id="skills">
+    <section className="skills-section section" id="skills">
       <div className="container">
-        <m.div
-          className="skills-content"
-          variants={staggerContainer}
-          initial="initial"
-          whileInView="animate"
-          viewport={{ once: true }}
-        >
-          {/* Section Header */}
-          <m.div className="section-header" variants={fadeInUp}>
-            <h2 className="section-title">Skills & Expertise</h2>
-            <p className="section-subtitle">
-              Technical skills and soft skills that drive my success
-            </p>
-          </m.div>
+        <div className="skills-content">
+          <SectionHeader
+            title="Skills & Expertise"
+            subtitle="Hardware, software, and the people skills that hold a team together"
+          />
 
-          {/* Technical Skills */}
-          <div className="technical-skills">
-            {skillCategories.map((category, categoryIndex) => (
-              <m.div
-                key={category.title}
-                ref={el => skillCardsRef.current[categoryIndex] = el}
-                className="skill-category-card"
-                variants={fadeInUp}
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.3 }}
-              >
+          <Reveal className="technical-skills" step={0.1}>
+            {skillCategories.map((category) => (
+              <RevealItem key={category.title} className="skill-category-card">
                 <div className="category-header">
-                  <m.div
-                    ref={el => skillIconsRef.current[categoryIndex] = el}
-                    className="category-icon"
-                    variants={iconVariants}
-                    whileHover="hover"
-                  >
+                  <div className="category-icon" aria-hidden="true">
                     {category.icon && React.createElement(category.icon)}
-                  </m.div>
+                  </div>
                   <h3 className="category-title">{category.title}</h3>
                 </div>
 
                 <div className="skills-grid">
                   {category.skills.map((skill, skillIndex) => (
-                    <m.div
-                      key={skill.name}
-                      className="skill-item"
-                      variants={fadeInUp}
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ duration: 0.3 }}
-                    >
+                    <div key={skill.name} className="skill-item">
                       <div className="skill-header">
-                        <div className="skill-icon">
+                        <div className="skill-icon" aria-hidden="true">
                           {skill.icon && React.createElement(skill.icon)}
                         </div>
                         <span className="skill-name">{skill.name}</span>
@@ -222,103 +114,66 @@ const Skills = () => {
                       
                       <div className="progress-container">
                         <div className="progress-bar">
-                          <m.div
-                            ref={el => progressBarsRef.current[categoryIndex * 6 + skillIndex] = el}
-                            className="progress-fill"
-                            data-width={`${skill.level}%`}
-                            variants={progressVariants}
-                          ></m.div>
+                          <Bar className="progress-fill" level={skill.level} delay={skillIndex * 0.05} />
                         </div>
                       </div>
-                    </m.div>
+                    </div>
                   ))}
                 </div>
-              </m.div>
+              </RevealItem>
             ))}
-          </div>
+          </Reveal>
 
-          {/* Soft Skills */}
-          <m.div 
-            className="soft-skills"
-            variants={fadeInUp}
-          >
-            <h3 className="soft-skills-title">Soft Skills</h3>
-            <div className="soft-skills-grid">
+          <Reveal className="soft-skills">
+            <RevealItem as="h3" className="soft-skills-title">Soft Skills</RevealItem>
+            <RevealItem className="soft-skills-grid">
               {softSkills.map((skill, index) => (
-                <m.div
-                  key={skill.name}
-                  className="soft-skill-item"
-                  variants={fadeInUp}
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.3 }}
-                >
+                <div key={skill.name} className="soft-skill-item">
                   <div className="soft-skill-header">
                     <span className="soft-skill-name">{skill.name}</span>
                     <span className="soft-skill-level">{skill.level}%</span>
                   </div>
                   
                   <div className="soft-skill-progress">
-                    <m.div
-                      className="soft-skill-bar"
-                      initial={{ width: 0 }}
-                      whileInView={{ width: `${skill.level}%` }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 1.5, delay: index * 0.1 }}
-                    ></m.div>
+                    <Bar className="soft-skill-bar" level={skill.level} delay={index * 0.05} />
                   </div>
-                </m.div>
+                </div>
               ))}
-            </div>
-          </m.div>
+            </RevealItem>
+          </Reveal>
 
-          {/* Certifications */}
-          <m.div 
-            className="certifications"
-            variants={fadeInUp}
-          >
-            <h3 className="certifications-title">Certifications</h3>
-            <div className="certifications-grid">
-              <m.div
-                className="certification-item"
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.3 }}
-              >
+          <Reveal className="certifications">
+            <RevealItem as="h3" className="certifications-title">Certifications</RevealItem>
+            <RevealItem className="certifications-grid">
+              <div className="certification-item">
                 <div className="cert-icon"><FaTrophy /></div>
                 <div className="cert-content">
                   <h4>FTC National Inspire Award</h4>
                   <p>FIRST Tech Challenge</p>
                   <span className="cert-date">2025</span>
                 </div>
-              </m.div>
+              </div>
               
-              <m.div
-                className="certification-item"
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.3 }}
-              >
+              <div className="certification-item">
                 <div className="cert-icon"><FaGraduationCap /></div>
                 <div className="cert-content">
                   <h4>Grade 2 Piano Distinction</h4>
                   <p>ABRSM UK</p>
                   <span className="cert-date">2023</span>
                 </div>
-              </m.div>
+              </div>
               
-              <m.div
-                className="certification-item"
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.3 }}
-              >
+              <div className="certification-item">
                 <div className="cert-icon"><FaChess /></div>
                 <div className="cert-content">
                   <h4>Chess U1800 Champion</h4>
                   <p>St. Andrew Parish</p>
                   <span className="cert-date">2022</span>
                 </div>
-              </m.div>
-            </div>
-          </m.div>
-        </m.div>
+              </div>
+            </RevealItem>
+          </Reveal>
+        </div>
       </div>
     </section>
   );

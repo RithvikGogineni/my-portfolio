@@ -1,168 +1,77 @@
-import React, { useEffect, Suspense, lazy } from 'react';
-import { LazyMotion, domAnimation, m, MotionConfig, useScroll, useSpring } from 'framer-motion';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import React, { Suspense, lazy, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { LazyMotion, domAnimation, MotionConfig } from 'framer-motion';
 import { ThemeProvider } from './context/ThemeContext';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
+import { Header } from './components/a2/Chrome';
 import ErrorBoundary from './components/ErrorBoundary';
-import './index.css';
+import Home from './pages/a2/Home';
+import './styles/index.css';
 
-// Home is the landing page, so it ships in the main bundle: lazy-loading it
-// added a second round-trip before the hero could paint. Other pages stay lazy.
-import HomePage from './pages/HomePage';
-const AboutPage = lazy(() => import('./pages/AboutPage'));
-const ProjectsPage = lazy(() => import('./pages/ProjectsPage'));
-const ProjectDetailPage = lazy(() => import('./pages/ProjectDetailPage'));
-const ExperiencePage = lazy(() => import('./pages/ExperiencePage'));
-const SkillsPage = lazy(() => import('./pages/SkillsPage'));
-const GalleryPage = lazy(() => import('./pages/GalleryPage'));
-const BlogPage = lazy(() => import('./pages/BlogPage'));
-const BlogPostPage = lazy(() => import('./pages/BlogPostPage'));
-const ContactPage = lazy(() => import('./pages/ContactPage'));
+// The home page ships in the main bundle — it is the landing page, and a
+// second round-trip before the nameplate can paint is not worth the split.
+// Case studies are lazy: they carry the assembly exhibit and the project
+// imagery, and nobody pays for that until they ask for a project.
+const CaseStudy = lazy(() => import('./pages/a2/CaseStudy'));
 
-// Loading fallback component
-const PageLoader = () => (
-  <div style={{ 
-    display: 'flex', 
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    minHeight: '100vh',
-    color: 'var(--color-text-light)'
-  }}>
-    <div>Loading...</div>
+/**
+ * Route changes start at the top of the new sheet; in-page anchors are left
+ * alone so the header's section links still work. Browser back and forward
+ * restore their own position, which is what a visitor expects.
+ */
+function ScrollManager() {
+  const { pathname, hash } = useLocation();
+  useEffect(() => {
+    if (hash) return;
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [pathname, hash]);
+  return null;
+}
+
+/** A case study's own sheet index is in-page; arriving with a hash honours it. */
+function HashFocus() {
+  const { hash } = useLocation();
+  useEffect(() => {
+    if (!hash) return;
+    const el = document.getElementById(hash.slice(1));
+    if (el) el.scrollIntoView({ block: 'start' });
+  }, [hash]);
+  return null;
+}
+
+const Loading = () => (
+  <div className="a2-sheet" style={{ minHeight: '60vh', display: 'grid', placeItems: 'center' }}>
+    <p className="a2-label a2-label--dim">Loading sheet…</p>
   </div>
 );
 
-// Component to handle scroll to top on route change
-const ScrollToTop = () => {
-  const { pathname } = useLocation();
-
-  useEffect(() => {
-    // Small delay to ensure DOM is ready
-    const scrollToTop = () => {
-      // Try Lenis first if available (for smooth scrolling library)
-      if (window.lenis) {
-        window.lenis.scrollTo(0, { immediate: true });
-      } else {
-        // Fallback to native scroll
-        window.scrollTo(0, 0);
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
-      }
-    };
-
-    // Immediate scroll
-    scrollToTop();
-    
-    // Also scroll after a tiny delay to catch any async rendering
-    const timeoutId = setTimeout(scrollToTop, 0);
-    
-    return () => clearTimeout(timeoutId);
-  }, [pathname]);
-
-  return null;
-};
-
-// Thin bar at the top that tracks page scroll. Spring-smoothed, transform-only.
-const ScrollProgress = () => {
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness: 200, damping: 40, restDelta: 0.001 });
-  return <m.div className="scroll-progress" style={{ scaleX }} aria-hidden="true" />;
-};
-
-// Fades page content in on route changes only, never on first load, so the
-// first paint isn't held back behind an opacity animation.
-const RouteFade = ({ children }) => {
-  const { pathname } = useLocation();
-  const first = React.useRef(true);
-  useEffect(() => { first.current = false; }, []);
-  return (
-    <m.div
-      key={pathname}
-      initial={first.current ? false : { opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.35, ease: 'easeOut' }}
-    >
-      {children}
-    </m.div>
-  );
-};
-
-function App() {
-  useEffect(() => {
-    // Smooth scrolling, skipped for people who prefer reduced motion.
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const initSmoothScroll = async () => {
-      const { default: Lenis } = await import('lenis');
-      const lenis = new Lenis({
-        duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        direction: 'vertical',
-        gestureDirection: 'vertical',
-        smooth: true,
-        mouseMultiplier: 1,
-        smoothTouch: false,
-        touchMultiplier: 2,
-        infinite: false,
-      });
-
-      // Store Lenis instance globally for ScrollToTop component
-      window.lenis = lenis;
-
-      function raf(time) {
-        lenis.raf(time);
-        requestAnimationFrame(raf);
-      }
-
-      requestAnimationFrame(raf);
-    };
-
-    initSmoothScroll();
-  }, []);
-
+export default function App() {
   return (
     <ErrorBoundary>
-      {/* LazyMotion + the `m` component ship only the animation features this
-          site uses (animations, variants, exit, hover/tap, whileInView) instead
-          of the full `motion` bundle. No layout or drag animations are used, so
-          `domAnimation` is sufficient; `strict` makes a stray `motion.*` throw
+      {/* domAnimation covers everything this site animates: transforms,
+          opacity, variants, exit and gestures. No layout or drag animations
+          are used anywhere, and `strict` makes a stray `motion.*` throw
           rather than silently pulling the full bundle back in. */}
       <LazyMotion features={domAnimation} strict>
-      <MotionConfig reducedMotion="user">
-      <ThemeProvider>
-        <BrowserRouter>
-          <ScrollToTop />
-          <div className="App">
-            {/* Navbar */}
-            <Navbar />
-
-            <ScrollProgress />
-
-            <Suspense fallback={<PageLoader />}>
-              <RouteFade>
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/about" element={<AboutPage />} />
-                <Route path="/projects" element={<ProjectsPage />} />
-                <Route path="/projects/:id" element={<ProjectDetailPage />} />
-                <Route path="/experience" element={<ExperiencePage />} />
-                <Route path="/skills" element={<SkillsPage />} />
-                <Route path="/gallery" element={<GalleryPage />} />
-                <Route path="/blog" element={<BlogPage />} />
-                <Route path="/blog/:id" element={<BlogPostPage />} />
-                <Route path="/contact" element={<ContactPage />} />
-              </Routes>
-              </RouteFade>
-            </Suspense>
-
-            <Footer />
-          </div>
-        </BrowserRouter>
-      </ThemeProvider>
-      </MotionConfig>
+        <MotionConfig reducedMotion="user">
+          <ThemeProvider>
+            <BrowserRouter>
+              <ScrollManager />
+              <HashFocus />
+              <a className="a2-skip" href="#main">Skip to content</a>
+              <Header />
+              <Suspense fallback={<Loading />}>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/work/:slug" element={<CaseStudy />} />
+                  {/* Legacy project links keep working rather than 404ing. */}
+                  <Route path="/projects/*" element={<Navigate to="/#index" replace />} />
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+              </Suspense>
+            </BrowserRouter>
+          </ThemeProvider>
+        </MotionConfig>
       </LazyMotion>
     </ErrorBoundary>
   );
 }
-
-export default App;

@@ -48,18 +48,22 @@ Real assets in the repo that Concept A.2 does not have a slot for:
 
 ## 4. Facts still to confirm
 
-1. **FTC result wording.** The concept PDF says *"National 2nd Place Inspire
-   Award"*. Your résumé says *"Jamaica Inspire Award and Judges' Choice (Ochoa)
-   Award at the 2025 FIRST Championship"*. **The site uses the résumé wording.**
-   Tell me which is right and I will align both.
-2. **JARVIS** and **Veyra** were listed as candidate projects in the brief.
+1. **JARVIS** and **Veyra** were listed as candidate projects in the brief.
    JARVIS exists in the old site copy as *"developing"*; Veyra appears nowhere
    in the repo or the résumé. Neither has a case study, because there is
    nothing verified to write one from. Send content and each becomes one entry
    in `src/content/projects.js`.
-3. **Build log.** The concept has a milestone timeline (concept → build →
+2. **Build log.** The concept has a milestone timeline (concept → build →
    test). It is **not rendered**, because no dated milestones exist. Three real
    dates plus a photo each would turn it on.
+
+### Resolved
+
+- **FTC result wording** — confirmed 2026-11-12. The résumé is right: *Jamaica
+  Inspire Award and the Judges' Choice (Ochoa) Award at the 2025 FIRST
+  Championship*. The concept PDF's *"National 2nd Place Inspire Award"* was a
+  drafting guess and is **deliberately not used**. Do not "correct" the site to
+  match the PDF on this point.
 
 ## 5. What was removed from the build
 

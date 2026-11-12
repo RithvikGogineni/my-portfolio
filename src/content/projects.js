@@ -103,6 +103,10 @@ export const projects = [
       { label: 'My role', value: 'Captain (2025–26), Vice-Captain (2024–25)', verified: true }, // R
       { label: 'Seasons', value: '2024–25 · 2025–26', verified: true },                         // R
       { label: 'Competition', value: 'FIRST Tech Challenge', verified: true },                  // R
+      // CONFIRMED 2026-11-12: the résumé wording is correct. The approved
+      // concept PDF says "National 2nd Place Inspire Award"; that was a
+      // drafting guess and is deliberately not used here. Do not reconcile
+      // this line to the PDF.
       { label: 'Result', value: 'Jamaica Inspire Award · Judges’ Choice (Ochoa)', verified: true }, // R
     ],
 

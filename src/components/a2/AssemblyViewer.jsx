@@ -215,7 +215,9 @@ export default function AssemblyViewer({ assembly }) {
         )}
 
         <div className="a2-stage__controls">
-          <StageHint>Drag to orbit · arrows to step · +/− to zoom · 0 to reset</StageHint>
+          <StageHint touch="Drag to orbit · drag the slider to separate · tap a part">
+            Drag to orbit · arrows to step · +/− to zoom · 0 to reset
+          </StageHint>
         </div>
       </div>
     </div>

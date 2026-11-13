@@ -40,7 +40,9 @@ export default function FeaturedInspect({ systems, media }) {
     <div className="a2-inspect">
       <figure className="a2-inspect__well a2-well a2-ch-l">
         <figcaption className="a2-exhibit__bar">
-          <span className="a2-label">{media.figure}</span>
+          {/* The figure label names the system currently being inspected, so
+              the drawing and its caption can never disagree. */}
+          <span className="a2-label">{media.figure} · {active.name}</span>
           {media.illustrative && (
             <span className="a2-tag a2-ch-s a2-chamfer">Illustrative · asset {media.assetId}</span>
           )}
@@ -80,7 +82,14 @@ export default function FeaturedInspect({ systems, media }) {
               role="tab"
               id={`sys-${s.id}`}
               aria-selected={n === i}
-              aria-controls={`sysp-${s.id}`}
+              // Only one panel is in the DOM at a time, because the note
+              // crossfades on selection and four mounted panels would have
+              // nothing to crossfade. So only the selected tab may claim to
+              // control one: on the other three the id resolved to nothing,
+              // which is worse for a screen reader than no attribute at all.
+              // ARIA makes aria-controls optional on role="tab" for exactly
+              // this case.
+              aria-controls={n === i ? `sysp-${s.id}` : undefined}
               tabIndex={n === i ? 0 : -1}
               className={`a2-tab a2-ch-s${n === i ? ' is-on' : ''}`}
               onClick={() => setI(n)}

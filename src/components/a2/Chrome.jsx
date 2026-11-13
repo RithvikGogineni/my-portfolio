@@ -4,10 +4,11 @@
 // numbered destinations in the centre, the theme control on the right. The
 // fine-line indicator under the active destination is the only moving part,
 // and it travels rather than blinking between positions.
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { m } from 'framer-motion';
+import { m, useReducedMotion } from 'framer-motion';
 import ThemeControl from './ThemeControl';
+import { useMediaQuery, NARROW } from '../../hooks/useMediaQuery';
 import { site } from '../../content/site';
 import { T } from '../../motion/tokens';
 
@@ -67,10 +68,110 @@ function useActiveSection(enabled) {
   return active;
 }
 
+/**
+ * The header's index on a phone.
+ *
+ * The four numbered destinations do not fit under 620px, so the approved
+ * mobile sheet replaces them with an INDEX affordance. This is that: a
+ * disclosure holding the same four rows, in the same order, with the same
+ * numbers and the same active mark. It introduces no new destinations — it is
+ * the desktop row, stacked.
+ *
+ * It renders only when the query matches, so the navigation never exists
+ * twice in the accessibility tree. `aria-expanded` carries the state;
+ * `aria-controls` is deliberately absent, because the panel is unmounted
+ * while closed and an id that resolves to nothing is worse than no attribute.
+ * The panel is the toggle's next sibling, so reading order already leads
+ * there.
+ */
+function HeadIndex({ onHome, active }) {
+  const [open, setOpen] = useState(false);
+  const reduce = useReducedMotion();
+  const { pathname, hash } = useLocation();
+  const wrap = useRef(null);
+  const toggle = useRef(null);
+
+  // Any navigation closes it, a same-page hash jump included.
+  useEffect(() => { setOpen(false); }, [pathname, hash]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e) => {
+      if (e.key !== 'Escape') return;
+      setOpen(false);
+      // Escape must hand focus back to the control that opened the panel,
+      // or a keyboard visitor is dropped at the top of the document.
+      toggle.current?.focus();
+    };
+    const onDown = (e) => {
+      if (!wrap.current?.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener('keydown', onKey);
+    document.addEventListener('pointerdown', onDown);
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.removeEventListener('pointerdown', onDown);
+    };
+  }, [open]);
+
+  return (
+    <div className="a2-head__index" ref={wrap}>
+      <button
+        type="button"
+        ref={toggle}
+        className="a2-head__indexBtn a2-label"
+        aria-expanded={open}
+        onClick={() => setOpen((o) => !o)}
+      >
+        Index
+        <span className="a2-head__indexArrow a2-mono" aria-hidden="true">↓</span>
+      </button>
+
+      {open && (
+        <m.nav
+          className="a2-head__panel"
+          aria-label="Sections"
+          initial={reduce ? false : { opacity: 0, y: -6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={T.state}
+        >
+          {SECTIONS.map((s) => {
+            const on = onHome && active === s.id;
+            const cls = `a2-head__panelLink${on ? ' is-on' : ''}`;
+            const inner = (
+              <>
+                <span className="a2-head__n">{s.n}</span>
+                <span>{s.label}</span>
+              </>
+            );
+            return onHome ? (
+              <a
+                key={s.id}
+                href={`#${s.id}`}
+                className={cls}
+                aria-label={`${s.n} ${s.label}`}
+                aria-current={on ? 'true' : undefined}
+                onClick={() => setOpen(false)}
+              >
+                {inner}
+              </a>
+            ) : (
+              <Link key={s.id} to={`/#${s.id}`} className={cls} aria-label={`${s.n} ${s.label}`}>
+                {inner}
+              </Link>
+            );
+          })}
+        </m.nav>
+      )}
+    </div>
+  );
+}
+
 export function Header() {
   const { pathname } = useLocation();
   const onHome = pathname === '/';
   const active = useActiveSection(onHome);
+  const narrow = useMediaQuery(NARROW);
 
   return (
     <header className="a2-head">
@@ -80,13 +181,20 @@ export function Header() {
           <span className="a2-label a2-head__name">{site.name}</span>
         </Link>
 
-        {onHome ? (
+        {narrow ? (
+          <HeadIndex onHome={onHome} active={active} />
+        ) : onHome ? (
           <nav className="a2-head__nav" aria-label="Sections">
             {SECTIONS.map((s) => (
               <a
                 key={s.id}
                 href={`#${s.id}`}
                 className={`a2-head__link${active === s.id ? ' is-on' : ''}`}
+                // The number and the label are separate spans so the gap can
+                // be a flex gap. Without this the accessible name is the
+                // run-on "01Work": a whitespace text node between flex items
+                // is not rendered, so it cannot supply the separator either.
+                aria-label={`${s.n} ${s.label}`}
                 aria-current={active === s.id ? 'true' : undefined}
               >
                 <span className="a2-head__n">{s.n}</span>

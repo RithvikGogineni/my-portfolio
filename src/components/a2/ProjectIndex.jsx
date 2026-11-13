@@ -109,7 +109,11 @@ export default function ProjectIndex({ projects }) {
                   type="button"
                   className={`a2-row${isOpen ? ' is-open' : ''}`}
                   aria-expanded={isOpen}
-                  aria-controls={`${uid}-${p.slug}`}
+                  // The disclosure is mounted only while open, so the id is
+                  // only referable while open. aria-expanded carries the
+                  // state either way; a dangling aria-controls carries only
+                  // a broken reference.
+                  aria-controls={isOpen ? `${uid}-${p.slug}` : undefined}
                   onClick={() => setOpen(isOpen ? null : p.slug)}
                 >
                   {body}

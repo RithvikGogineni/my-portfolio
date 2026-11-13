@@ -3,12 +3,16 @@
 import React from 'react';
 import { DrawIn } from '../../motion/motion';
 
-export default function SheetHead({ n, name, sheet, of, id }) {
+// `as` promotes the section label to a real heading. A section whose body
+// carries its own display heading leaves this a span; a section whose title
+// *is* this strip passes as="h2", so every sheet is reachable by heading
+// navigation without changing a pixel.
+export default function SheetHead({ n, name, sheet, of, id, as: Tag = 'span' }) {
   return (
     <div className="a2-sheet-head" id={id}>
-      <span className="a2-label">
+      <Tag className="a2-label">
         {n ? `${n} — ` : ''}{name}
-      </span>
+      </Tag>
       {sheet && (
         <span className="a2-label a2-label--dim">
           Sheet {sheet}{of ? ` / ${of}` : ''}

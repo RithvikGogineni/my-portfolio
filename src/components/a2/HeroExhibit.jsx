@@ -190,7 +190,9 @@ export default function HeroExhibit() {
           </p>
         )}
         <div className="a2-stage__controls">
-          <StageHint>Drag to orbit · arrows to step · 0 to reset</StageHint>
+          <StageHint touch="Drag to orbit · tap a numbered point">
+            Drag to orbit · arrows to step · 0 to reset
+          </StageHint>
           <button type="button" data-stage-control className="a2-ghost a2-mono" onClick={reset}>Reset view</button>
         </div>
       </div>

@@ -44,7 +44,9 @@ export const projects = [
     media: {
       illustrative: true,
       assetId: 'A-01',
-      figure: 'Fig. 02 — Inspect · Structure',
+      // The system name is appended by the inspector, which owns which system
+      // is selected. Keeping it out of the content stops the two drifting.
+      figure: 'Fig. 02 — Inspect',
       need: 'Studio photograph or clean CAD render, 4:5',
       drawing: 'humanoid',
       alt: 'Front-elevation engineering drawing of a humanoid robot, shown with a centre line and joint markers. A labelled placeholder standing in until a photograph of the real build is available.',

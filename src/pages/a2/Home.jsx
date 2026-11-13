@@ -80,21 +80,29 @@ export default function Home() {
                 stop
                 immediate
               />
-              <RiseIn as="p" className="a2-lede a2-feature__lede">{featured.lede}</RiseIn>
+              {/* The lede and the verified spec table share one band. The
+                  approved sheet puts a flagship-candidates note to the right
+                  of the lede, but that line is the design document talking to
+                  me about which project to feature — not site copy — so the
+                  space carries real facts instead of leaving 60% of the band
+                  empty. */}
+              <div className="a2-feature__intro">
+                <RiseIn as="p" className="a2-lede a2-feature__lede">{featured.lede}</RiseIn>
+
+                <Reveal as="dl" className="a2-meta a2-feature__meta">
+                  {featured.facts.map((f) => (
+                    <RevealItem className="a2-meta__row" key={f.label}>
+                      <dt className="a2-label a2-label--dim">{f.label}</dt>
+                      <dd className="a2-mono">{f.value}</dd>
+                    </RevealItem>
+                  ))}
+                </Reveal>
+              </div>
             </div>
 
             <RiseIn className="a2-feature__body">
               <FeaturedInspect systems={featured.systems} media={featured.media} />
             </RiseIn>
-
-            <Reveal as="dl" className="a2-meta a2-feature__meta">
-              {featured.facts.map((f) => (
-                <RevealItem className="a2-meta__row" key={f.label}>
-                  <dt className="a2-label a2-label--dim">{f.label}</dt>
-                  <dd className="a2-mono">{f.value}</dd>
-                </RevealItem>
-              ))}
-            </Reveal>
 
             <RiseIn className="a2-feature__cta">
               <Button to={`/work/${featured.slug}`} viewTransition tone="accent">
@@ -106,13 +114,13 @@ export default function Home() {
 
         {/* ---------------------------------------------------- SHEET 03 */}
         <section className="a2-sheet a2-section" id="index">
-          <SheetHead n="02" name="Index of work" sheet="03" of="06" />
+          <SheetHead n="02" name="Index of work" sheet="03" of="06" as="h2" />
           <ProjectIndex projects={indexed} />
         </section>
 
         {/* ---------------------------------------------------- SHEET 04 */}
         <section className="a2-sheet a2-section" id="practice">
-          <SheetHead n="03" name="Practice" sheet="04" of="06" />
+          <SheetHead n="03" name="Practice" sheet="04" of="06" as="h2" />
           <div className="a2-practice">
             <RiseIn as="figure" className="a2-practice__well a2-well a2-ch-l">
               <figcaption className="a2-exhibit__bar">

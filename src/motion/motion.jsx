@@ -96,20 +96,26 @@ export function MaskedLines({
   return (
     <Tag ref={ref} className={className}>
       {lines.map((line, i) => (
-        <span className={`a2-mask ${lineClassName}`} key={i}>
-          <m.span
-            className="a2-mask__in"
-            initial={reduce ? false : { y: '105%' }}
-            animate={show ? { y: '0%' } : { y: '105%' }}
-            transition={{ duration: DUR.cine, ease: EASE.out, delay: delay + i * step }}
-          >
-            {line}
-            {/* The coral stop is a mark, not punctuation: it rides inside the
-                last line so it tracks the type at every size, and it is hidden
-                from assistive technology because it is not read. */}
-            {stop && i === lines.length - 1 && <span className="a2-stop" aria-hidden="true" />}
-          </m.span>
-        </span>
+        <React.Fragment key={i}>
+          {/* A real space between the line boxes. The masks are block-level,
+              so it costs nothing visually, but without it the heading's text
+              content runs the lines together — an h1 of "RithvikGogineni". */}
+          {i > 0 && ' '}
+          <span className={`a2-mask ${lineClassName}`}>
+            <m.span
+              className="a2-mask__in"
+              initial={reduce ? false : { y: '105%' }}
+              animate={show ? { y: '0%' } : { y: '105%' }}
+              transition={{ duration: DUR.cine, ease: EASE.out, delay: delay + i * step }}
+            >
+              {line}
+              {/* The coral stop is a mark, not punctuation: it rides inside the
+                  last line so it tracks the type at every size, and it is hidden
+                  from assistive technology because it is not read. */}
+              {stop && i === lines.length - 1 && <span className="a2-stop" aria-hidden="true" />}
+            </m.span>
+          </span>
+        </React.Fragment>
       ))}
     </Tag>
   );

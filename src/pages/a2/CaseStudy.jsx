@@ -14,7 +14,7 @@
 // runs, and browser back and forward behave normally throughout.
 // ===========================================================================
 import React, { useMemo } from 'react';
-import { useParams, Navigate, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import SheetHead from '../../components/a2/SheetHead';
 import Button from '../../components/a2/Button';
 import AssemblyViewer from '../../components/a2/AssemblyViewer';
@@ -67,7 +67,33 @@ export default function CaseStudy() {
     return projects[(i + 1) % projects.length];
   }, [p]);
 
-  if (!p) return <Navigate to="/" replace />;
+  // An unknown slug is a stale link, not a crash. Saying so beats a silent
+  // redirect, which leaves the visitor on a page they did not ask for with no
+  // explanation of what happened to the one they did.
+  if (!p) {
+    return (
+      <>
+        <main id="main" className="a2-case">
+          <section className="a2-sheet a2-section">
+            <SheetHead name="Sheet not found" as="h1" />
+            <RiseIn>
+              <p className="a2-lede" style={{ marginTop: 'clamp(1.5rem, 4vw, 3rem)' }}>
+                There is no project filed under <em>{slug}</em>.
+              </p>
+              <p className="a2-read" style={{ marginTop: '1.25rem', maxWidth: '46ch' }}>
+                The link is probably from an earlier version of this site. Every
+                project is listed on the index.
+              </p>
+              <p style={{ marginTop: 'clamp(1.5rem, 3vw, 2.5rem)' }}>
+                <Button as="link" to="/#index" tone="accent">Index of work</Button>
+              </p>
+            </RiseIn>
+          </section>
+        </main>
+        <Colophon sheet="—" />
+      </>
+    );
+  }
 
   const assembly = getAssembly(p.assembly);
 

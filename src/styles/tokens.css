@@ -121,6 +121,12 @@
   --accent-voice: #681f2b;   /* deep oxblood — the italic voice */
   --accent-surface: #ff4040; /* vivid coral — fills only */
   --on-accent: #1b1c1e;      /* the only text colour coral ever takes */
+  /* A.3 — the accent for the small type that sits on a *seated* surface,
+     whose ground is the opposite edition's: charcoal here, ivory in dark.
+     Full-strength coral measures 4.4:1 on charcoal and only 3.0:1 on ivory,
+     so each edition names the accent that holds against its own inverse
+     rather than reusing the one that holds against its own ground. */
+  --accent-inverted: #ff6b6b; /* on charcoal — 5.5:1 */
 
   /* The contact band is coral in the light edition. */
   --contact-bg: #ff4040;
@@ -157,6 +163,9 @@
   --accent-voice: #ff8f8f;
   --accent-surface: #ff4040;
   --on-accent: #1b1c1e;
+  /* The seated row is ivory here, so the accent on it is the oxblood the
+     light edition uses as its voice — 9.9:1 on ivory. */
+  --accent-inverted: #681f2b;
 
   --contact-bg: #681f2b;
   --contact-ink: #f1ede6;

@@ -25,11 +25,27 @@ const groupVariants = (step, delay) => ({
   show: { transition: { staggerChildren: step, delayChildren: delay } },
 });
 
+// A.3 — REDUCED MOTION
+//
+// `MotionConfig reducedMotion="user"` drops transform animations and keeps
+// opacity ones, which is a reasonable library default and the wrong answer
+// here: sheet S1 of the approved concept says reduced motion removes *all*
+// entrance transitions, and a fresh reduced-motion load was still running
+// four 450 ms fades on delays of up to 450 ms. A visitor who has asked for
+// less motion was watching the hero assemble itself for nearly a second.
+//
+// So each primitive below opts out entirely rather than partially: no
+// initial state to animate out of, and nothing scheduled. The content is
+// there on the first paint, which is what the setting is asking for.
+const NONE = { duration: 0 };
+
 /** A group whose children rise in sequence once the group arrives. */
 export function Reveal({ as = 'div', step = 0.055, delay = 0, children, ...rest }) {
   const C = m[as] ?? m.div;
   const ref = useRef(null);
-  const arrived = useArrived(ref);
+  const reduce = useReducedMotion();
+  const arrived = useArrived(ref, { enabled: !reduce });
+  if (reduce) return <C ref={ref} {...rest}>{children}</C>;
   return (
     <C
       ref={ref}
@@ -46,6 +62,11 @@ export function Reveal({ as = 'div', step = 0.055, delay = 0, children, ...rest 
 /** One child of a Reveal group. */
 export function RevealItem({ as = 'div', children, ...rest }) {
   const C = m[as] ?? m.div;
+  const reduce = useReducedMotion();
+  // No variants, so the parent's stagger has nothing to drive and the child
+  // simply exists. A variant of `show` with a zero duration would still be
+  // scheduled through the stagger and still arrive late.
+  if (reduce) return <C {...rest}>{children}</C>;
   return <C variants={riseVariants} {...rest}>{children}</C>;
 }
 
@@ -53,7 +74,9 @@ export function RevealItem({ as = 'div', children, ...rest }) {
 export function RiseIn({ as = 'div', delay = 0, children, ...rest }) {
   const C = m[as] ?? m.div;
   const ref = useRef(null);
-  const arrived = useArrived(ref);
+  const reduce = useReducedMotion();
+  const arrived = useArrived(ref, { enabled: !reduce });
+  if (reduce) return <C ref={ref} {...rest}>{children}</C>;
   return (
     <C
       ref={ref}
@@ -127,15 +150,16 @@ export function MaskedLines({
 // ---------------------------------------------------------------------------
 export function DrawIn({ className = '', delay = 0, origin = 'left' }) {
   const ref = useRef(null);
-  const arrived = useArrived(ref);
+  const reduce = useReducedMotion();
+  const arrived = useArrived(ref, { enabled: !reduce });
   return (
     <m.span
       ref={ref}
       className={`a2-draw ${className}`}
       style={{ transformOrigin: origin }}
-      initial={{ scaleX: 0 }}
-      animate={{ scaleX: arrived ? 1 : 0 }}
-      transition={{ duration: DUR.cine, ease: EASE.out, delay }}
+      initial={reduce ? false : { scaleX: 0 }}
+      animate={{ scaleX: reduce || arrived ? 1 : 0 }}
+      transition={reduce ? NONE : { duration: DUR.cine, ease: EASE.out, delay }}
       aria-hidden="true"
     />
   );

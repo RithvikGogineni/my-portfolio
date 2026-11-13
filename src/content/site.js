@@ -5,10 +5,15 @@
 // or from existing site copy. Nothing is inferred. If a fact is not in one of
 // those two places it does not appear on the site.
 //
-// A.3 note on tense: the résumé dates the captaincy 2025–26 and the FIRST
+// A.3 note on tense: the résumé dates the co-captaincy 2025–26 and the FIRST
 // Global role 2025, both of which are now behind us, so the standing lines
 // carry their seasons. "I captain" with no date was true when it was written
 // and quietly stops being true; a dated line never does.
+//
+// A.3 note on the title: confirmed 2026-11-13 as CO-captain for 2025–26.
+// 16075 ran a two-person model — see the ownership note on the FTC case
+// study. The served résumé PDF still says "Captain"; reissue it or the
+// site and the document it links to will keep disagreeing.
 // ===========================================================================
 
 export const site = {
@@ -21,7 +26,7 @@ export const site = {
 
   // Résumé — Education, and the three leadership lines under Robotics.
   standing: [
-    'Captain, FTC Team 16075 — 2025–26.',
+    'Co-Captain, FTC Team 16075 — 2025–26.',
     'Lead Engineer, Team Jamaica — FIRST Global Challenge 2025.',
     'Founder, RehabOS.',
   ],
@@ -78,7 +83,7 @@ export const site = {
 // Résumé — Experience & Leadership. Teaching numbers are the résumé's own.
 export const practice = {
   statement: [
-    { t: 'I work across mechanical engineering, robotics, AI, and software — because the interesting problems sit between them. I captained ' },
+    { t: 'I work across mechanical engineering, robotics, AI, and software — because the interesting problems sit between them. I co-captained ' },
     { t: 'FTC Team 16075', voice: true },
     { t: ' through the 2025–26 season, led engineering for Team Jamaica at the FIRST Global Challenge, and started ' },
     { t: 'RehabOS', voice: true },

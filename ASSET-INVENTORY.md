@@ -71,12 +71,11 @@ written so one could be dropped in.
 
 ### 4.1 Needs your answer
 
-1. **Captain or co-captain (2025–26).** The résumé says *Captain*. The team's
-   own DECODE-season engineering portfolio shows a **co-captain** model with
-   two named co-captains and a paragraph explaining the choice. The site
-   currently says *Captain*, following the résumé, and `ownership` on the FTC
-   case study credits the team for the design record. Tell me which is right
-   and I will make them agree.
+1. **The résumé PDF still says “Captain”.** The 2025–26 role is confirmed as
+   **co-captain** (see §4.2) and the site now says so everywhere. The served
+   `public/Rithvik-Gogineni-Resume.pdf` has not been reissued, so the site and
+   the document it links to disagree on this one line. The PDF is yours to
+   regenerate; nothing in the repo can fix it.
 2. **The four achievements that are not on the résumé.** The previous site
    listed an *OUCC* win (2021 & 2022), *FIRST Lego League* representation
    (2017), a *chess U1800* title (2022) and an *ABRSM Grade 2* distinction
@@ -94,6 +93,11 @@ written so one could be dropped in.
 
 ### 4.2 Resolved
 
+- **Co-captain, not captain (2025–26)** — confirmed 2026-11-13. The team ran a
+  deliberate two-person model: engineering was this half of it, programming
+  the other. The site says *Co-Captain* in the standing line, the FTC role
+  fact, the role metadata and the ownership note. The résumé PDF still reads
+  *Captain* — see §4.1.1.
 - **FTC result wording** — confirmed 2026-11-12. The résumé is right: *Jamaica
   Inspire Award and the Judges' Choice (Ochoa) Award at the 2025 FIRST
   Championship*. The concept PDF's *“National 2nd Place Inspire Award”* was a
@@ -121,7 +125,8 @@ Each was a résumé line that had acquired a comparison the source did not make.
 | Roamly — “the same request from two users is **answered once**” | “caching across users rather than per device”, which is the résumé's wording |
 | RehabOS — 67 pages under test presented as a reliability result | stated as coverage, with what it does *not* establish said in the same breath |
 | NexusOS marketing image — “Eighteen specialized AI agents”, “Trusted by 247+ businesses worldwide” | image withdrawn; a `Status` fact now reads “Designed and architected · no deployment claimed” |
-| “I captain FTC Team 16075” (undated, now behind us) | “I captained … through the 2025–26 season” |
+| “I captain FTC Team 16075” (undated, now behind us) | “I co-captained … through the 2025–26 season” |
+| “Captain (2025–26)” on the FTC case study | “Co-Captain (2025–26)”, confirmed 2026-11-13 |
 
 ## 5. Still missing, in priority order
 

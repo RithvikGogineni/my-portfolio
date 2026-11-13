@@ -1,10 +1,12 @@
 import React, { Suspense, lazy, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, Navigate, useParams } from 'react-router-dom';
 import { LazyMotion, domAnimation, MotionConfig } from 'framer-motion';
 import { ThemeProvider } from './context/ThemeContext';
 import { Header } from './components/a2/Chrome';
 import ErrorBoundary from './components/ErrorBoundary';
 import Home from './pages/a2/Home';
+import NotFound from './pages/a2/NotFound';
+import { PROJECT_ROUTES, SECTION_ROUTES, RETIRED } from './content/legacy';
 import './styles/index.css';
 
 // The home page ships in the main bundle — it is the landing page, and a
@@ -38,6 +40,36 @@ function HashFocus() {
   return null;
 }
 
+/**
+ * `/projects/:id` from the previous site.
+ *
+ * The hosting layer answers these with a 308 before the app is ever loaded
+ * (see vercel.json), so this only runs in local preview or on a host that
+ * serves index.html for everything. It has to agree with that table exactly;
+ * the QA sweep compares the two.
+ *
+ * A number that was never published is still a project link, so it goes to
+ * the index rather than to a 404 — the visitor was looking for work, and the
+ * work is all there.
+ */
+function LegacyProject() {
+  const { id } = useParams();
+  return <Navigate to={PROJECT_ROUTES[id] ?? '/#index'} replace />;
+}
+
+/** One of the retired routes: explained, not redirected. */
+function Retired({ path }) {
+  const r = RETIRED[path];
+  return (
+    <NotFound
+      name={`${r.name} — retired`}
+      lede={<>The {r.name.toLowerCase()} is not part of this edition of the site.</>}
+      body={r.body}
+      path={path}
+    />
+  );
+}
+
 const Loading = () => (
   <div className="a2-sheet" style={{ minHeight: '60vh', display: 'grid', placeItems: 'center' }}>
     <p className="a2-label a2-label--dim">Loading sheet…</p>
@@ -63,9 +95,31 @@ export default function App() {
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="/work/:slug" element={<CaseStudy />} />
-                  {/* Legacy project links keep working rather than 404ing. */}
-                  <Route path="/projects/*" element={<Navigate to="/#index" replace />} />
-                  <Route path="*" element={<Navigate to="/" replace />} />
+
+                  {/* The previous site's URLs, each to the thing it was
+                      about. See content/legacy.js. */}
+                  <Route path="/projects" element={<Navigate to={SECTION_ROUTES['/projects']} replace />} />
+                  <Route path="/projects/:id" element={<LegacyProject />} />
+                  {Object.entries(SECTION_ROUTES)
+                    .filter(([from]) => from !== '/projects')
+                    .map(([from, to]) => (
+                      <Route key={from} path={from} element={<Navigate to={to} replace />} />
+                    ))}
+                  {Object.keys(RETIRED).map((path) => (
+                    <Route key={path} path={path} element={<Retired path={path} />} />
+                  ))}
+
+                  {/* Anything else is explained rather than swallowed. */}
+                  <Route
+                    path="*"
+                    element={
+                      <NotFound
+                        name="Sheet not found"
+                        lede="There is no sheet at this address."
+                        body="The link is probably from an earlier version of this site, and the page it pointed at has either moved or was not carried over. Every project is on the index; the résumé has the complete record."
+                      />
+                    }
+                  />
                 </Routes>
               </Suspense>
             </BrowserRouter>

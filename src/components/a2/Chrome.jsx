@@ -161,6 +161,13 @@ function HeadIndex({ onHome, active }) {
               </Link>
             );
           })}
+          {/* A.3 — the résumé belongs in the header, and on a phone the
+              header *is* this panel. There is room for it here that there is
+              not in a 390px strip. */}
+          <a className="a2-head__panelLink a2-head__panelResume" href={site.resume.href}>
+            <span className="a2-head__n" aria-hidden="true">↓</span>
+            <span>{site.resume.label}</span>
+          </a>
         </m.nav>
       )}
     </div>
@@ -210,6 +217,11 @@ export function Header() {
                 )}
               </a>
             ))}
+            {/* Only where the header has the width for a fifth item without
+                crowding the four destinations — see .a2-head__resume. */}
+            <a className="a2-head__link a2-head__resume" href={site.resume.href}>
+              <span>{site.resume.short}</span>
+            </a>
           </nav>
         ) : (
           <nav className="a2-head__nav" aria-label="Sections">
@@ -218,6 +230,9 @@ export function Header() {
               <span>Index of work</span>
             </Link>
             <Link to="/#contact" className="a2-head__link"><span>Contact</span></Link>
+            <a className="a2-head__link a2-head__resume" href={site.resume.href}>
+              <span>{site.resume.short}</span>
+            </a>
           </nav>
         )}
 

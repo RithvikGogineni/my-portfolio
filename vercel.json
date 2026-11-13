@@ -4,6 +4,98 @@
   "devCommand": "npm run dev",
   "installCommand": "npm install",
   "framework": "vite",
+  "redirects": [
+    {
+      "source": "/projects/1",
+      "destination": "/work/first-global",
+      "permanent": true
+    },
+    {
+      "source": "/projects/2",
+      "destination": "/work/ftc-16075",
+      "permanent": true
+    },
+    {
+      "source": "/projects/3",
+      "destination": "/work/rehabos#related",
+      "permanent": true
+    },
+    {
+      "source": "/projects/4",
+      "destination": "/#other-proper-constructions",
+      "permanent": true
+    },
+    {
+      "source": "/projects/5",
+      "destination": "/#other-gorilla-gym",
+      "permanent": true
+    },
+    {
+      "source": "/projects/6",
+      "destination": "/#colophon",
+      "permanent": true
+    },
+    {
+      "source": "/projects/7",
+      "destination": "/#other-ftc-starter-guide",
+      "permanent": true
+    },
+    {
+      "source": "/projects/8",
+      "destination": "/#other-object-tracking",
+      "permanent": true
+    },
+    {
+      "source": "/projects/9",
+      "destination": "/#other-jarvis",
+      "permanent": true
+    },
+    {
+      "source": "/projects/10",
+      "destination": "/work/humanoid",
+      "permanent": true
+    },
+    {
+      "source": "/projects/11",
+      "destination": "/work/rehabos",
+      "permanent": true
+    },
+    {
+      "source": "/projects/12",
+      "destination": "/work/roamly",
+      "permanent": true
+    },
+    {
+      "source": "/projects/13",
+      "destination": "/work/nexusos",
+      "permanent": true
+    },
+    {
+      "source": "/projects",
+      "destination": "/#index",
+      "permanent": true
+    },
+    {
+      "source": "/about",
+      "destination": "/#practice",
+      "permanent": true
+    },
+    {
+      "source": "/experience",
+      "destination": "/#practice",
+      "permanent": true
+    },
+    {
+      "source": "/skills",
+      "destination": "/#toolkit",
+      "permanent": true
+    },
+    {
+      "source": "/contact",
+      "destination": "/#contact",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/(.*)",
@@ -11,4 +103,3 @@
     }
   ]
 }
-

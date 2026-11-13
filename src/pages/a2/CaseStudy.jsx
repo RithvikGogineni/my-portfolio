@@ -12,17 +12,25 @@
 // carried, so arriving from the index hands this page that exact image.
 // Nothing waits on it: the markup is complete whether or not the transition
 // runs, and browser back and forward behave normally throughout.
+//
+// A.3 added three module kinds — `iterations`, `decisions` and `limits` —
+// and made every section label a real <h2>. The headings were the audit's
+// finding 11: software pages went from <h1> straight to <h3>, so a screen
+// reader's heading list had no way to see the shape of the page.
 // ===========================================================================
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import SheetHead from '../../components/a2/SheetHead';
 import Button from '../../components/a2/Button';
 import AssemblyViewer from '../../components/a2/AssemblyViewer';
 import HumanoidDrawing from '../../components/a2/HumanoidDrawing';
+import NotFound from './NotFound';
 import { Colophon } from '../../components/a2/Chrome';
 import { MaskedLines, Reveal, RevealItem, RiseIn } from '../../motion/motion';
 import { projects, bySlug } from '../../content/projects';
 import { getAssembly } from '../../content/assemblies';
+import { site } from '../../content/site';
+import { applyMeta, projectMeta } from '../../lib/meta';
 
 function HeroMedia({ p }) {
   return (
@@ -44,14 +52,35 @@ function HeroMedia({ p }) {
           width="1600"
           height="1000"
         />
-      ) : (
+      ) : p.media.drawing === 'humanoid' ? (
         <div className="a2-case__drawing">
           <HumanoidDrawing className="a2-case__svg" />
           <span className="a2-sr">{p.media.alt}</span>
         </div>
+      ) : (
+        // A.3 — a project with no media at all. The humanoid drawing used to
+        // be the fallback for everything, which would have put a robot
+        // elevation at the top of an inventory platform.
+        <div className="a2-case__empty">
+          <span className="a2-mono">Awaiting {p.media.need.toLowerCase()}</span>
+        </div>
       )}
 
-      {p.media.illustrative && (
+      {/* A.3 — what the picture actually is, where that is not what a reader
+          would assume. A render is not a photograph of the competition robot;
+          a logo is not an interface; an empty dashboard is not a busy clinic.
+          Saying so under the figure costs one line and buys the rest of the
+          page its credibility. */}
+      {p.media.provenance && (
+        <figcaption className="a2-well__prov a2-note">{p.media.provenance}</figcaption>
+      )}
+      {p.media.withheld && (
+        <figcaption className="a2-well__prov a2-note">{p.media.withheld}</figcaption>
+      )}
+
+      {/* Only when there is an image above it. The empty well already says
+          what it is waiting for, inside the frame. */}
+      {p.media.src && p.media.need && (
         <p className="a2-well__need a2-mono">Awaiting {p.media.need.toLowerCase()}</p>
       )}
     </figure>
@@ -61,6 +90,11 @@ function HeroMedia({ p }) {
 export default function CaseStudy() {
   const { slug } = useParams();
   const p = bySlug(slug);
+
+  useEffect(() => {
+    if (p) applyMeta(projectMeta(p));
+  }, [p]);
+
   const next = useMemo(() => {
     if (!p) return null;
     const i = projects.findIndex((x) => x.slug === p.slug);
@@ -72,26 +106,12 @@ export default function CaseStudy() {
   // explanation of what happened to the one they did.
   if (!p) {
     return (
-      <>
-        <main id="main" className="a2-case">
-          <section className="a2-sheet a2-section">
-            <SheetHead name="Sheet not found" as="h1" />
-            <RiseIn>
-              <p className="a2-lede" style={{ marginTop: 'clamp(1.5rem, 4vw, 3rem)' }}>
-                There is no project filed under <em>{slug}</em>.
-              </p>
-              <p className="a2-read" style={{ marginTop: '1.25rem', maxWidth: '46ch' }}>
-                The link is probably from an earlier version of this site. Every
-                project is listed on the index.
-              </p>
-              <p style={{ marginTop: 'clamp(1.5rem, 3vw, 2.5rem)' }}>
-                <Button as="link" to="/#index" tone="accent">Index of work</Button>
-              </p>
-            </RiseIn>
-          </section>
-        </main>
-        <Colophon sheet="—" />
-      </>
+      <NotFound
+        name="Sheet not found"
+        lede={<>There is no project filed under <em>{slug}</em>.</>}
+        body="The link is probably from an earlier version of this site. Every project is listed on the index, and the ones that did not become case studies are in Other work beneath it."
+        path={`/work/${slug}`}
+      />
     );
   }
 
@@ -105,8 +125,11 @@ export default function CaseStudy() {
     assembly && { key: 'assembly', id: 'assembly', label: 'Assembly' },
     p.systems && !p.architecture && { key: 'systems', id: 'systems', label: 'Systems' },
     p.architecture && { key: 'systems', id: 'systems', label: p.architecture.heading },
+    p.iterations && { key: 'iterations', id: 'iterations', label: p.iterations.heading },
+    p.decisions && { key: 'decisions', id: 'decisions', label: p.decisions.heading },
     p.reliability && { key: 'reliability', id: 'reliability', label: p.reliability.heading },
     p.related && { key: 'related', id: 'related', label: p.related.heading },
+    p.limits && { key: 'limits', id: 'limits', label: p.limits.heading },
     p.result && { key: 'result', id: 'result', label: 'Result' },
     p.ownership && { key: 'ownership', id: 'ownership', label: p.ownership.heading },
   ].filter(Boolean).map((m, i) => ({
@@ -130,34 +153,49 @@ export default function CaseStudy() {
             Project {p.number} · {p.kind} — Case study
           </p>
 
+          {/* A.3 — the plate and the facts are one grid now. The audit's
+              finding 14: at 1440 the metadata sat 250px *below* a lede that
+              ended two-thirds of the way across an otherwise empty band, and
+              the robot did not appear until past the fold. The approved sheet
+              puts them side by side; so does this. The grid collapses to one
+              column on a phone, where stacking is the right answer. */}
           <div className="a2-case__plate">
             <MaskedLines as="h1" className="a2-display a2-hero-type" lines={p.titleLines} stop immediate step={0.08} />
-            <RiseIn as="p" className="a2-lede a2-case__lede" delay={0.1}>{p.lede}</RiseIn>
-          </div>
 
-          <RiseIn className="a2-case__facts">
-            <dl className="a2-meta a2-meta--boxed a2-frame a2-ch-s">
-              <div>
-                {p.facts.map((f) => (
-                  <div className="a2-meta__row" key={f.label}>
-                    <dt className="a2-label a2-label--dim">{f.label}</dt>
-                    <dd className="a2-mono">
-                      {unverified && (
-                        <span className={`a2-vmark${f.verified ? ' is-on' : ''}`} aria-hidden="true" />
-                      )}
-                      {f.value}
-                    </dd>
-                  </div>
-                ))}
+            <div className="a2-case__opening">
+              <div className="a2-case__intro">
+                <RiseIn as="p" className="a2-lede a2-case__lede" delay={0.1}>{p.lede}</RiseIn>
+                <RiseIn as="p" className="a2-note a2-case__status" delay={0.14}>
+                  <span className="a2-label a2-label--dim">Status — </span>
+                  {p.status} <span aria-hidden="true">·</span> {p.when}
+                </RiseIn>
               </div>
-            </dl>
-            {unverified && (
-              <p className="a2-label a2-label--dim a2-case__legend">
-                <span className="a2-vmark is-on" aria-hidden="true" /> Verified&nbsp;&nbsp;
-                <span className="a2-vmark" aria-hidden="true" /> To supply
-              </p>
-            )}
-          </RiseIn>
+
+              <RiseIn className="a2-case__facts" delay={0.12}>
+                <dl className="a2-meta a2-meta--boxed a2-frame a2-ch-s">
+                  <div>
+                    {p.facts.map((f) => (
+                      <div className="a2-meta__row" key={f.label}>
+                        <dt className="a2-label a2-label--dim">{f.label}</dt>
+                        <dd className="a2-mono">
+                          {unverified && (
+                            <span className={`a2-vmark${f.verified ? ' is-on' : ''}`} aria-hidden="true" />
+                          )}
+                          {f.value}
+                        </dd>
+                      </div>
+                    ))}
+                  </div>
+                </dl>
+                {unverified && (
+                  <p className="a2-label a2-label--dim a2-case__legend">
+                    <span className="a2-vmark is-on" aria-hidden="true" /> Verified&nbsp;&nbsp;
+                    <span className="a2-vmark" aria-hidden="true" /> To supply
+                  </p>
+                )}
+              </RiseIn>
+            </div>
+          </div>
         </section>
 
         <section className="a2-sheet">
@@ -192,6 +230,7 @@ export default function CaseStudy() {
               name={mod('systems').label}
               sheet={mod('systems').sheet}
               of={sheets}
+              as="h2"
             />
             <Reveal as="ol" className="a2-sys">
               {(p.architecture?.items ?? p.systems).map((s) => (
@@ -205,10 +244,61 @@ export default function CaseStudy() {
           </section>
         )}
 
+        {/* --------------------------------------------------- ITERATIONS */}
+        {p.iterations && (
+          <section className="a2-sheet a2-section" id="iterations">
+            <SheetHead n={mod('iterations').n} name={p.iterations.heading} sheet={mod('iterations').sheet} of={sheets} as="h2" />
+            <RiseIn as="p" className="a2-note a2-iter__source">{p.iterations.source}</RiseIn>
+            <Reveal as="ol" className="a2-iter">
+              {p.iterations.items.map((it) => (
+                <RevealItem as="li" className={`a2-iter__row is-${it.verdict.toLowerCase()}`} key={it.sub + it.v}>
+                  <span className="a2-iter__tag">
+                    <span className="a2-mono a2-iter__sub">{it.sub}</span>
+                    <span className="a2-mono a2-iter__v">{it.v}</span>
+                  </span>
+                  <h3 className="a2-display a2-iter__name">{it.name}</h3>
+                  {/* The verdict is the first thing read, because a rejected
+                      prototype and an accepted one are read differently. */}
+                  <span className={`a2-tag a2-ch-s a2-chamfer a2-iter__verdict${it.verdict === 'Accepted' ? ' is-on' : ''}`}>
+                    {it.verdict}
+                  </span>
+                  <p className="a2-read a2-iter__what">{it.what}</p>
+                  <p className="a2-read a2-iter__why">{it.why}</p>
+                  <p className="a2-note a2-iter__learned">
+                    <span className="a2-label a2-label--dim">What it taught us — </span>{it.learned}
+                  </p>
+                </RevealItem>
+              ))}
+            </Reveal>
+          </section>
+        )}
+
+        {/* ---------------------------------------------------- DECISIONS */}
+        {p.decisions && (
+          <section className="a2-sheet a2-section" id="decisions">
+            <SheetHead n={mod('decisions').n} name={p.decisions.heading} sheet={mod('decisions').sheet} of={sheets} as="h2" />
+            <RiseIn as="p" className="a2-note a2-iter__source">{p.decisions.source}</RiseIn>
+            <Reveal as="ol" className="a2-dec">
+              {p.decisions.items.map((d, i) => (
+                <RevealItem as="li" className="a2-dec__row" key={d.name}>
+                  <span className="a2-mono a2-dec__n">{String(i + 1).padStart(2, '0')}</span>
+                  <h3 className="a2-display a2-dec__name">{d.name}</h3>
+                  <p className="a2-read a2-dec__body">{d.body}</p>
+                  {/* Every decision has a price. A list of choices with no
+                      costs beside them is a list of preferences. */}
+                  <p className="a2-note a2-dec__cost">
+                    <span className="a2-label a2-label--dim">What it cost — </span>{d.cost}
+                  </p>
+                </RevealItem>
+              ))}
+            </Reveal>
+          </section>
+        )}
+
         {/* -------------------------------------------------- RELIABILITY */}
         {p.reliability && (
           <section className="a2-sheet a2-section" id="reliability">
-            <SheetHead n={mod('reliability').n} name={p.reliability.heading} sheet={mod('reliability').sheet} of={sheets} />
+            <SheetHead n={mod('reliability').n} name={p.reliability.heading} sheet={mod('reliability').sheet} of={sheets} as="h2" />
             <div className="a2-rel">
               <RiseIn as="p" className="a2-prose">{p.reliability.body}</RiseIn>
               {p.reliability.stat && (
@@ -224,7 +314,7 @@ export default function CaseStudy() {
         {/* ------------------------------------------------------ RELATED */}
         {p.related && (
           <section className="a2-sheet a2-section" id="related">
-            <SheetHead n={mod('related').n} name={p.related.heading} sheet={mod('related').sheet} of={sheets} />
+            <SheetHead n={mod('related').n} name={p.related.heading} sheet={mod('related').sheet} of={sheets} as="h2" />
             <div className="a2-related">
               <RiseIn as="figure" className="a2-related__well a2-well a2-ch-m">
                 <img src={p.related.media.src} alt={p.related.media.alt} loading="lazy" decoding="async" />
@@ -238,6 +328,14 @@ export default function CaseStudy() {
                 )}
               </div>
             </div>
+          </section>
+        )}
+
+        {/* ------------------------------------------------------- LIMITS */}
+        {p.limits && (
+          <section className="a2-sheet a2-section" id="limits">
+            <SheetHead n={mod('limits').n} name={p.limits.heading} sheet={mod('limits').sheet} of={sheets} as="h2" />
+            <RiseIn as="p" className="a2-prose a2-own">{p.limits.body}</RiseIn>
           </section>
         )}
       </main>
@@ -259,10 +357,29 @@ export default function CaseStudy() {
       {/* ---------------------------------------------------- OWNERSHIP */}
       {p.ownership && (
         <section className="a2-sheet a2-section" id="ownership">
-          <SheetHead n={mod('ownership').n} name={p.ownership.heading} sheet={mod('ownership').sheet} of={sheets} />
+          <SheetHead n={mod('ownership').n} name={p.ownership.heading} sheet={mod('ownership').sheet} of={sheets} as="h2" />
           <RiseIn as="p" className="a2-prose a2-own">{p.ownership.body}</RiseIn>
         </section>
       )}
+
+      {/* ------------------------------------------------- THE WAY OUT */}
+      {/* A.3 — the audit's finding 15: a case study was a dead end. Someone
+          who has just read the whole thing is the most likely person on the
+          site to want the résumé or an email address, and they had neither
+          without going back to the home page first. */}
+      <section className="a2-sheet a2-case__exit">
+        <div className="a2-case__exitIn">
+          <p className="a2-read a2-case__exitLine">
+            That is {p.title}. If it is the kind of work you are hiring for, the
+            résumé has the rest and my inbox is open.
+          </p>
+          <p className="a2-case__exitActions">
+            <Button href={`mailto:${site.contact.email}`} tone="accent">Get in touch</Button>
+            <a className="a2-mono a2-case__exitLink" href={site.resume.href}>[ {site.resume.label} ]</a>
+            <Link className="a2-mono a2-case__exitLink" to="/#index">[ Index of work ]</Link>
+          </p>
+        </div>
+      </section>
 
       {/* --------------------------------------------------------- NEXT */}
       {next && (

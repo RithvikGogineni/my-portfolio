@@ -1,0 +1,184 @@
+/* ===========================================================================
+   A.2 — ENGINEERING EDITORIAL EVOLVED
+   Design token reference. Sheet S1 of the approved concept.
+
+   One grid, one order, two editions. Light is the reference; dark is the same
+   drawing on charcoal. Every value below comes from the approved sheet — if a
+   number is not on the sheet, it is derived from one that is.
+   ========================================================================= */
+
+:root {
+  /* --- 01 TYPE ------------------------------------------------------------
+     Archivo carries the display voice at width 62 / weight 800, uppercase.
+     Newsreader carries the reading voice. IBM Plex Mono carries spec values,
+     drawing annotations and functional metadata only — never body copy. */
+  --font-display: 'Archivo', 'Arial Narrow', system-ui, sans-serif;
+  --font-read: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Display is condensed by axis, not by transform, so letterforms stay true. */
+  --display-stretch: 62;
+  --display-weight: 800;
+
+  /* Fluid display scale. Hero 220–300px at the top of the range; section
+     heads 96–160px; index rows 56px. Line-height .8–.9 throughout — the
+     sheet's tight stacking is what makes the name read as a nameplate. */
+  --type-hero: clamp(4.25rem, 15.5vw, 18.75rem);
+  --type-section: clamp(3rem, 9.5vw, 10rem);
+  --type-row: clamp(1.875rem, 4.6vw, 3.5rem);
+  --type-sub: clamp(1.75rem, 3.4vw, 2.75rem);
+
+  --leading-display: 0.84;
+  --leading-row: 0.9;
+
+  /* Reading voice. Sheet S1: body 20–22px, lede 28–34px. Both clamps are
+     written to hold their floor at 360px rather than reach it somewhere in
+     the middle of the range — the earlier pair bottomed out at 17px and 20px
+     on a phone, which is where this site is most often opened first, and
+     which left the lede only three pixels above the body it introduces.
+     The ramp is therefore shallow on purpose: it is a correction across the
+     range, not a change of voice at the top of it. 22px and 32px at desktop
+     are unchanged. */
+  --type-read: clamp(1.25rem, 0.33vw + 1.17rem, 1.375rem);
+  /* The secondary reading voice: captions, side notes and standing lines that
+     sit under a lede. One value, not the 15/16/17px drift it replaces. It is
+     written out rather than derived, so that raising the body floor above it
+     widens the gap between the two tiers instead of collapsing it. */
+  --type-note: 1.0625rem;    /* 17px */
+  --leading-note: 1.5;
+  --type-read-lg: clamp(1.75rem, 0.6vw + 1.6rem, 2rem);
+  --leading-read: 1.52;
+
+  /* Mono: 10–14px. Mobile floor is 10px for captions, 12px for data. */
+  --type-label: 0.6875rem;   /* 11px — section labels, sheet numbers */
+  --type-caption: 0.625rem;  /* 10px — in-well captions (mobile floor)   */
+  --type-data: 0.75rem;      /* 12px — spec values, parts lists          */
+  --track-label: 0.12em;
+  --track-data: 0.08em;
+
+  /* --- 02 GRID AND MEASURE ----------------------------------------------- */
+  --sheet-max: 1560px;
+  --gutter: clamp(1.125rem, 3.2vw, 3.25rem);
+  --rule-weight: 1px;
+  --row-rule-opacity: 0.3;
+
+  /* Vertical rhythm between sheets. */
+  --sheet-gap: clamp(4.5rem, 9vw, 9.5rem);
+  --block-gap: clamp(1.75rem, 3.2vw, 3rem);
+
+  /* --- 03 CHAMFER SCALE --------------------------------------------------
+     Top-left and bottom-right corners only, always. Three steps, nothing in
+     between. Images stay square-cornered inside their wells. No pills, no
+     rounded cards, no blur, no gradients.
+       6px  — buttons, tabs, chips, small wells   (inner frame offset 5px)
+      12px  — index previews, inset panels
+      20px  — hero and featured image wells                                */
+  --chamfer-s: 6px;
+  --chamfer-m: 12px;
+  --chamfer-l: 20px;
+
+  /* --- 04 MOTION ---------------------------------------------------------
+     150–450ms, ease-out. State changes, not scroll choreography. Entrances
+     ease out; exits ease in and run shorter; repositioning eases in-out.
+     Expressive spring is reserved for the mechanical exhibits.             */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in: cubic-bezier(0.64, 0, 0.78, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-mech: cubic-bezier(0.34, 0.9, 0.2, 1);
+
+  --dur-press: 120ms;   /* pointer-down feedback, must feel immediate      */
+  --dur-control: 180ms; /* buttons, tabs, chips, links                     */
+  --dur-state: 240ms;   /* row open/close, label swaps                     */
+  --dur-panel: 320ms;   /* preview crossfades, annotation travel           */
+  --dur-cine: 450ms;    /* the ceiling the sheet allows for ordinary work  */
+
+  /* --- 05 CONTROLS -------------------------------------------------------- */
+  --touch-min: 44px;
+  --focus-weight: 3px;
+}
+
+/* ===========================================================================
+   COLOUR — TWO EDITIONS
+   Coral is a surface: #FF4040 fills buttons, the contact band and single
+   marks, and always takes #1B1C1E text, never white. No orange, no salmon.
+   Oxblood is a voice: italic accent text in light, the contact surface in
+   dark. Periwinkle is rare: charcoal wells only — hotspot highlight, focus
+   box, the exploded part. Never on ivory, never as a fill, never as a theme.
+   ========================================================================= */
+
+:root,
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --bg: #f1ede6;         /* warm ivory — the reference ground */
+  --panel: #e4ded5;      /* ivory shade — hover, seated panels */
+  --raised: #f9f6f0;     /* ivory lift */
+  --ink: #242528;        /* text and rules */
+  --ink-soft: #5e6065;   /* secondary mono data — 5.4:1 on ivory */
+  --rule: #242528;
+  --rule-hair: rgb(36 37 40 / 30%);
+
+  --accent-voice: #681f2b;   /* deep oxblood — the italic voice */
+  --accent-surface: #ff4040; /* vivid coral — fills only */
+  --on-accent: #1b1c1e;      /* the only text colour coral ever takes */
+  /* A.3 — the accent for the small type that sits on a *seated* surface,
+     whose ground is the opposite edition's: charcoal here, ivory in dark.
+     Full-strength coral measures 4.4:1 on charcoal and only 3.0:1 on ivory,
+     so each edition names the accent that holds against its own inverse
+     rather than reusing the one that holds against its own ground. */
+  --accent-inverted: #ff6b6b; /* on charcoal — 5.5:1 */
+
+  /* The contact band is coral in the light edition. */
+  --contact-bg: #ff4040;
+  --contact-ink: #1b1c1e;
+  --contact-rule: rgb(27 28 30 / 30%);
+  --contact-voice: #681f2b;
+
+  /* Drawing wells are charcoal in both editions. That is what lets the
+     periwinkle live somewhere legal and lets one drawing serve both. */
+  --well: #303337;
+  --well-raised: #3b3f44;
+  --well-ink: #f1ede6;
+  --well-hair: rgb(241 237 230 / 24%);
+  --well-dim: rgb(241 237 230 / 58%);
+  --well-accent: #ff4040;
+  --well-tertiary: #a5a0ff; /* periwinkle — wells only */
+
+  --selection: rgb(255 64 64 / 24%);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --bg: #303337;         /* machined charcoal */
+  --panel: #35393c;      /* charcoal 2 */
+  --raised: #45494d;     /* charcoal 3 */
+  --ink: #f1ede6;
+  --ink-soft: #a7abae;   /* 6.1:1 on charcoal */
+  --rule: #626669;
+  --rule-hair: rgb(98 102 105 / 70%);
+
+  /* In dark the oxblood becomes a surface, so the small accent text lifts to
+     #FF8F8F to keep 4.5:1 against charcoal. */
+  --accent-voice: #ff8f8f;
+  --accent-surface: #ff4040;
+  --on-accent: #1b1c1e;
+  /* The seated row is ivory here, so the accent on it is the oxblood the
+     light edition uses as its voice — 9.9:1 on ivory. */
+  --accent-inverted: #681f2b;
+
+  --contact-bg: #681f2b;
+  --contact-ink: #f1ede6;
+  --contact-rule: rgb(241 237 230 / 28%);
+  --contact-voice: #ff8f8f;
+
+  --well: #35393c;
+  --well-raised: #45494d;
+  --well-ink: #f1ede6;
+  --well-hair: rgb(241 237 230 / 22%);
+  --well-dim: rgb(241 237 230 / 56%);
+  --well-accent: #ff4040;
+  --well-tertiary: #a5a0ff;
+
+  --selection: rgb(255 64 64 / 30%);
+}

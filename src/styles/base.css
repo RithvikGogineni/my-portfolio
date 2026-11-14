@@ -1,0 +1,246 @@
+/* ===========================================================================
+   A.2 — BASE
+   Reset, the sheet grid, the chamfer primitives and the type voices.
+   ========================================================================= */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  /* The approved system has no scroll choreography, so native scrolling is
+     left exactly as the browser ships it. Anchor jumps still land softly. */
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-read);
+  font-size: var(--type-read);
+  line-height: var(--leading-read);
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* Theme changes are a calibrated fade, never a flash. Only the ground and
+     the ink cross-fade; nothing reflows, so the layout cannot shift. */
+  transition: background-color var(--dur-panel) var(--ease-in-out),
+              color var(--dur-panel) var(--ease-in-out);
+}
+
+::selection { background: var(--selection); }
+
+img, svg, video { display: block; max-width: 100%; }
+img { height: auto; }
+
+h1, h2, h3, h4, p, figure, blockquote, ul, ol, dl, dd { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+
+button, input, select, textarea { font: inherit; color: inherit; }
+button { background: none; border: 0; padding: 0; cursor: pointer; }
+
+a { color: inherit; text-decoration: none; }
+
+/* --- FOCUS ---------------------------------------------------------------
+   A 3px inset ring in ink, visible in both editions, never removed. Inset so
+   a chamfered clip-path cannot crop it away. */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: var(--focus-weight) solid var(--ink);
+  outline-offset: -var(--focus-weight);
+  outline-offset: calc(var(--focus-weight) * -1);
+}
+.on-well :focus-visible,
+.a2-well :focus-visible { outline-color: var(--well-tertiary); }
+.a2-contact :focus-visible { outline-color: var(--contact-ink); }
+
+/* Skip link — the first stop for a keyboard, hidden until it is wanted. */
+.a2-skip {
+  position: fixed;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 200;
+  padding: 0.75rem 1.25rem;
+  background: var(--accent-surface);
+  color: var(--on-accent);
+  font-family: var(--font-mono);
+  font-size: var(--type-label);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.a2-skip:focus-visible {
+  width: auto;
+  height: auto;
+  padding: 0.75rem 1.25rem;
+  overflow: visible;
+  clip-path: none;
+}
+
+/* ===========================================================================
+   SHEET GRID
+   Every page is a drawing sheet: one measure, one gutter, hard rules.
+   ========================================================================= */
+
+.a2-sheet {
+  width: 100%;
+  max-width: var(--sheet-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* The label strip that opens every section: number and name on the left,
+   sheet count on the right, a hard rule under both. Section numbering is
+   used only where it carries the engineering-publication structure. */
+.a2-sheet-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-bottom: 0.625rem;
+  border-bottom: var(--rule-weight) solid var(--rule);
+}
+
+.a2-label {
+  font-family: var(--font-mono);
+  font-size: var(--type-label);
+  font-weight: 400;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.a2-label--dim { color: var(--ink-soft); }
+
+/* ===========================================================================
+   TYPE VOICES
+   ========================================================================= */
+
+.a2-display {
+  font-family: var(--font-display);
+  font-variation-settings: 'wdth' var(--display-stretch), 'wght' var(--display-weight);
+  font-weight: var(--display-weight);
+  text-transform: uppercase;
+  line-height: var(--leading-display);
+  letter-spacing: -0.012em;
+  /* The nameplate is set tight; hyphenation would break the stack. */
+  hyphens: none;
+  text-wrap: balance;
+}
+
+.a2-hero-type { font-size: var(--type-hero); }
+.a2-section-type { font-size: var(--type-section); }
+
+/* The full stop after a display line is the one piece of punctuation the
+   system keeps, and it is always coral. It is a mark, not a period. */
+.a2-stop {
+  display: inline-block;
+  width: 0.17em;
+  height: 0.17em;
+  margin-left: 0.07em;
+  vertical-align: baseline;
+  background: var(--accent-surface);
+}
+
+.a2-read { font-family: var(--font-read); max-width: 34ch; }
+.a2-read--wide { max-width: 50ch; }
+.a2-lede {
+  font-family: var(--font-read);
+  font-size: var(--type-read-lg);
+  font-style: italic;
+  line-height: 1.34;
+  max-width: 22ch;
+  text-wrap: pretty;
+}
+.a2-prose {
+  font-family: var(--font-read);
+  font-size: var(--type-read-lg);
+  line-height: 1.42;
+  max-width: 28ch;
+  text-wrap: pretty;
+}
+/* Italic is the oxblood voice, used on the names of real things only. */
+.a2-voice { font-style: italic; color: var(--accent-voice); }
+
+.a2-mono {
+  font-family: var(--font-mono);
+  font-size: var(--type-data);
+  letter-spacing: var(--track-data);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===========================================================================
+   CHAMFER
+   clip-path removes real borders, so an outlined control is a padded wrapper
+   whose background is the rule colour and whose child is the surface. The
+   inner chamfer is one step smaller so the bevel stays parallel.
+   ========================================================================= */
+
+.a2-ch-s { --ch: var(--chamfer-s); --ch-in: calc(var(--chamfer-s) - 1px); }
+.a2-ch-m { --ch: var(--chamfer-m); --ch-in: calc(var(--chamfer-m) - 1px); }
+.a2-ch-l { --ch: var(--chamfer-l); --ch-in: calc(var(--chamfer-l) - 1px); }
+
+.a2-chamfer {
+  clip-path: polygon(
+    var(--ch) 0,
+    100% 0,
+    100% calc(100% - var(--ch)),
+    calc(100% - var(--ch)) 100%,
+    0 100%,
+    0 var(--ch)
+  );
+}
+
+/* Outlined: wrapper carries the rule, child carries the surface. */
+.a2-frame {
+  padding: var(--rule-weight);
+  background: var(--rule);
+  clip-path: polygon(
+    var(--ch) 0, 100% 0, 100% calc(100% - var(--ch)),
+    calc(100% - var(--ch)) 100%, 0 100%, 0 var(--ch)
+  );
+}
+.a2-frame > * {
+  background: var(--bg);
+  clip-path: polygon(
+    var(--ch-in) 0, 100% 0, 100% calc(100% - var(--ch-in)),
+    calc(100% - var(--ch-in)) 100%, 0 100%, 0 var(--ch-in)
+  );
+}
+
+/* A well is a charcoal field that drawings and photographs sit inside.
+   Images stay square-cornered within it; the well carries the bevel. */
+.a2-well {
+  position: relative;
+  background: var(--well);
+  color: var(--well-ink);
+  clip-path: polygon(
+    var(--ch) 0, 100% 0, 100% calc(100% - var(--ch)),
+    calc(100% - var(--ch)) 100%, 0 100%, 0 var(--ch)
+  );
+}
+
+/* ===========================================================================
+   REDUCED MOTION
+   The sheet is explicit: prefers-reduced-motion removes all transitions. The
+   site must be fully usable — every exhibit, every control — with none.
+   ========================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}

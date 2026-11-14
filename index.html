@@ -3,9 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Rithvik Gogineni: Mechanical &amp; Robotics Engineering student at WPI. FTC Team 16075 captain, Team Jamaica lead engineer, founder of RehabOS. Open to Summer 2027 internships." />
-    <meta name="theme-color" content="#0b0b0d" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- These are the home page's values and the pre-script defaults. Every
+         route rewrites them in place on mount — see src/lib/meta.js. They are
+         declared here rather than rendered by React so that the document a
+         crawler receives before running any script is already correct for the
+         home page, and so there is exactly one of each tag to rewrite. -->
+    <meta name="description" content="Rithvik Gogineni — Mechanical &amp; Robotics Engineering at WPI. FTC Team 16075, lead engineer for Team Jamaica at the FIRST Global Challenge, founder of RehabOS. Open to Summer 2027 internships." />
+    <meta name="robots" content="index,follow" />
+    <meta name="theme-color" content="#f1ede6" />
     <link rel="canonical" href="https://rithvikgogineni.vercel.app/" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://rithvikgogineni.vercel.app/" />
@@ -15,13 +21,40 @@
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    <link rel="preconnect" href="https://firebasestorage.googleapis.com" />
-    <link rel="preconnect" href="https://firestore.googleapis.com" />
+
+    <!-- Resolve the theme before the first paint. System is the default and
+         follows the OS; an explicit choice is stored and wins. Doing this
+         here rather than in React is what prevents the ivory/charcoal flash. -->
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('a2-theme');
+          var mode = stored === 'light' || stored === 'dark' ? stored : null;
+          var resolved = mode || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+          document.documentElement.setAttribute('data-theme', resolved);
+          var m = document.querySelector('meta[name="theme-color"]');
+          if (m) m.setAttribute('content', resolved === 'dark' ? '#303337' : '#f1ede6');
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      })();
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Fonts load without blocking first paint; system fonts show until they arrive. -->
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" /></noscript>
+    <!-- Archivo carries the display voice at width 62; Newsreader the reading
+         voice; IBM Plex Mono the technical labels. Loaded non-blocking, with
+         `display=swap`, so first paint is never held behind a font. -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap" />
+    </noscript>
+
     <title>Rithvik Gogineni · Mechanical &amp; Robotics Engineering, WPI</title>
   </head>
   <body>

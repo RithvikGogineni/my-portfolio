@@ -1,0 +1,1062 @@
+/* ===========================================================================
+   A.2 — COMPONENTS
+   ========================================================================= */
+
+.a2-sr {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+
+.a2-num { font-variant-numeric: tabular-nums; }
+
+/* A line that draws itself in once, under a section head. */
+.a2-draw {
+  position: absolute; left: 0; right: 0; bottom: -1px; height: 1px;
+  background: var(--rule); display: block;
+}
+.a2-sheet-head { position: relative; border-bottom-color: transparent; }
+.a2-sheet-head::after {
+  content: ''; position: absolute; inset: auto 0 -1px; height: 1px;
+  background: var(--rule-hair);
+}
+
+.a2-section { padding-block: var(--sheet-gap) 0; }
+
+/* ---------------------------------------------------------------- HEADER */
+.a2-head {
+  position: sticky; top: 0; z-index: 50;
+  /* Solid, not translucent: the approved sheet rules out blur, and a
+     blurred backdrop pulled colour from whatever was behind it. */
+  background: var(--bg);
+  border-bottom: 1px solid var(--rule-hair);
+}
+.a2-head__in {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; min-height: 56px;
+}
+.a2-head__id { display: flex; align-items: center; gap: 0.625rem; min-height: var(--touch-min); }
+.a2-head__mark {
+  display: grid; place-items: center; width: 24px; height: 24px;
+  background: var(--ink); color: var(--bg);
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.04em;
+  transition: background-color var(--dur-control) var(--ease-out);
+}
+.a2-head__id:hover .a2-head__mark { background: var(--accent-surface); color: var(--on-accent); }
+.a2-head__name { white-space: nowrap; }
+
+.a2-head__nav { display: flex; align-items: center; gap: clamp(0.75rem, 2vw, 1.75rem); }
+.a2-head__link {
+  position: relative;
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  min-height: var(--touch-min); padding-inline: 0.125rem;
+  font-family: var(--font-mono); font-size: var(--type-label);
+  letter-spacing: var(--track-label); text-transform: uppercase;
+  color: var(--ink-soft);
+  transition: color var(--dur-control) var(--ease-out);
+}
+.a2-head__link:hover, .a2-head__link.is-on { color: var(--ink); }
+.a2-head__n { color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.a2-head__link.is-on .a2-head__n { color: var(--accent-surface); }
+/* The fine-line indicator: one hairline, drawn from the left. */
+.a2-head__tick {
+  position: absolute; inset: auto 0 6px; height: 1px;
+  background: var(--accent-surface); transform-origin: left;
+}
+
+/* The index on a phone: the same four numbered destinations, stacked under
+   the header instead of laid across it. The panel is positioned against
+   .a2-head — sticky, so it is the containing block — which lets the strip
+   span the full width rather than hang off a mid-header anchor. */
+.a2-head__index { position: static; }
+.a2-head__indexBtn {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  min-height: var(--touch-min); padding-inline: 0.25rem;
+  color: var(--ink-soft);
+  transition: color var(--dur-control) var(--ease-out);
+}
+.a2-head__indexBtn[aria-expanded='true'] { color: var(--ink); }
+/* The arrow turns over rather than swapping glyph, so the open state is a
+   continuation of the closed one. Transform only. */
+.a2-head__indexArrow { transition: transform var(--dur-state) var(--ease-in-out); }
+.a2-head__indexBtn[aria-expanded='true'] .a2-head__indexArrow { transform: rotate(180deg); }
+
+.a2-head__panel {
+  position: absolute; z-index: 60; inset: 100% 0 auto 0;
+  display: grid;
+  background: var(--bg);
+  border-bottom: 1px solid var(--rule);
+}
+.a2-head__panelLink {
+  display: flex; align-items: center; gap: 0.75rem;
+  min-height: var(--touch-min); padding-inline: var(--gutter);
+  font-family: var(--font-mono); font-size: var(--type-label);
+  letter-spacing: var(--track-label); text-transform: uppercase;
+  color: var(--ink-soft);
+  border-top: 1px solid var(--rule-hair);
+  transition: color var(--dur-control) var(--ease-out),
+              background-color var(--dur-control) var(--ease-out);
+}
+.a2-head__panelLink:first-child { border-top: 0; }
+.a2-head__panelLink:active { background: var(--panel); }
+.a2-head__panelLink.is-on { color: var(--ink); }
+.a2-head__panelLink.is-on .a2-head__n { color: var(--accent-surface); }
+
+/* -------------------------------------------------------------- COLOPHON */
+.a2-colophon { margin-top: var(--sheet-gap); border-top: 1px solid var(--rule); }
+.a2-colophon__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.a2-colophon__cell {
+  padding: 0.875rem 1rem 1rem 0;
+  border-right: 1px solid var(--rule-hair);
+  display: grid; gap: 0.25rem;
+}
+.a2-colophon__cell:last-child { border-right: 0; }
+.a2-colophon__cell dd { margin: 0; }
+
+/* --------------------------------------------------------------- BUTTONS */
+.a2-btn { display: inline-block; padding: 1px; background: transparent; }
+.a2-btn--accent { background: var(--accent-surface); }
+.a2-btn--ink { background: var(--ink); }
+.a2-btn--ghost { background: var(--rule); }
+
+.a2-btn__in {
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: space-between; gap: 2.5rem;
+  min-height: calc(var(--touch-min) + 4px);
+  padding: 0.75rem 1.125rem;
+  font-family: var(--font-mono); font-size: var(--type-data);
+  letter-spacing: var(--track-data); text-transform: uppercase;
+  transition: transform var(--dur-press) var(--ease-out);
+}
+.a2-btn--accent .a2-btn__in { background: var(--accent-surface); color: var(--on-accent); }
+.a2-btn--ink .a2-btn__in { background: var(--ink); color: var(--bg); }
+.a2-btn--ghost .a2-btn__in { background: var(--bg); color: var(--ink); }
+
+/* The directional edge highlight: a band that sweeps across the face on
+   hover. It is a transform on a child, so it never reflows the control. */
+.a2-btn__edge {
+  position: absolute; inset: 0;
+  background: currentColor; opacity: 0.1;
+  transform: translateX(-101%);
+  transition: transform var(--dur-state) var(--ease-out);
+}
+.a2-btn:hover .a2-btn__edge, .a2-btn:focus-visible .a2-btn__edge { transform: translateX(0); }
+.a2-btn__text, .a2-btn__arrow { position: relative; }
+.a2-btn__arrow { transition: transform var(--dur-control) var(--ease-out); }
+.a2-btn:hover .a2-btn__arrow { transform: translateX(3px); }
+/* Press feedback: immediate, small, and no bounce. */
+.a2-btn:active .a2-btn__in { transform: translateY(1px); }
+
+.a2-ghost {
+  min-height: var(--touch-min); padding: 0.4rem 0;
+  color: var(--ink-soft); text-transform: uppercase;
+  letter-spacing: var(--track-label); font-size: var(--type-label);
+  border-bottom: 1px solid transparent;
+  transition: color var(--dur-control) var(--ease-out), border-color var(--dur-control) var(--ease-out);
+}
+.a2-ghost:hover { color: var(--ink); border-bottom-color: var(--ink); }
+
+/* ------------------------------------------------------ SEGMENTED CONTROL */
+.a2-seg {
+  position: relative; display: grid;
+  grid-template-columns: repeat(var(--seg-count, 3), 1fr);
+  padding: 2px; background: var(--panel);
+  isolation: isolate;
+}
+.a2-seg__fill {
+  position: absolute; z-index: 0; top: 2px; bottom: 2px; left: 2px;
+  width: calc((100% - 4px) / var(--seg-count, 3));
+  background: var(--ink);
+}
+.a2-seg__btn {
+  position: relative; z-index: 1;
+  min-height: 30px; padding: 0.3rem 0.6rem;
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: var(--track-label); text-transform: uppercase;
+  color: var(--ink-soft);
+  transition: color var(--dur-control) var(--ease-out);
+}
+.a2-seg__btn.is-on { color: var(--bg); }
+.a2-seg__btn:hover:not(.is-on) { color: var(--ink); }
+@media (pointer: coarse) { .a2-seg__btn { min-height: var(--touch-min); } }
+
+/* ----------------------------------------------------------------- CHIPS */
+.a2-chip {
+  padding: 0.5rem 0.75rem; min-height: var(--touch-min);
+  background: var(--panel); color: var(--ink-soft);
+  font-family: var(--font-mono); font-size: var(--type-label);
+  letter-spacing: var(--track-label); text-transform: uppercase;
+  clip-path: polygon(var(--ch) 0, 100% 0, 100% calc(100% - var(--ch)), calc(100% - var(--ch)) 100%, 0 100%, 0 var(--ch));
+  transition: background-color var(--dur-control) var(--ease-out), color var(--dur-control) var(--ease-out);
+}
+.a2-chip:hover { color: var(--ink); }
+.a2-chip.is-on { background: var(--ink); color: var(--bg); }
+/* The compact theme control. A fixed minimum width so cycling LGT → DRK → SYS
+   never resizes the header around it. */
+.a2-chip--theme {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 3.5rem;
+}
+
+/* ------------------------------------------------------------ META TABLE */
+.a2-meta { display: grid; }
+.a2-meta__row {
+  display: grid; grid-template-columns: minmax(84px, 0.4fr) 1fr;
+  gap: 1rem; align-items: baseline;
+  padding: 0.5rem 0; border-bottom: 1px solid var(--rule-hair);
+}
+.a2-meta__row:last-child { border-bottom: 0; }
+.a2-meta__row dd { margin: 0; }
+.a2-meta--boxed > div { padding: 0.625rem 0.875rem; }
+
+.a2-vmark {
+  display: inline-block; width: 7px; height: 7px; margin-right: 0.5rem;
+  border: 1px solid currentColor; vertical-align: baseline;
+}
+.a2-vmark.is-on { background: var(--accent-surface); border-color: var(--accent-surface); }
+
+/* ------------------------------------------------------- WELLS & FIGURES */
+.a2-exhibit__bar {
+  display: flex; align-items: center; justify-content: space-between;
+  /* A.3 — the figure label and the illustrative tag are both nowrap, and at
+     320px their combined min-content was 311px inside a 284px sheet. That
+     measurement propagated up through the well, the featured body and the
+     featured grid's auto column, and pushed the whole document 9px wide: the
+     overflow the audit found was this tag, not the display type everything
+     pointed at. Wrapping the bar costs nothing at any width where the two
+     already fit side by side. */
+  flex-wrap: wrap;
+  gap: 0.375rem 1rem; padding: 0.625rem 0.875rem;
+  color: var(--well-dim);
+}
+.a2-exhibit__bar .a2-label { color: var(--well-dim); }
+
+/* The honest placeholder tag. Periwinkle lives on charcoal only, and this is
+   the one place on the home page it appears. */
+.a2-tag {
+  padding: 0.25rem 0.5rem;
+  background: rgb(165 160 255 / 14%);
+  color: var(--well-tertiary);
+  font-family: var(--font-mono); font-size: var(--type-caption);
+  letter-spacing: var(--track-label); text-transform: uppercase;
+  white-space: nowrap;
+}
+.a2-well__need {
+  padding: 0 0.875rem 0.75rem;
+  color: var(--well-dim); font-size: var(--type-caption);
+  letter-spacing: var(--track-data); text-transform: uppercase;
+}
+.a2-well img { width: 100%; object-fit: cover; }
+
+/* ---------------------------------------------------- DRAWING LINE STYLES
+   One stroke vocabulary for every exhibit. Non-scaling strokes keep a
+   technical line exactly 1px at any zoom, which is what makes a drawing on a
+   screen read as a drawing rather than as an illustration. */
+.a2-ln {
+  fill: none; stroke: var(--well-ink); stroke-width: 1;
+  vector-effect: non-scaling-stroke; stroke-linejoin: miter;
+}
+.a2-ln--thin { stroke-width: 0.75; opacity: 0.78; }
+.a2-ln--hidden { stroke-dasharray: 3 3; opacity: 0.26; stroke-width: 0.75; }
+.a2-ln--centre {
+  stroke: var(--well-accent); stroke-width: 0.75; opacity: 0.9;
+  stroke-dasharray: 10 4 2 4;
+}
+.a2-ln--axis { opacity: 0.55; }
+.a2-ln--frame { stroke: var(--well-tertiary); stroke-dasharray: 4 4; opacity: 0.45; }
+.a2-ln--leader { stroke: var(--well-dim); stroke-width: 0.75; opacity: 0.5; }
+.a2-ln--leader.is-on { stroke: var(--well-tertiary); opacity: 1; }
+
+.a2-part .a2-ln { transition: stroke var(--dur-control) var(--ease-out); }
+.a2-part__face { fill: color-mix(in srgb, var(--well) 70%, transparent); }
+.a2-part.is-on .a2-ln { stroke: var(--well-tertiary); }
+.a2-part.is-on .a2-part__face { fill: rgb(165 160 255 / 10%); }
+
+/* ------------------------------------------------------------- THE STAGE */
+.a2-stage {
+  position: relative; aspect-ratio: 4 / 3; width: 100%;
+  cursor: grab; touch-action: pan-y;
+}
+.a2-stage.is-dragging { cursor: grabbing; }
+.a2-stage--asm { aspect-ratio: 1 / 1; }
+.a2-stage__svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+.a2-stage__spots { position: absolute; inset: 0; }
+.a2-stage__spots > li { position: absolute; transform: translate(-50%, -50%); }
+
+/* Hotspots are real buttons with a 44px hit area and a smaller visible dot,
+   so touch targets are honest without the drawing turning into a grid. */
+.a2-spot {
+  display: grid; place-items: center;
+  width: var(--touch-min); height: var(--touch-min);
+}
+.a2-spot__dot {
+  display: grid; place-items: center;
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 1px solid var(--well-dim); background: var(--well);
+  color: var(--well-ink);
+  font-family: var(--font-mono); font-size: 10px; font-variant-numeric: tabular-nums;
+  transition: transform var(--dur-control) var(--ease-out),
+              background-color var(--dur-control) var(--ease-out),
+              border-color var(--dur-control) var(--ease-out),
+              color var(--dur-control) var(--ease-out);
+}
+.a2-spot--sm .a2-spot__dot { width: 19px; height: 19px; }
+.a2-spot:hover .a2-spot__dot { border-color: var(--well-ink); transform: scale(1.1); }
+.a2-spot.is-on .a2-spot__dot {
+  background: var(--well-tertiary); border-color: var(--well-tertiary);
+  color: #1b1c1e; transform: scale(1.12);
+}
+
+.a2-stage__controls {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; flex-wrap: wrap;
+}
+.a2-stage__hint { color: var(--well-dim); font-size: var(--type-caption); text-transform: uppercase; }
+
+.a2-exhibit { display: grid; }
+.a2-exhibit__foot { padding: 0 0.875rem 0.875rem; display: grid; gap: 0.75rem; }
+.a2-exhibit__ann {
+  display: flex; gap: 0.625rem; align-items: baseline;
+  min-height: 3.4em;
+  font-family: var(--font-read); font-size: var(--type-note); line-height: var(--leading-note);
+  color: var(--well-ink);
+}
+.a2-exhibit__ann--rest { color: var(--well-dim); }
+.a2-exhibit__annN { color: var(--well-tertiary); }
+.a2-exhibit .a2-ghost { color: var(--well-dim); }
+.a2-exhibit .a2-ghost:hover { color: var(--well-ink); border-bottom-color: var(--well-ink); }
+
+/* =============================================================== THE HERO */
+.a2-hero { padding-block: clamp(1.5rem, 3vw, 2.75rem) 0; }
+.a2-hero__sheet { color: var(--ink-soft); margin-bottom: clamp(1rem, 2.4vw, 2rem); }
+
+.a2-hero__grid {
+  display: grid; gap: clamp(1.5rem, 3vw, 3rem);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+@media (min-width: 1040px) {
+  .a2-hero__grid { grid-template-columns: minmax(0, 1fr) minmax(300px, 30%); }
+}
+
+.a2-hero__plate { position: relative; }
+.a2-hero__name { margin: 0; }
+/* The mask that each display line slides out of. */
+.a2-mask { display: block; overflow: hidden; padding-bottom: 0.04em; }
+.a2-mask__in { display: block; will-change: transform; }
+
+.a2-hero__rule {
+  display: flex; align-items: center; gap: 1rem;
+  margin-top: clamp(1rem, 2vw, 1.75rem);
+  color: var(--ink-soft);
+}
+.a2-hero__rule-line { flex: 1; height: 1px; background: var(--rule-hair); }
+
+.a2-hero__foot {
+  display: grid; gap: clamp(1.5rem, 3vw, 2.5rem);
+  grid-template-columns: minmax(0, 1fr);
+  padding-block: clamp(2rem, 4vw, 3.5rem);
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+  border-top: 1px solid var(--rule);
+}
+@media (min-width: 820px) {
+  .a2-hero__foot { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(220px, 0.8fr); }
+}
+.a2-hero__standing { display: grid; gap: 0.375rem; align-content: start; }
+.a2-hero__standing li { font-size: var(--type-note); line-height: var(--leading-note); }
+.a2-hero__cta { display: grid; gap: 1rem; align-content: start; justify-items: start; }
+.a2-avail { display: flex; gap: 0.625rem; align-items: baseline; }
+.a2-avail__mark {
+  width: 9px; height: 9px; background: var(--accent-surface); flex: none;
+  translate: 0 -1px;
+}
+.a2-avail .a2-read { font-size: 1rem; }
+
+/* ============================================================ THE FEATURE */
+/* `minmax(0, 1fr)`, not the implicit `auto`: an auto column is at least as
+   wide as its widest child's min-content, so one unbreakable string anywhere
+   inside the featured band can widen the column past the sheet and take the
+   document's scroll width with it. This is the structural half of the 320px
+   fix; the wrapping bar above is the other half. */
+.a2-feature {
+  padding-top: clamp(1.5rem, 3vw, 2.5rem);
+  display: grid; grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1.75rem, 3.5vw, 3rem);
+}
+.a2-feature__head { position: relative; }
+.a2-feature__lede { margin-top: clamp(1rem, 2vw, 1.5rem); max-width: 30ch; }
+/* Lede left, spec table right, so the band under the title is not 60% empty.
+   One column on narrow screens, where the table reads better underneath. */
+.a2-feature__intro { display: grid; gap: clamp(1.25rem, 3vw, 2.5rem); align-items: start; }
+@media (min-width: 900px) {
+  .a2-feature__intro { grid-template-columns: minmax(0, 32ch) minmax(0, 1fr); }
+  .a2-feature__meta { margin-top: clamp(1rem, 2vw, 1.5rem); justify-self: end; width: 100%; }
+}
+.a2-feature__meta { max-width: 44rem; }
+.a2-feature__cta { justify-self: start; }
+
+.a2-inspect { display: grid; gap: clamp(1.25rem, 2.5vw, 2rem); align-items: start; }
+@media (min-width: 900px) { .a2-inspect { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); } }
+
+.a2-inspect__stage { position: relative; aspect-ratio: 4 / 5; }
+.a2-inspect__svg { position: absolute; inset: 0; width: 100%; height: 100%; padding: 6%; }
+/* The travelling focus box. Periwinkle, dashed, decorative. */
+.a2-focusbox {
+  position: absolute; display: block; pointer-events: none;
+  border: 1px dashed var(--well-tertiary);
+  background: rgb(165 160 255 / 7%);
+}
+.a2-inspect__side { display: grid; gap: 0.875rem; align-content: start; }
+.a2-inspect__tabs { display: grid; }
+.a2-tab {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 0.875rem;
+  align-items: center; text-align: left;
+  min-height: calc(var(--touch-min) + 4px); padding: 0.625rem 0.875rem;
+  background: var(--panel); color: var(--ink);
+  border-bottom: 1px solid var(--bg);
+  clip-path: polygon(var(--ch) 0, 100% 0, 100% calc(100% - var(--ch)), calc(100% - var(--ch)) 100%, 0 100%, 0 var(--ch));
+  transition: background-color var(--dur-state) var(--ease-out), color var(--dur-state) var(--ease-out);
+}
+.a2-tab:hover { background: var(--raised); }
+.a2-tab.is-on { background: var(--ink); color: var(--bg); }
+.a2-tab__n { color: var(--ink-soft); font-family: var(--font-mono); font-size: var(--type-label); }
+.a2-tab.is-on .a2-tab__n { color: var(--accent-surface); }
+.a2-tab__name {
+  font-family: var(--font-display);
+  font-variation-settings: 'wdth' var(--display-stretch), 'wght' 700;
+  font-size: clamp(1.0625rem, 1.6vw, 1.3125rem); text-transform: uppercase;
+  letter-spacing: 0.005em;
+}
+.a2-tab__mark { color: var(--ink-soft); font-family: var(--font-mono); font-size: 0.75rem; }
+.a2-tab.is-on .a2-tab__mark { color: var(--accent-surface); }
+.a2-inspect__panel { min-height: 6.5em; padding-top: 0.25rem; }
+
+/* ========================================================== INDEX OF WORK */
+.a2-index {
+  display: grid; gap: clamp(1.5rem, 3vw, 2.5rem);
+  padding-top: clamp(1.25rem, 2.5vw, 2rem);
+  align-items: start;
+}
+@media (min-width: 980px) {
+  .a2-index { grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.85fr); }
+  .a2-index__preview { position: sticky; top: 5rem; }
+}
+.a2-index__rows { display: grid; }
+.a2-index__item { border-bottom: 1px solid var(--rule-hair); }
+.a2-index__item:first-child { border-top: 1px solid var(--rule-hair); }
+
+.a2-row {
+  position: relative; width: 100%; text-align: left;
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: clamp(0.75rem, 2vw, 1.5rem); align-items: center;
+  padding: clamp(0.75rem, 1.6vw, 1.125rem) clamp(0.625rem, 1.4vw, 1rem);
+  min-height: calc(var(--touch-min) + 14px);
+  color: var(--ink);
+  transition: background-color var(--dur-state) var(--ease-out),
+              color var(--dur-state) var(--ease-out);
+}
+/* The seated row fills rather than tinting, so the selection is not carried
+   by colour alone and survives a forced-colours rendering. */
+.a2-row.is-on, .a2-row.is-open { background: var(--ink); color: var(--bg); }
+/* A.3 — THE 1.15:1 BUG.
+   The old rule was `.a2-row:not(.is-on):hover`, which is three classes to
+   `.a2-row.is-open`'s two, so on an open row hover won the background and
+   lost the colour: ivory text on the ivory shade, measured at 1.15:1 on a
+   390px light-mode phone. A tap leaves `:hover` stuck on the row it opened,
+   so on touch this was not an edge case — it was every row a visitor opened.
+   Two changes, each sufficient on its own, kept because they say different
+   things: the hover tint belongs only to pointers that can hover, and it
+   belongs only to rows that are neither seated nor open. */
+@media (hover: hover) {
+  .a2-row:not(.is-on):not(.is-open):hover { background: var(--panel); }
+}
+/* The keyboard case has to agree with the pointer case. A focused row that
+   is not yet seated reads as seated-in-waiting rather than borrowing the
+   open state's inverted text. */
+.a2-row:focus-visible { background: var(--panel); }
+.a2-row.is-on:focus-visible, .a2-row.is-open:focus-visible { background: var(--ink); }
+.a2-row__n { font-size: var(--type-data); color: var(--ink-soft); }
+/* A.3 — was var(--accent-surface), which is 4.4:1 on the light edition's
+   seated charcoal and 3.0:1 on the dark edition's seated ivory. The index
+   number is the one piece of coral on an inverted ground anywhere on the
+   page, so it takes the inverted accent. */
+.a2-row.is-on .a2-row__n, .a2-row.is-open .a2-row__n { color: var(--accent-inverted); }
+.a2-row__title {
+  font-size: var(--type-row); line-height: var(--leading-row);
+  /* The title travels a hair to the right as its row seats — an origin-aware
+     acknowledgement that the row, not the page, is what moved. */
+  transition: transform var(--dur-state) var(--ease-out);
+}
+.a2-row.is-on .a2-row__title, .a2-row.is-open .a2-row__title { transform: translateX(6px); }
+.a2-row__kind {
+  display: inline-flex; align-items: center; gap: 0.75rem;
+  font-size: var(--type-label); letter-spacing: var(--track-label);
+  text-transform: uppercase; color: var(--ink-soft); white-space: nowrap;
+}
+.a2-row.is-on .a2-row__kind, .a2-row.is-open .a2-row__kind { color: var(--bg); }
+.a2-row__arrow { transition: transform var(--dur-control) var(--ease-out); }
+.a2-row.is-on .a2-row__arrow { transform: translateX(4px); }
+
+.a2-index__disclosure { overflow: hidden; }
+.a2-prev { display: grid; gap: 0.875rem; }
+.a2-prev--inline { padding: 1rem 0.75rem 1.25rem; }
+.a2-prev__media { position: relative; aspect-ratio: 4 / 3; }
+.a2-prev__frame { position: absolute; inset: 0; }
+.a2-prev__frame img { width: 100%; height: 100%; object-fit: cover; }
+.a2-prev__placeholder {
+  display: grid; place-items: center; height: 100%; padding: 1rem;
+  color: var(--well-dim); text-align: center;
+  font-size: var(--type-caption); letter-spacing: var(--track-label); text-transform: uppercase;
+}
+.a2-prev__line { font-size: var(--type-note); line-height: var(--leading-note); font-style: italic; }
+.a2-index--touch .a2-prev__line { max-width: none; }
+
+/* ======================================================== THE ASSEMBLY */
+.a2-asm { display: grid; gap: clamp(1.25rem, 2.5vw, 2rem); align-items: start; }
+@media (min-width: 940px) { .a2-asm { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); } }
+.a2-asm__slider {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 0.875rem;
+  align-items: center; padding: 0.75rem 0.875rem 0.875rem;
+}
+.a2-asm__slider .a2-label { color: var(--well-dim); white-space: nowrap; }
+
+/* A machined slider: square thumb, hairline track, periwinkle fill. */
+/* A.3 — 26px tall was under the approved 44px minimum, and this is the
+   control a touch visitor uses to drive the exploded view. The track and the
+   thumb are unchanged; only the area that accepts a finger grew. */
+.a2-range { -webkit-appearance: none; appearance: none; width: 100%; height: var(--touch-min); background: none; }
+.a2-range::-webkit-slider-runnable-track { height: 2px; background: var(--well-hair); }
+.a2-range::-moz-range-track { height: 2px; background: var(--well-hair); }
+.a2-range::-moz-range-progress { height: 2px; background: var(--well-tertiary); }
+.a2-range::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 12px; height: 18px; margin-top: -8px;
+  background: var(--well-tertiary); border: 0;
+  transition: transform var(--dur-control) var(--ease-out);
+}
+.a2-range::-moz-range-thumb {
+  width: 12px; height: 18px; border: 0; border-radius: 0;
+  background: var(--well-tertiary);
+}
+.a2-range:active::-webkit-slider-thumb { transform: scaleY(1.12); }
+
+.a2-asm__side { display: grid; gap: 0.875rem; align-content: start; }
+.a2-asm__views { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.a2-parts { display: grid; border-top: 1px solid var(--rule-hair); }
+.a2-parts__row {
+  width: 100%; text-align: left;
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 0.875rem;
+  align-items: baseline; min-height: var(--touch-min);
+  padding: 0.625rem 0.5rem;
+  border-bottom: 1px solid var(--rule-hair);
+  transition: background-color var(--dur-control) var(--ease-out);
+}
+.a2-parts__row:hover, .a2-parts__row.is-on { background: var(--panel); }
+.a2-parts__n { color: var(--ink-soft); font-size: var(--type-label); }
+.a2-parts__row.is-on .a2-parts__n { color: var(--accent-voice); }
+.a2-parts__name {
+  font-family: var(--font-display);
+  font-variation-settings: 'wdth' var(--display-stretch), 'wght' 700;
+  font-size: 1.0625rem; text-transform: uppercase;
+}
+.a2-parts__spec { color: var(--ink-soft); font-size: var(--type-caption); }
+.a2-asm__note { font-size: var(--type-note); line-height: var(--leading-note); max-width: 42ch; color: var(--ink-soft); }
+.a2-asm .a2-stage__hint { color: var(--ink-soft); }
+
+/* ============================================================== PRACTICE */
+.a2-practice { display: grid; gap: clamp(1.5rem, 3vw, 2.75rem); padding-top: clamp(1.5rem, 3vw, 2.5rem); align-items: start; }
+@media (min-width: 900px) { .a2-practice { grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); } }
+.a2-practice__well { align-self: start; }
+.a2-practice__well img { aspect-ratio: 4 / 5; }
+.a2-practice__body { display: grid; gap: clamp(1.5rem, 3vw, 2.25rem); }
+
+.a2-disc { display: grid; gap: 0; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+.a2-disc__item {
+  display: flex; gap: 0.75rem; align-items: baseline;
+  padding: 0.625rem 0.75rem 0.625rem 0;
+  border-top: 1px solid var(--rule-hair);
+}
+.a2-disc__n { color: var(--ink-soft); font-size: var(--type-label); }
+.a2-disc__name {
+  font-family: var(--font-display);
+  font-variation-settings: 'wdth' var(--display-stretch), 'wght' 700;
+  font-size: 1rem; text-transform: uppercase; line-height: 1.15;
+}
+
+.a2-teach { display: grid; }
+.a2-teach__row {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.5rem 1rem;
+  padding: 0.875rem 0; border-top: 1px solid var(--rule-hair);
+}
+.a2-teach__role { font-family: var(--font-read); font-size: 1.0625rem; }
+.a2-teach__org { color: var(--ink-soft); }
+.a2-teach__note { grid-column: 1 / -1; font-size: var(--type-note); line-height: var(--leading-note); max-width: 54ch; color: var(--ink-soft); }
+
+/* =============================================================== CONTACT */
+.a2-contact {
+  margin-top: var(--sheet-gap);
+  padding-block: clamp(2rem, 4vw, 3.5rem) clamp(2.5rem, 5vw, 4.5rem);
+  background: var(--contact-bg); color: var(--contact-ink);
+  position: relative;
+}
+.a2-contact__head { border-bottom-color: var(--contact-rule); }
+.a2-contact__head::after { background: var(--contact-rule); }
+.a2-contact .a2-label { color: var(--contact-ink); }
+.a2-contact__title { margin: clamp(1rem, 2vw, 1.75rem) 0 0; }
+.a2-contact .a2-stop, .a2-result .a2-stop { background: var(--contact-ink); }
+.a2-contact__grid {
+  display: grid; gap: clamp(1.5rem, 3vw, 3rem);
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+}
+@media (min-width: 860px) { .a2-contact__grid { grid-template-columns: minmax(0, 1fr) auto; align-items: end; } }
+.a2-contact__pitch { max-width: 30ch; color: var(--contact-ink); }
+.a2-contact__actions { display: grid; gap: 1rem; justify-items: start; }
+@media (min-width: 860px) { .a2-contact__actions { justify-items: end; } }
+.a2-contact .a2-btn--ink { background: var(--contact-ink); }
+.a2-contact .a2-btn--ink .a2-btn__in { background: var(--contact-ink); color: var(--contact-bg); }
+.a2-contact__links { display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; }
+.a2-contact__link {
+  display: inline-flex; align-items: center; min-height: var(--touch-min);
+  font-size: var(--type-data); letter-spacing: var(--track-data);
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px;
+  text-decoration-color: transparent;
+  transition: text-decoration-color var(--dur-control) var(--ease-out);
+}
+.a2-contact__link:hover { text-decoration-color: currentColor; }
+
+/* ============================================================ CASE STUDY */
+.a2-case__top { padding-block: clamp(1.5rem, 3vw, 2.5rem) 0; }
+/* A.3 — the breadcrumb row. The "Index of work" link measured 103 × 14px,
+   well under the approved 44px minimum, and it is the only way back from a
+   case study on a phone. The link keeps its type size and gains a hit area:
+   the negative margin puts the text back on the optical line so nothing
+   moves, and the crumb's own line-height absorbs the extra height. */
+.a2-case__crumb {
+  display: flex; flex-wrap: wrap; align-items: center;
+  color: var(--ink-soft); margin-bottom: clamp(0.5rem, 2.4vw, 1.5rem);
+}
+.a2-case__back {
+  display: inline-flex; align-items: center;
+  min-height: var(--touch-min); padding-inline: 0.5rem;
+  margin-inline-start: -0.5rem;
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.a2-case__plate { position: relative; }
+
+/* A.3 — THE OPENING.
+   At 1440 the title ran the full width, the lede stopped at 550px, and the
+   fact table sat 250px below it while 840px of the band stayed empty — so
+   the robot did not appear until past a 1000px fold. The approved sheet puts
+   the metadata beside the introduction, and so does this. One column on a
+   phone, where stacking is the right answer and always was. */
+.a2-case__opening { display: grid; gap: clamp(1.25rem, 3vw, 2.5rem); align-items: start; }
+@media (min-width: 900px) {
+  .a2-case__opening { grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); }
+  .a2-case__facts { justify-self: end; width: 100%; }
+}
+.a2-case__intro { display: grid; gap: 0.875rem; }
+.a2-case__lede { margin-top: clamp(0.5rem, 1.5vw, 1rem); max-width: 30ch; }
+.a2-case__status { color: var(--ink-soft); }
+.a2-case__facts { max-width: 34rem; display: grid; gap: 0.625rem; }
+.a2-case__legend { display: flex; align-items: center; }
+
+.a2-case__well { margin-top: clamp(1.75rem, 3.5vw, 3rem); }
+.a2-case__img { aspect-ratio: 16 / 10; }
+.a2-case__drawing { position: relative; aspect-ratio: 16 / 10; }
+.a2-case__svg { position: absolute; inset: 0; width: 100%; height: 100%; padding: 3% 0; }
+
+.a2-case__index {
+  display: flex; flex-wrap: wrap; gap: 0 clamp(1rem, 3vw, 3rem);
+  margin-top: clamp(1.25rem, 2.5vw, 2rem);
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule-hair);
+}
+.a2-case__indexLink {
+  display: inline-flex; align-items: center; gap: 0.625rem;
+  min-height: var(--touch-min);
+  font-family: var(--font-mono); font-size: var(--type-label);
+  letter-spacing: var(--track-label); text-transform: uppercase;
+  color: var(--ink-soft);
+  transition: color var(--dur-control) var(--ease-out);
+}
+.a2-case__indexLink:hover { color: var(--ink); }
+.a2-case__indexN { color: var(--accent-voice); }
+.a2-case__h2 { margin-block: clamp(1rem, 2vw, 1.5rem) clamp(1.25rem, 2.5vw, 2rem); display: inline-block; }
+
+.a2-sys {
+  display: grid; gap: 0; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  padding-top: clamp(1.25rem, 2.5vw, 2rem);
+}
+.a2-sys__cell {
+  display: grid; gap: 0.5rem; align-content: start;
+  padding: 1rem 1.25rem 1.5rem 0;
+  border-top: 1px solid var(--rule);
+}
+.a2-sys__n { color: var(--accent-voice); font-size: var(--type-label); }
+.a2-sys__name {
+  font-family: var(--font-display);
+  font-variation-settings: 'wdth' var(--display-stretch), 'wght' var(--display-weight);
+  font-size: clamp(1.375rem, 2.4vw, 1.75rem); text-transform: uppercase; line-height: 1.02;
+}
+.a2-sys__note { font-size: var(--type-note); line-height: var(--leading-note); max-width: 34ch; }
+
+.a2-rel { display: grid; gap: clamp(1.25rem, 3vw, 2.5rem); padding-top: clamp(1.25rem, 2.5vw, 2rem); align-items: end; }
+@media (min-width: 820px) { .a2-rel { grid-template-columns: minmax(0, 1fr) auto; } }
+.a2-rel__stat { display: grid; gap: 0.25rem; justify-items: start; }
+.a2-rel__value { font-size: clamp(3.5rem, 8vw, 6.5rem); line-height: 0.86; color: var(--accent-voice); }
+
+.a2-related { display: grid; gap: clamp(1.25rem, 3vw, 2.5rem); padding-top: clamp(1.25rem, 2.5vw, 2rem); align-items: start; }
+@media (min-width: 820px) { .a2-related { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.a2-related__well img { aspect-ratio: 16 / 10; }
+.a2-related__body { display: grid; gap: 1.25rem; justify-items: start; }
+
+.a2-result {
+  margin-top: var(--sheet-gap);
+  padding-block: clamp(2rem, 4vw, 3.5rem) clamp(2.5rem, 5vw, 4rem);
+  background: var(--contact-bg); color: var(--contact-ink);
+}
+.a2-result__head { border-bottom-color: var(--contact-rule); }
+.a2-result__head::after { background: var(--contact-rule); }
+.a2-result .a2-label { color: var(--contact-ink); }
+.a2-result__title { margin-top: clamp(1rem, 2vw, 1.75rem); }
+.a2-result__caption { margin-top: clamp(0.75rem, 1.5vw, 1.25rem); max-width: 40ch; color: var(--contact-ink); }
+
+.a2-own { padding-top: clamp(1.25rem, 2.5vw, 2rem); max-width: 34ch; }
+
+.a2-next { margin-top: var(--sheet-gap); }
+.a2-next__link {
+  display: grid; gap: 0.5rem 1.5rem; align-items: center;
+  grid-template-columns: minmax(0, 1fr);
+  padding: clamp(1.25rem, 2.5vw, 2rem) clamp(0.5rem, 1.4vw, 1rem);
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+  transition: background-color var(--dur-state) var(--ease-out), color var(--dur-state) var(--ease-out);
+}
+@media (min-width: 760px) { .a2-next__link { grid-template-columns: auto minmax(0, 1fr) auto; } }
+.a2-next__link:hover { background: var(--ink); color: var(--bg); }
+.a2-next__title { font-size: clamp(1.75rem, 4.4vw, 3.25rem); line-height: var(--leading-row); }
+.a2-next__go { white-space: nowrap; color: var(--ink-soft); }
+.a2-next__link:hover .a2-next__go, .a2-next__link:hover .a2-label--dim { color: var(--bg); }
+
+/* ===================================================== VIEW TRANSITIONS
+   Shared-element handoff between the index preview and the case-study hero.
+   Native, so it costs no bundle, it never blocks content, and a browser
+   without it simply swaps pages. Reduced motion turns it off entirely. */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-group(*) { animation-duration: 420ms; animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+  ::view-transition-old(root) { animation-duration: 180ms; animation-timing-function: cubic-bezier(0.64, 0, 0.78, 0); }
+  ::view-transition-new(root) { animation-duration: 320ms; animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}
+
+/* ======================================================== FORCED COLOURS */
+@media (forced-colors: active) {
+  .a2-btn__in, .a2-tab, .a2-chip, .a2-row { forced-color-adjust: none; }
+  .a2-ln { stroke: CanvasText; }
+  .a2-focusbox { border-color: Highlight; }
+  .a2-row.is-on, .a2-tab.is-on, .a2-chip.is-on { background: Highlight; color: HighlightText; }
+}
+
+/* ======================================================= NARROW VIEWPORTS */
+@media (max-width: 620px) {
+  .a2-head__nav { display: none; }
+  /* The mark alone identifies the page here; the full name would squeeze the
+     theme control off the edge. */
+  .a2-head__name { display: none; }
+  /* With the name hidden the link is only as wide as the 24px mark, which is
+     under the 44px minimum on the horizontal axis. The negative margin keeps
+     the mark itself optically on the gutter. */
+  .a2-head__id { padding-inline: 0.625rem; margin-inline-start: -0.625rem; }
+  .a2-head__in { min-height: 52px; }
+  .a2-row { grid-template-columns: auto minmax(0, 1fr); row-gap: 0.25rem; }
+  .a2-row__kind { grid-column: 2; justify-content: space-between; width: 100%; }
+  .a2-colophon__cell { border-right: 0; border-bottom: 1px solid var(--rule-hair); padding-right: 0; }
+  .a2-asm__slider { grid-template-columns: 1fr; gap: 0.5rem; }
+  .a2-stage--asm { aspect-ratio: 4 / 5; }
+}
+
+/* ===========================================================================
+   A.3 — RECOVERED CONTENT
+   New sheets and modules, in the same vocabulary as everything above: ruled
+   rows rather than cards, mono for data, display for names, one coral accent
+   per row and no more. Nothing here introduces a new colour, a new radius or
+   a new shadow.
+   ========================================================================= */
+
+/* The secondary reading voice. One size, set in tokens.css, for captions,
+   side notes and the standing lines under a lede. */
+.a2-note {
+  font-family: var(--font-read);
+  font-size: var(--type-note); line-height: var(--leading-note);
+  color: var(--ink-soft); max-width: 58ch;
+}
+
+/* ------------------------------------------------------- RÉSUMÉ ACCESS */
+/* The quiet mono link that appears beside a primary action. */
+.a2-hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.25rem; }
+.a2-hero__resume, .a2-case__exitLink, .a2-missing__resume, .a2-other__link {
+  display: inline-flex; align-items: center; min-height: var(--touch-min);
+  padding-inline: 0.25rem; margin-inline: -0.25rem;
+  color: var(--ink-soft);
+  text-decoration: underline; text-decoration-color: transparent;
+  text-underline-offset: 4px;
+  transition: color var(--dur-control) var(--ease-out),
+              text-decoration-color var(--dur-control) var(--ease-out);
+}
+.a2-hero__resume:hover, .a2-case__exitLink:hover,
+.a2-missing__resume:hover, .a2-other__link:hover {
+  color: var(--ink); text-decoration-color: currentColor;
+}
+
+/* In the header the résumé is a fifth item, and it only appears where there
+   is room for one without crowding the four destinations. Below this it
+   lives in the index panel instead, which has the width. */
+.a2-head__resume { display: none; }
+@media (min-width: 1100px) {
+  .a2-head__resume { display: inline-flex; color: var(--ink-soft); }
+}
+.a2-head__panelResume { border-top: 1px solid var(--rule); }
+.a2-head__panelResume .a2-head__n { color: var(--accent-surface); }
+
+/* ---------------------------------------------------------- OTHER WORK */
+.a2-other__lede { max-width: 34ch; margin-bottom: clamp(1.25rem, 2.5vw, 2rem); }
+.a2-other__rows { display: grid; }
+.a2-other__item {
+  padding-block: clamp(1.25rem, 2.5vw, 2rem);
+  border-top: 1px solid var(--rule-hair);
+}
+.a2-other__item:first-child { border-top: 1px solid var(--rule); }
+
+.a2-other__head {
+  display: grid; grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.25rem 0.875rem; align-items: baseline;
+}
+.a2-other__n { color: var(--accent-voice); font-size: var(--type-label); }
+.a2-other__title { font-size: clamp(1.375rem, 3.4vw, 2rem); line-height: 1.08; }
+.a2-other__tags {
+  grid-column: 2; display: flex; flex-wrap: wrap; align-items: center;
+  gap: 0.5rem 0.875rem; margin-top: 0.375rem;
+}
+.a2-other__kind, .a2-other__when { color: var(--ink-soft); font-size: var(--type-label); letter-spacing: var(--track-label); text-transform: uppercase; }
+
+/* The status chip. `.a2-tag` is a periwinkle-on-charcoal mark for wells;
+   on the ivory ground it needs its own pairing, and the status is a fact
+   rather than a placeholder warning. */
+.a2-other__status, .a2-iter__verdict {
+  background: none; padding: 0.2rem 0.5rem;
+  border: 1px solid var(--rule-hair); color: var(--ink-soft);
+}
+.a2-iter__verdict.is-on {
+  background: var(--accent-surface); border-color: var(--accent-surface);
+  color: #1a1114;
+}
+
+.a2-other__body {
+  display: grid; gap: clamp(1rem, 2.5vw, 2rem); align-items: start;
+  margin-top: 0.875rem;
+}
+@media (min-width: 860px) {
+  .a2-other__body { grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr); }
+  .a2-other__head { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .a2-other__tags { grid-column: 3; margin-top: 0; justify-content: flex-end; }
+}
+.a2-other__text { display: grid; gap: 0.75rem; }
+.a2-other__sum { max-width: 46ch; }
+.a2-other__detail { max-width: 52ch; color: var(--ink-soft); }
+.a2-other__owned { max-width: 52ch; }
+.a2-other__note { font-style: italic; }
+
+/* The "there is no artifact" line. Periwinkle lives on charcoal, so on the
+   sheet the same honesty is carried by the oxblood voice and a hairline. */
+.a2-other__missing {
+  max-width: 52ch; font-size: var(--type-caption); line-height: 1.5;
+  letter-spacing: var(--track-data);
+  color: var(--accent-voice);
+  border-left: 2px solid var(--accent-voice);
+  padding-left: 0.75rem;
+}
+.a2-other__links { display: flex; flex-wrap: wrap; gap: 0 1.25rem; }
+.a2-other__well { align-self: start; }
+.a2-other__well img { aspect-ratio: 16 / 10; }
+.a2-other__well .a2-well__need { display: block; padding-top: 0.625rem; }
+
+.a2-other__colophon {
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+  padding-top: clamp(1rem, 2vw, 1.5rem);
+  border-top: 1px solid var(--rule);
+}
+.a2-other__colophonHead { display: block; margin-bottom: 0.5rem; }
+
+/* ------------------------------------------------------------ PRACTICE */
+.a2-where { display: grid; gap: 0.5rem; }
+.a2-where__line {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.625rem;
+  font-size: var(--type-label); letter-spacing: var(--track-label);
+  text-transform: uppercase;
+}
+.a2-where__arrow { color: var(--accent-surface); }
+.a2-where__note { max-width: 46ch; color: var(--ink-soft); }
+
+.a2-edu { display: grid; }
+.a2-edu__row {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.25rem 1rem;
+  padding: 0.875rem 0; border-top: 1px solid var(--rule-hair);
+}
+.a2-edu__school {
+  font-family: var(--font-display);
+  font-variation-settings: 'wdth' var(--display-stretch), 'wght' 700;
+  font-size: 1rem; text-transform: uppercase; line-height: 1.15;
+}
+.a2-edu__detail { grid-column: 1 / -1; font-size: var(--type-note); color: var(--ink-soft); max-width: 54ch; }
+.a2-edu__when { grid-row: 1; grid-column: 2; text-align: right; }
+
+/* A sub-block inside a sheet: its own hairline head, its own anchor. */
+.a2-sub { margin-top: clamp(2rem, 4vw, 3.25rem); }
+.a2-sub__head {
+  display: block; padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+/* -------------------------------------------------------------- TOOLKIT */
+.a2-kit { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.a2-kit__group {
+  display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.25rem 0.75rem;
+  align-content: start; padding: 0.875rem 1rem 1.125rem 0;
+  border-top: 1px solid var(--rule-hair);
+}
+.a2-kit__n { color: var(--ink-soft); font-size: var(--type-label); }
+.a2-kit__name {
+  font-size: 1rem; line-height: 1.15;
+  font-variation-settings: 'wdth' var(--display-stretch), 'wght' 700;
+}
+.a2-kit__tools, .a2-kit__used { grid-column: 2; max-width: 34ch; }
+.a2-kit__tools { color: var(--ink-soft); font-size: var(--type-caption); line-height: 1.6; }
+.a2-kit__used { margin-top: 0.25rem; }
+.a2-kit__usedHead { display: block; }
+/* 44px-tall targets inside a narrow column wrap onto two rows; the negative
+   block margin stops two rows of links from reading as a gap in the sheet. */
+.a2-kit__links { display: flex; flex-wrap: wrap; gap: 0 0.75rem; margin: -0.375rem 0 -0.375rem -0.375rem; }
+.a2-kit__link {
+  display: inline-flex; align-items: center;
+  min-height: var(--touch-min); padding-inline: 0.375rem;
+  font-family: var(--font-read); font-size: var(--type-note);
+  color: var(--accent-voice);
+  text-decoration: underline; text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, var(--accent-voice) 40%, transparent);
+}
+.a2-kit__link:hover { text-decoration-color: currentColor; }
+
+/* --------------------------------------------------------- ACHIEVEMENTS */
+.a2-ach { display: grid; }
+.a2-ach__row {
+  display: grid; grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.25rem 0.875rem; align-items: baseline;
+  padding: 1rem 0; border-top: 1px solid var(--rule-hair);
+}
+.a2-ach__n { color: var(--accent-surface); font-size: var(--type-label); }
+.a2-ach__award { font-size: clamp(1.125rem, 2.4vw, 1.5rem); line-height: 1.1; }
+.a2-ach__meta {
+  grid-column: 2; color: var(--ink-soft);
+  font-size: var(--type-label); letter-spacing: var(--track-label); text-transform: uppercase;
+}
+.a2-ach__note { grid-column: 2; max-width: 56ch; margin-top: 0.375rem; font-size: var(--type-note); line-height: var(--leading-note); }
+
+.a2-offices { display: grid; gap: 0.375rem; margin-top: clamp(1rem, 2vw, 1.5rem); }
+.a2-offices__row { max-width: 60ch; }
+
+/* ---------------------------------------------------------- ITERATIONS */
+.a2-iter__source { margin-bottom: clamp(1rem, 2vw, 1.5rem); font-style: italic; }
+.a2-iter { display: grid; }
+.a2-iter__row {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.5rem 0.875rem; align-items: baseline;
+  padding: clamp(1rem, 2vw, 1.5rem) 0;
+  border-top: 1px solid var(--rule-hair);
+}
+.a2-iter__row:first-child { border-top: 1px solid var(--rule); }
+.a2-iter__tag { display: grid; gap: 0.125rem; }
+.a2-iter__sub { color: var(--ink-soft); font-size: var(--type-caption); letter-spacing: var(--track-label); text-transform: uppercase; }
+.a2-iter__v { color: var(--accent-voice); font-size: var(--type-label); }
+.a2-iter__name { font-size: clamp(1.125rem, 2.6vw, 1.625rem); line-height: 1.1; }
+.a2-iter__verdict { justify-self: end; align-self: start; }
+.a2-iter__what, .a2-iter__why, .a2-iter__learned { grid-column: 2 / -1; max-width: 58ch; }
+.a2-iter__why { color: var(--ink-soft); }
+/* On a wide sheet the three paragraphs stacked in one 58ch column left most
+   of the row empty, which is exactly the "generous space outweighing
+   substance" the audit called out. What it was and why it failed go in one
+   column; what it taught goes in the other, beside them, where it reads as
+   the conclusion rather than as a third paragraph. */
+@media (min-width: 1120px) {
+  .a2-iter__row { grid-template-columns: auto minmax(0, 1fr) minmax(0, 0.8fr) auto; }
+  .a2-iter__name { grid-column: 2 / 4; }
+  .a2-iter__what, .a2-iter__why { grid-column: 2; }
+  .a2-iter__learned { grid-column: 3; grid-row: 2 / span 2; align-self: start; max-width: 44ch; }
+  .a2-iter__verdict { grid-column: 4; grid-row: 1; }
+}
+/* A rejected version is history, not failure — it is set a shade back, and
+   the accepted one keeps the full ink. */
+.a2-iter__row.is-rejected .a2-iter__name { color: var(--ink-soft); }
+
+/* ----------------------------------------------------------- DECISIONS */
+.a2-dec { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); }
+.a2-dec__row {
+  display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.375rem 0.875rem;
+  align-content: start; padding: clamp(1rem, 2vw, 1.5rem) clamp(1rem, 2vw, 1.75rem) clamp(1.25rem, 2.5vw, 2rem) 0;
+  border-top: 1px solid var(--rule-hair);
+}
+.a2-dec__n { color: var(--accent-surface); font-size: var(--type-label); }
+.a2-dec__name { font-size: clamp(1rem, 2vw, 1.25rem); line-height: 1.15; }
+.a2-dec__body, .a2-dec__cost { grid-column: 2; max-width: 46ch; }
+.a2-dec__body { font-size: var(--type-note); line-height: var(--leading-note); }
+
+/* ------------------------------------------------- THE WAY OUT OF A CASE */
+.a2-case__exit { margin-top: clamp(2rem, 4vw, 3.5rem); }
+.a2-case__exitIn {
+  display: grid; gap: clamp(1rem, 2vw, 1.5rem);
+  padding-top: clamp(1.25rem, 2.5vw, 2rem);
+  border-top: 1px solid var(--rule);
+}
+@media (min-width: 820px) {
+  .a2-case__exitIn { grid-template-columns: minmax(0, 1fr) auto; align-items: center; }
+}
+.a2-case__exitLine { max-width: 46ch; }
+.a2-case__exitActions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.25rem; }
+
+/* A well with nothing in it yet. Same charcoal, same label voice as the
+   illustrative placeholders — it is the same statement. */
+/* Deliberately NOT the 16/10 a real figure gets. At 1440 that was 842px of
+   empty charcoal — an absent asset given more of the page than most of the
+   writing, which is the opposite of what a placeholder is for. It states its
+   absence and gets out of the way. */
+.a2-case__empty {
+  display: grid; place-items: center;
+  min-height: clamp(170px, 20vw, 280px); padding: 2rem;
+  color: var(--well-dim); text-align: center;
+  font-size: var(--type-caption); letter-spacing: var(--track-label); text-transform: uppercase;
+}
+/* What the picture above actually is. Inside the well, so it reads as part
+   of the figure rather than as body copy that happens to follow it. */
+.a2-well__prov {
+  padding: 0 0.875rem 0.875rem; margin: 0;
+  color: var(--well-dim); max-width: 64ch;
+}
+.a2-well__prov + .a2-well__need { padding-top: 0; }
+
+/* ------------------------------------------------------- THE 404 SHEET */
+.a2-missing { min-height: 52vh; }
+.a2-missing__lede { margin-top: clamp(1.5rem, 4vw, 3rem); max-width: 26ch; }
+.a2-missing__body { margin-top: 1.25rem; max-width: 50ch; }
+.a2-missing__cta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.25rem; margin-top: clamp(1.5rem, 3vw, 2.5rem); }
+
+/* ====================================================== NARROW: A.3 BLOCKS */
+@media (max-width: 620px) {
+  .a2-other__head { grid-template-columns: auto minmax(0, 1fr); }
+  .a2-iter__row { grid-template-columns: auto minmax(0, 1fr); }
+  .a2-iter__verdict { grid-column: 2; justify-self: start; }
+  .a2-iter__what, .a2-iter__why, .a2-iter__learned { grid-column: 1 / -1; }
+  .a2-dec__body, .a2-dec__cost { grid-column: 1 / -1; }
+  .a2-kit__tools, .a2-kit__used { grid-column: 1 / -1; }
+  .a2-ach__meta, .a2-ach__note { grid-column: 1 / -1; }
+  .a2-edu__when { grid-row: auto; grid-column: 1 / -1; text-align: left; }
+}

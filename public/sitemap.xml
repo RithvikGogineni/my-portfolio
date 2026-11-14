@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  The seven indexable URLs this edition actually has. The previous sitemap
+  still advertised /about, /projects, /experience, /skills, /contact and
+  /projects/1…13 — eighteen URLs that now answer with a redirect, which is
+  the fastest way to teach a crawler that the file is not maintained.
+
+  The retired routes (/blog, /gallery) are deliberately absent: they render a
+  page, but it carries noindex and there is nothing there to find.
+-->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://rithvikgogineni.vercel.app/</loc></url>
-  <url><loc>https://rithvikgogineni.vercel.app/about</loc></url>
-  <url><loc>https://rithvikgogineni.vercel.app/projects</loc></url>
-  <url><loc>https://rithvikgogineni.vercel.app/experience</loc></url>
-  <url><loc>https://rithvikgogineni.vercel.app/skills</loc></url>
-  <url><loc>https://rithvikgogineni.vercel.app/contact</loc></url>
-  <url><loc>https://rithvikgogineni.vercel.app/projects/1</loc></url>
-  <url><loc>https://rithvikgogineni.vercel.app/projects/2</loc></url>
-  <url><loc>https://rithvikgogineni.vercel.app/projects/3</loc></url>
-  <url><loc>https://rithvikgogineni.vercel.app/projects/4</loc></url>
-  <url><loc>https://rithvikgogineni.vercel.app/projects/5</loc></url>
-  <url><loc>https://rithvikgogineni.vercel.app/projects/6</loc></url>
-  <url><loc>https://rithvikgogineni.vercel.app/projects/7</loc></url>
-  <url><loc>https://rithvikgogineni.vercel.app/projects/8</loc></url>
-  <url><loc>https://rithvikgogineni.vercel.app/projects/9</loc></url>
-  <url><loc>https://rithvikgogineni.vercel.app/projects/10</loc></url>
-  <url><loc>https://rithvikgogineni.vercel.app/projects/11</loc></url>
-  <url><loc>https://rithvikgogineni.vercel.app/projects/12</loc></url>
-  <url><loc>https://rithvikgogineni.vercel.app/projects/13</loc></url>
+  <url><loc>https://rithvikgogineni.vercel.app/</loc><priority>1.0</priority></url>
+  <url><loc>https://rithvikgogineni.vercel.app/work/humanoid</loc><priority>0.9</priority></url>
+  <url><loc>https://rithvikgogineni.vercel.app/work/ftc-16075</loc><priority>0.9</priority></url>
+  <url><loc>https://rithvikgogineni.vercel.app/work/first-global</loc><priority>0.9</priority></url>
+  <url><loc>https://rithvikgogineni.vercel.app/work/rehabos</loc><priority>0.8</priority></url>
+  <url><loc>https://rithvikgogineni.vercel.app/work/nexusos</loc><priority>0.8</priority></url>
+  <url><loc>https://rithvikgogineni.vercel.app/work/roamly</loc><priority>0.8</priority></url>
 </urlset>

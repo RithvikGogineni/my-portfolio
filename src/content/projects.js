@@ -129,13 +129,13 @@ export const projects = [
     title: 'FTC Team 16075',
     titleLines: ['FTC Team', '16075'],
     kind: 'Robotics',
-    // CONFIRMED 2026-11-13: co-captain, not captain. The résumé says
-    // "Captain (2025–26)"; the team's own DECODE-season engineering
-    // portfolio shows a two-person co-captain model, and that is the
-    // correct one. The served résumé PDF still reads "Captain" — the
-    // site and the document it links to therefore disagree on this line
-    // until the PDF is reissued.
-    role: 'Co-Captain 2025–26 · Vice-Captain 2024–25', // N
+    // CONFIRMED 2026-11-14: captain. The résumé is right and the site
+    // follows it. Noting the conflicting record so nobody re-opens this:
+    // the team's DECODE-season engineering portfolio lays out a two-person
+    // co-captain structure, which is why A.3 queried the title in the first
+    // place. Asked and answered — captain. Do not reconcile this line to
+    // that document.
+    role: 'Captain 2025–26 · Vice-Captain 2024–25', // R
     when: '2024–2026',                              // R
     status: 'Competed',
     stack: ['FTC', 'Mechanical integration', 'Autonomous', 'Documentation'],
@@ -156,7 +156,7 @@ export const projects = [
       alt: 'A CAD render of an FTC robot: an aluminium extrusion chassis on four mecanum wheels, carrying a vertical tower, a motor-driven roller and a control hub.' },
 
     facts: [
-      { label: 'My role', value: 'Co-Captain (2025–26), Vice-Captain (2024–25)', verified: true }, // N
+      { label: 'My role', value: 'Captain (2025–26), Vice-Captain (2024–25)', verified: true }, // R
       { label: 'Seasons', value: 'Into the Deep 2024–25 · DECODE 2025–26', verified: true },    // N
       { label: 'Robot', value: 'Sir Launch-a-lot (2025–26)', verified: true },                  // N
       { label: 'Competition', value: 'FIRST Tech Challenge', verified: true },                  // R
@@ -257,7 +257,7 @@ export const projects = [
       // A.3 — the audit asked for team credit and personal credit to be
       // separable. The decisions above are the team's; this is the line the
       // résumé actually supports.
-      body: 'Mechanical integration and the iterative development of the competition robots across both seasons — intake, transfer, launching and autonomous — plus competition debugging and the engineering documentation. I co-captained the team through the 2025–26 season under a deliberate two-person model — engineering was my half of it, programming my counterpart’s. 16075 is a student-led team of about a dozen across engineering, programming and technical writing, and the design record above is the team’s work, not one person’s.', // R + N
+      body: 'Mechanical integration and the iterative development of the competition robots across both seasons — intake, transfer, launching and autonomous — plus competition debugging and the engineering documentation. As captain I carried the team through the 2025–26 season. 16075 is a student-led team of about a dozen across engineering, programming and technical writing, and the design record above is the team’s work, not one person’s.', // R + N
     },
 
     assembly: 'module-illustrative',

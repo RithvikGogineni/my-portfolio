@@ -71,33 +71,30 @@ written so one could be dropped in.
 
 ### 4.1 Needs your answer
 
-1. **The résumé PDF still says “Captain”.** The 2025–26 role is confirmed as
-   **co-captain** (see §4.2) and the site now says so everywhere. The served
-   `public/Rithvik-Gogineni-Resume.pdf` has not been reissued, so the site and
-   the document it links to disagree on this one line. The PDF is yours to
-   regenerate; nothing in the repo can fix it.
-2. **The four achievements that are not on the résumé.** The previous site
+1. **The four achievements that are not on the résumé.** The previous site
    listed an *OUCC* win (2021 & 2022), *FIRST Lego League* representation
    (2017), a *chess U1800* title (2022) and an *ABRSM Grade 2* distinction
    (2023). None is on the résumé, and the previous site expanded OUCC as
    “Outstanding University Computer Competition”, which does not match the
    competition of that name. They are **not published** pending confirmation
    of the event, year and level.
-3. **The RehabOS screenshot** shows the onboarding checklist mid-setup, all
+2. **The RehabOS screenshot** shows the onboarding checklist mid-setup, all
    counters at zero, and a named clinic principal in the account rail. It is
    published with a caption saying exactly that. A screen with a demo dataset
    and no personal name would be better evidence and carries no privacy
    question.
-4. **Proper Constructions** has no confirmed live URL, so that row has no
+3. **Proper Constructions** has no confirmed live URL, so that row has no
    link.
 
 ### 4.2 Resolved
 
-- **Co-captain, not captain (2025–26)** — confirmed 2026-11-13. The team ran a
-  deliberate two-person model: engineering was this half of it, programming
-  the other. The site says *Co-Captain* in the standing line, the FTC role
-  fact, the role metadata and the ownership note. The résumé PDF still reads
-  *Captain* — see §4.1.1.
+- **Captain (2025–26)** — asked 2026-11-13, settled 2026-11-14. **The résumé
+  is correct and the site agrees with it.** The conflicting record is worth
+  keeping on file so the question is not re-opened by whoever reads it next:
+  the team's own DECODE-season engineering portfolio lays out a two-person
+  co-captain structure with a paragraph explaining the choice, which is what
+  prompted the query. Confirmed as *Captain*. Do not reconcile the site to
+  that document.
 - **FTC result wording** — confirmed 2026-11-12. The résumé is right: *Jamaica
   Inspire Award and the Judges' Choice (Ochoa) Award at the 2025 FIRST
   Championship*. The concept PDF's *“National 2nd Place Inspire Award”* was a
@@ -125,8 +122,7 @@ Each was a résumé line that had acquired a comparison the source did not make.
 | Roamly — “the same request from two users is **answered once**” | “caching across users rather than per device”, which is the résumé's wording |
 | RehabOS — 67 pages under test presented as a reliability result | stated as coverage, with what it does *not* establish said in the same breath |
 | NexusOS marketing image — “Eighteen specialized AI agents”, “Trusted by 247+ businesses worldwide” | image withdrawn; a `Status` fact now reads “Designed and architected · no deployment claimed” |
-| “I captain FTC Team 16075” (undated, now behind us) | “I co-captained … through the 2025–26 season” |
-| “Captain (2025–26)” on the FTC case study | “Co-Captain (2025–26)”, confirmed 2026-11-13 |
+| “I captain FTC Team 16075” (undated, now behind us) | “I captained … through the 2025–26 season” — the title is unchanged, only the tense |
 
 ## 5. Still missing, in priority order
 

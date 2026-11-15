@@ -1,4 +1,4 @@
-# A.3 — Asset and fact inventory
+# A.4 — Asset and fact inventory
 
 Status of every image, document and claim the site depends on.
 Concept A.2's own rule still governs this file:
@@ -21,7 +21,9 @@ not a claim about the underlying engineering.
 
 | Project | File | Type | Source / provenance | Verified | Used for | Optimise? | Missing |
 |---|---|---|---|---|---|---|---|
-| FTC 16075 | `ftc-robot.webp` 900×509, 36 KB | CAD render | Carried over from the previous site; origin not established | **No** — labelled on the page as a render of unconfirmed season | Case-study hero, index preview | Source is 900px wide and displays up to 1348px — needs a larger export, not recompression | A photograph of the competition robot on the field |
+| FTC 16075 | `ftc-robot-side.webp` 1400×933, 165 KB | Technical illustration, transparent | **Team 16075's own engineering portfolio for the 2025–26 DECODE season.** The robot as built, drawn by the team | Yes — it is *Sir Launch-a-lot*, named and dated on the page | Home flagship: the inspection stage, with the focus box travelling over it | No | — |
+| FTC 16075 | `ftc-robot-top.webp` 900×1350, 119 KB | Technical illustration, transparent | Same document, plan view | Yes | Case-study hero | No | — |
+| FTC 16075 | `ftc-robot.webp` 900×509, 36 KB | CAD render | Carried over from the previous site; origin never established | **No** | **Unused since A.4** — kept in the repository, referenced nowhere | — | Superseded by the two illustrations above |
 | FIRST Global | `fgc-robot.webp` 900×507, 40 KB | CAD render | Same | **No** — labelled as a render, not a competition photograph | Case-study hero, index preview | Same | A build or arena photograph of *Probox Curry* |
 | RehabOS | `rehabos.webp` 1440×981, 48 KB | Product screenshot | Real RehabOS dashboard | Yes | Case-study hero, index preview | No | A screen with a demo dataset instead of an empty new tenant — see §4.1 |
 | Med Rehab website | `medrehab-website.webp` 1440×983, 64 KB | Site screenshot | Real client site | Yes | RehabOS → “The clinic”; Other work 10 | No | — |
@@ -30,7 +32,8 @@ not a claim about the underlying engineering.
 | FTC Starter Guide | `ftc-starter-guide.webp` 900×592, 48 KB | Workspace screenshot | The guide itself; its cover text is the source for that entry's copy | Yes | Other work 07 | No | A shareable link or an export, if the guide is ever published |
 | Proper Constructions | `proper-constructions.webp` 900×536, 32 KB | Site screenshot | Real client site | Yes | Other work 11 | No | A current live URL — none confirmed, so no link is shown |
 | Gorilla Gym / Club1962 | `gorilla-gym.webp` 900×596, 64 KB | Site screenshot | Real client sites | Yes | Other work 12 | No | Separate images if the two sites differ enough to show both |
-| Practice | `profile-photo.webp` 700×1050, 60 KB | Portrait | Yours | Yes | Practice sheet | No | The concept asks for a workshop / part-in-hand pair instead of a portrait |
+| The person | `portrait-2026.webp` 1100×1100, 83 KB | Portrait | Supplied by you, November 2026 | Yes | Sheet 02 — the source for the particle formation **and** the photograph that remains | No | — |
+| — | `profile-photo.webp` 700×1050, 60 KB | Portrait (2023-era, outdoors) | Yours | Yes | **Unused since A.4** — the person sheet uses the current portrait | — | — |
 | — | `professional_photo.jpg` 1122×1402, 288 KB | Portrait | Yours | Yes | **Unused.** Larger alternative to the above | Would need converting to WebP if adopted | — |
 | — | `portfolio-screenshot.webp` 900×584, 20 KB | Site screenshot | The *previous* portfolio | Yes | **Unused** — the colophon is prose, not a self-referential case study | — | — |
 | — | `src/assets/images/gallery/` | (empty directory) | Preserved for the separate gallery phase | — | — | — | Untouched by A.3, as instructed |
@@ -42,7 +45,7 @@ None is passed off as real.
 
 | ID | Asset | Where it shows | Replace by |
 |---|---|---|---|
-| **A-01** | Humanoid: studio photo or clean CAD render, 4:5 | Featured inspection + humanoid hero render a line drawing tagged `ILLUSTRATIVE · ASSET A-01` | Set `media` in `src/content/projects.js` to `{ src, alt, verified: true, figure }` |
+| **A-01** | Humanoid: studio photo or clean CAD render, 4:5 | The humanoid case study only — it is **held back** from the home page and the index until this exists, and says so at the top of its own page | Set `media` in `src/content/projects.js` to `{ src, alt, verified: true, figure }`, then delete `held: true` |
 | **A-05** | NexusOS: proposal → review → approval workflow | Empty well tagged `ILLUSTRATIVE · ASSET A-05`, with the reason the marketing page was withdrawn stated inside it | Same |
 | **A-06** | Roamly: route selection or navigation | The logotype, captioned as identity, with “awaiting a route-selection or navigation screen” under it | Same |
 | **CAD** | Exploded assembly + bill of materials | All three robotics case studies show a generic rotary module tagged `ILLUSTRATIVE · AWAITING CAD`; its parts list shows `—` for quantity and material | See `src/content/assemblies.js` |
@@ -124,12 +127,49 @@ Each was a résumé line that had acquired a comparison the source did not make.
 | NexusOS marketing image — “Eighteen specialized AI agents”, “Trusted by 247+ businesses worldwide” | image withdrawn; a `Status` fact now reads “Designed and architected · no deployment claimed” |
 | “I captain FTC Team 16075” (undated, now behind us) | “I captained … through the 2025–26 season” — the title is unchanged, only the tense |
 
+## 4.4 A.4 — what changed, and what needs you
+
+### Resolved by evidence
+
+- **Veyra is not NexusOS.** Your own Veyra roadmap (19 October 2026) settles
+  it in one line: *“The old NexusOS checkout was initially discovered but is
+  unrelated to this baseline. Its Hono server, pnpm monorepo and 23-module
+  registry are **not Veyra facts**.”* The same document gives Veyra's planning
+  baseline as `dev/rehabOS/app`, with tenancy on `clinics`, `clinic_id` and
+  `practitioners` — so **Veyra is RehabOS growing into a business suite**, not
+  a NexusOS rebrand. NexusOS keeps its own entry and its own name. Nothing
+  about Veyra is published: see below.
+- **Real FTC media exists.** Two technical illustrations of *Sir
+  Launch-a-lot* came out of the team's DECODE engineering portfolio. They
+  replace the unprovenanced render A.3 flagged, which is the last piece of
+  carried-over media on the site whose origin was unknown.
+
+### Needs you
+
+1. **The FTC illustrations are team work.** They are drawings of your team's
+   robot, from a document the team produced, and they are credited to the
+   team in the caption and the provenance line. They contain no names and no
+   finances. If you would rather they were not published, it is one commit to
+   pull them and the flagship falls back to a labelled placeholder.
+2. **Piano.** The person sheet says you play; it does **not** claim the ABRSM
+   Grade 2 distinction the previous site listed, because that award is still
+   in §4.1 awaiting confirmation. Confirm it and it can be stated properly.
+3. **Veyra.** There is enough material in your Codex outputs to write an
+   honest entry — a roadmap, an audit and an implementation record — but it
+   describes an unreleased product with an explicit list of what is *not*
+   verified. Say the word and it becomes either a note on RehabOS ("where it
+   went next") or an entry of its own. It is not on the site today.
+4. **The humanoid comes back** the day there is a build photograph. Everything
+   about it is intact; `held: true` is the only thing standing between it and
+   the front page.
+
 ## 5. Still missing, in priority order
 
-1. **A real flagship photograph.** One good photograph of a finished robot on
-   a field or a bench would do more for this site than any other single
-   asset. Today the first screen and all three robotics heroes are renders or
-   drawings.
+1. **A photograph of a robot.** The flagship is now a real technical
+   illustration of the real machine, which is a long way better than a
+   generic render — but it is still a drawing. One photograph of 16075 on a
+   field, or of the FIRST Global robot in Panama, would do more for this site
+   than any other single asset.
 2. **A Roamly product screen.** The only software case study with no interface.
 3. **A NexusOS workflow screen.** Needed before that project can show anything.
 4. **A humanoid build photograph**, plus degrees of freedom, actuator choice

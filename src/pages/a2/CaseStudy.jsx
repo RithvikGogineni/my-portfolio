@@ -27,7 +27,7 @@ import HumanoidDrawing from '../../components/a2/HumanoidDrawing';
 import NotFound from './NotFound';
 import { Colophon } from '../../components/a2/Chrome';
 import { MaskedLines, Reveal, RevealItem, RiseIn } from '../../motion/motion';
-import { projects, bySlug } from '../../content/projects';
+import { published, bySlug } from '../../content/projects';
 import { getAssembly } from '../../content/assemblies';
 import { site } from '../../content/site';
 import { applyMeta, projectMeta } from '../../lib/meta';
@@ -95,10 +95,14 @@ export default function CaseStudy() {
     if (p) applyMeta(projectMeta(p));
   }, [p]);
 
+  // A.4 — the cycle runs over published projects only. A held project is
+  // still reachable, but it is not somewhere the site sends you, and it does
+  // not get a "next" of its own: the chain would otherwise run off the end of
+  // the public work and into a page nothing links to.
   const next = useMemo(() => {
-    if (!p) return null;
-    const i = projects.findIndex((x) => x.slug === p.slug);
-    return projects[(i + 1) % projects.length];
+    if (!p || p.held) return null;
+    const i = published.findIndex((x) => x.slug === p.slug);
+    return i === -1 ? null : published[(i + 1) % published.length];
   }, [p]);
 
   // An unknown slug is a stale link, not a crash. Saying so beats a silent
@@ -145,6 +149,14 @@ export default function CaseStudy() {
   return (
     <>
       <main id="main" className="a2-case">
+        {/* A.4 — a held project says so before it says anything else. */}
+        {p.heldNote && (
+          <section className="a2-sheet a2-case__held">
+            <p className="a2-label a2-case__heldHead">{p.heldNote.heading}</p>
+            <p className="a2-note a2-case__heldBody">{p.heldNote.body}</p>
+          </section>
+        )}
+
         {/* --------------------------------------------------------- HEAD */}
         <section className="a2-sheet a2-case__top">
           <p className="a2-label a2-case__crumb">

@@ -22,6 +22,9 @@ export default function FeaturedInspect({ systems, media }) {
   const tabs = useRef([]);
   const active = systems[i];
   const f = active.focus ?? { x: 50, y: 50, w: 60, h: 60 };
+  // A dedicated inspection view if the project has one, otherwise its hero
+  // image, otherwise the drawing.
+  const inspectSrc = media.inspect ?? media.src ?? null;
 
   const onKeyDown = (e) => {
     const last = systems.length - 1;
@@ -48,8 +51,26 @@ export default function FeaturedInspect({ systems, media }) {
           )}
         </figcaption>
 
-        <div className="a2-inspect__stage">
-          <HumanoidDrawing className="a2-inspect__svg" />
+        <div className="a2-inspect__stage" style={{ aspectRatio: media.aspect ?? '4 / 5' }}>
+          {/* A.4 — the stage used to be the humanoid drawing and nothing else,
+              which is why promoting any other project to the flagship would
+              have put a humanoid elevation behind its subsystems. It now shows
+              whatever the project actually has: a photograph or technical
+              illustration where one exists, the labelled drawing where it does
+              not. The focus box is positioned in percentages either way, so it
+              tracks the artwork at every size without a resize observer. */}
+          {inspectSrc ? (
+            <img
+              className="a2-inspect__img"
+              src={inspectSrc}
+              alt=""
+              decoding="async"
+              width="1400"
+              height="933"
+            />
+          ) : (
+            <HumanoidDrawing className="a2-inspect__svg" />
+          )}
           {/* The travelling focus box. Overlaid in percentage units so it
               tracks the drawing at every size without a resize observer. */}
           <m.span
@@ -69,7 +90,9 @@ export default function FeaturedInspect({ systems, media }) {
         {media.illustrative && (
           <p className="a2-well__need a2-mono">Awaiting {media.need.toLowerCase()}</p>
         )}
-        <span className="a2-sr">{media.alt}</span>
+        {/* The image above is alt="" because it is the same subject the panel
+            is describing in words; this carries the description once. */}
+        <span className="a2-sr">{media.inspectAlt ?? media.alt}</span>
       </figure>
 
       <div className="a2-inspect__side">

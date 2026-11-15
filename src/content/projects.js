@@ -45,7 +45,14 @@
 // `status` uses the same controlled vocabulary as content/other.js.
 // ===========================================================================
 
-import ftcRobot from '../assets/images/ftc-robot.webp';
+// A.4 — the real machine. Technical illustrations of Sir Launch-a-lot,
+// the 2025–26 DECODE robot, from the team's own engineering portfolio for
+// that season. They are on transparency, which is why the charcoal well
+// reads as a drawing sheet rather than as a photo frame. The
+// unprovenanced render A.3 flagged, `ftc-robot.webp`, stays in the
+// repository but is no longer used anywhere.
+import ftcSide from '../assets/images/ftc-robot-side.webp';
+import ftcTop from '../assets/images/ftc-robot-top.webp';
 import fgcRobot from '../assets/images/fgc-robot.webp';
 import rehabos from '../assets/images/rehabos.webp';
 import medrehab from '../assets/images/medrehab-website.webp';
@@ -54,81 +61,12 @@ import roamly from '../assets/images/roamly.webp';
 export const projects = [
   // -------------------------------------------------------------------------
   {
-    slug: 'humanoid',
-    number: '01',
-    title: 'The Humanoid',
-    titleLines: ['The', 'Humanoid'],
-    kind: 'Robotics',
-    featured: true,
-    role: 'Independent build',          // R
-    when: '2025',                       // R
-    status: 'Built',                    // R — built and programmed; no demonstration is claimed
-    stack: ['Raspberry Pi', 'ROS', 'CAD', '3D Printing'], // R
-    // D — the author's own line from the approved concept.
-    lede: 'A humanoid robot modeled in CAD, printed in parts, driven by a Raspberry Pi running ROS, with an LLM-based AI onboard.',
-
-    media: {
-      illustrative: true,
-      assetId: 'A-01',
-      // The system name is appended by the inspector, which owns which system
-      // is selected. Keeping it out of the content stops the two drifting.
-      figure: 'Fig. 02 — Inspect',
-      need: 'Studio photograph or clean CAD render, 4:5',
-      drawing: 'humanoid',
-      alt: 'Front-elevation engineering drawing of a humanoid robot, shown with a centre line and joint markers. A labelled placeholder standing in until a photograph of the real build is available.',
-    },
-
-    facts: [
-      { label: 'Process', value: '3D-modeled · 3D-printed', verified: true },   // R
-      { label: 'Compute', value: 'Raspberry Pi · ROS', verified: true },        // R
-      { label: 'Intelligence', value: 'Onboard LLM-based AI', verified: true }, // R
-      { label: 'My role', value: 'Designed, built and programmed, independently', verified: true }, // R
-      // A.3 — the audit asked for status on the humanoid, and this is the
-      // honest one: it was built; nothing on this site shows it moving.
-      { label: 'Status', value: 'Built 2025 · no demonstration published', verified: true },
-    ],
-
-    // The featured inspection: four subsystems, a dashed focus box travelling
-    // between them. Copy for `structure` is the author's own (D); the rest
-    // are the résumé's own verbs, not invented specifications.
-    systems: [
-      { id: 'structure', n: '01', name: 'Structure',
-        note: 'Designed in CAD and printed in parts, so every joint, bracket and shell is a decision rather than an off-the-shelf compromise.', // D
-        focus: { x: 50, y: 46, w: 44, h: 72 } },
-      { id: 'actuation', n: '02', name: 'Actuation',
-        note: 'The printed limbs and joints were assembled from scratch alongside the electronics, rather than dropped onto a donor chassis.', // R
-        focus: { x: 50, y: 52, w: 84, h: 40 } },
-      { id: 'compute', n: '03', name: 'Compute',
-        note: 'A Raspberry Pi runs the control software under ROS, integrating the structure, the electronics and the onboard compute into one system.', // R
-        focus: { x: 50, y: 20, w: 34, h: 26 } },
-      { id: 'intelligence', n: '04', name: 'Intelligence',
-        note: 'An onboard LLM system interprets conversational commands and responds to them, so the robot is spoken to rather than driven.', // R
-        focus: { x: 50, y: 16, w: 26, h: 20 } },
-    ],
-
-    // A.3 — what the page cannot show, said on the page rather than only in
-    // the inventory. The audit's finding 05: the flagship is illustrative,
-    // and the honest move while that is true is to say so where it shows.
-    limits: {
-      heading: 'What this page cannot show you',
-      body: 'There is no photograph of this robot on this site, and the drawing above is a placeholder, clearly marked as one. Degrees of freedom, actuator selection and the control topology are not listed because I have not published measurements for them. When there is a build photograph and a clip of it responding to a command, they go here and this note comes out.',
-    },
-
-    ownership: {
-      heading: 'What I owned',
-      body: 'Everything. The CAD, the print runs, the assembly, the electronics integration, the ROS control software and the onboard LLM layer were all mine — this was an independent build, not a team project.', // R
-    },
-
-    assembly: 'module-illustrative',
-  },
-
-  // -------------------------------------------------------------------------
-  {
     slug: 'ftc-16075',
-    number: '02',
+    number: '01',
     title: 'FTC Team 16075',
     titleLines: ['FTC Team', '16075'],
     kind: 'Robotics',
+    featured: true,
     // CONFIRMED 2026-11-14: captain. The résumé is right and the site
     // follows it. Noting the conflicting record so nobody re-opens this:
     // the team's DECODE-season engineering portfolio lays out a two-person
@@ -145,15 +83,21 @@ export const projects = [
     // engineering portfolio.
     lede: 'Two seasons with Jamaica’s Team 16075 — Into the Deep in 2024–25, DECODE in 2025–26. The intake, the transfer and the launcher were each rebuilt between the first prototype and the field.',
 
-    media: { src: ftcRobot,
-      // A.3 — this is a CAD render carried over from the previous site. It is
-      // a render of a robot; whether it is *the* competition robot of either
-      // season is not something this site can establish, so it no longer says
-      // so. The audit was explicit that a filename is not provenance.
-      verified: false,
-      figure: 'Fig. 01 — Robot render',
-      provenance: 'Carried over from the previous site. A render, not a competition photograph; its season is unconfirmed.',
-      alt: 'A CAD render of an FTC robot: an aluminium extrusion chassis on four mecanum wheels, carrying a vertical tower, a motor-driven roller and a control hub.' },
+    // A.4 — the provenance problem A.3 flagged is solved, not managed. The
+    // unprovenanced render is gone and these are the real machine, from the
+    // team's own engineering portfolio for the season they describe. Two
+    // views, so the home page and the case study show the same robot without
+    // showing the same picture.
+    media: { src: ftcTop,
+      inspect: ftcSide,
+      // The inspection stage takes the side elevation's own ratio, so the
+      // focus-box percentages land on the robot rather than on letterboxing.
+      aspect: '3 / 2',
+      verified: true,
+      figure: 'Fig. 01 — Sir Launch-a-lot',
+      provenance: 'Technical illustration from Team 16075’s engineering portfolio for the 2025–26 DECODE season. The robot as built, drawn by the team.',
+      alt: 'Plan view of the competition robot Sir Launch-a-lot: a crimson and aluminium chassis with the hooded flywheel turret at the top, the intake rollers across the front, drive motors either side of the centre line, and the transfer path running down the middle.',
+      inspectAlt: 'Side elevation of the same robot, showing the turret-mounted hooded flywheel above a chain-driven transfer and intake, on a crimson extrusion drivetrain.' },
 
     facts: [
       { label: 'My role', value: 'Captain (2025–26), Vice-Captain (2024–25)', verified: true }, // R
@@ -171,15 +115,21 @@ export const projects = [
     // portfolio for the DECODE season. These are the robot as it was built,
     // not as it was first drawn; `iterations` below is how it got there.
     systems: [
+      // The focus box travels right → middle → upper-left → top, which is
+      // also the path an ARTIFACT takes through the machine.
       { id: 'intake', n: '01', name: 'Intake',
+        focus: { x: 74, y: 58, w: 30, h: 42 },
         note: 'Dual-stage and fully open, so an ARTIFACT can be collected without the driver lining the robot up first. Stage one pulls it off the field; stage two pushes it on, with a chain down the centre acting as a conveyor and vectored wheels on either side centring it as it goes.' },
       { id: 'transfer', n: '02', name: 'Transfer',
+        focus: { x: 52, y: 60, w: 26, h: 34 },
         note: 'A third stage with a high-torque motor of its own, stationary until it is asked for. Giving it its own motor is what made the feed repeatable rather than dependent on the robot holding still.' },
       { id: 'launching', n: '03', name: 'Launcher',
+        focus: { x: 32, y: 26, w: 42, h: 38 },
         note: 'A turret-mounted hooded flywheel. The turret aims across the field independently of where the drivetrain is pointing, and the hood sets the launch angle, so the robot can shoot without first turning to face the goal.' },
       // A.3 — was: "…and the one competition debugging touched most."
       // The rank was not in any source.
       { id: 'autonomous', n: '04', name: 'Autonomous',
+        focus: { x: 45, y: 14, w: 22, h: 20 },
         note: 'A webcam reads the MOTIF; odometry and AprilTag readings are fused under a Kalman filter so the shooter can align and fire from any point in the routine rather than only from a start position.' },
     ],
 
@@ -266,7 +216,7 @@ export const projects = [
   // -------------------------------------------------------------------------
   {
     slug: 'first-global',
-    number: '03',
+    number: '02',
     title: 'FIRST Global Challenge',
     titleLines: ['FIRST', 'Global'],
     kind: 'Robotics',
@@ -363,7 +313,7 @@ export const projects = [
   // -------------------------------------------------------------------------
   {
     slug: 'rehabos',
-    number: '04',
+    number: '03',
     title: 'RehabOS',
     titleLines: ['RehabOS'],
     kind: 'Software · AI',
@@ -432,7 +382,7 @@ export const projects = [
   // -------------------------------------------------------------------------
   {
     slug: 'nexusos',
-    number: '05',
+    number: '04',
     title: 'NexusOS',
     titleLines: ['NexusOS'],
     kind: 'Software · AI',
@@ -496,7 +446,7 @@ export const projects = [
   // -------------------------------------------------------------------------
   {
     slug: 'roamly',
-    number: '06',
+    number: '05',
     title: 'Roamly',
     titleLines: ['Roamly'],
     kind: 'Software',
@@ -550,10 +500,106 @@ export const projects = [
       heading: 'What I owned',
       body: 'All of it — the app, the routing migration, the safety-rating system and the trip planner.', // R
     },
+  },  // -------------------------------------------------------------------------
+  {
+    slug: 'humanoid',
+    number: '06',
+    title: 'The Humanoid',
+    titleLines: ['The', 'Humanoid'],
+    kind: 'Robotics',
+    // A.4 — HELD BACK, NOT REMOVED.
+    // This was the flagship. It is not one any more, and the reason is
+    // honest: there is still no photograph of the build, no CAD and no
+    // measurements, so the page leads with a labelled placeholder. A
+    // flagship whose hero is a drawing of itself is an argument against
+    // everything else on the site.
+    //
+    // `held` keeps it off the home page, out of the index and out of the
+    // sitemap while leaving /work/humanoid live, reachable and linked from
+    // the legacy map — a URL that has been published should not start
+    // 404ing because the editorial order changed. The page says so itself.
+    held: true,
+    role: 'Independent build',          // R
+    when: '2025',                       // R
+    status: 'Built',                    // R — built and programmed; no demonstration is claimed
+    stack: ['Raspberry Pi', 'ROS', 'CAD', '3D Printing'], // R
+    // D — the author's own line from the approved concept.
+    lede: 'A humanoid robot modeled in CAD, printed in parts, driven by a Raspberry Pi running ROS, with an LLM-based AI onboard.',
+
+    media: {
+      illustrative: true,
+      assetId: 'A-01',
+      // The system name is appended by the inspector, which owns which system
+      // is selected. Keeping it out of the content stops the two drifting.
+      figure: 'Fig. 02 — Inspect',
+      need: 'Studio photograph or clean CAD render, 4:5',
+      drawing: 'humanoid',
+      alt: 'Front-elevation engineering drawing of a humanoid robot, shown with a centre line and joint markers. A labelled placeholder standing in until a photograph of the real build is available.',
+    },
+
+    facts: [
+      { label: 'Process', value: '3D-modeled · 3D-printed', verified: true },   // R
+      { label: 'Compute', value: 'Raspberry Pi · ROS', verified: true },        // R
+      { label: 'Intelligence', value: 'Onboard LLM-based AI', verified: true }, // R
+      { label: 'My role', value: 'Designed, built and programmed, independently', verified: true }, // R
+      // A.3 — the audit asked for status on the humanoid, and this is the
+      // honest one: it was built; nothing on this site shows it moving.
+      { label: 'Status', value: 'Built 2025 · no demonstration published', verified: true },
+    ],
+
+    // The featured inspection: four subsystems, a dashed focus box travelling
+    // between them. Copy for `structure` is the author's own (D); the rest
+    // are the résumé's own verbs, not invented specifications.
+    systems: [
+      { id: 'structure', n: '01', name: 'Structure',
+        note: 'Designed in CAD and printed in parts, so every joint, bracket and shell is a decision rather than an off-the-shelf compromise.', // D
+        focus: { x: 50, y: 46, w: 44, h: 72 } },
+      { id: 'actuation', n: '02', name: 'Actuation',
+        note: 'The printed limbs and joints were assembled from scratch alongside the electronics, rather than dropped onto a donor chassis.', // R
+        focus: { x: 50, y: 52, w: 84, h: 40 } },
+      { id: 'compute', n: '03', name: 'Compute',
+        note: 'A Raspberry Pi runs the control software under ROS, integrating the structure, the electronics and the onboard compute into one system.', // R
+        focus: { x: 50, y: 20, w: 34, h: 26 } },
+      { id: 'intelligence', n: '04', name: 'Intelligence',
+        note: 'An onboard LLM system interprets conversational commands and responds to them, so the robot is spoken to rather than driven.', // R
+        focus: { x: 50, y: 16, w: 26, h: 20 } },
+    ],
+
+    // A.3 — what the page cannot show, said on the page rather than only in
+    // the inventory. The audit's finding 05: the flagship is illustrative,
+    // and the honest move while that is true is to say so where it shows.
+    // A.4 — rendered at the head of the page, above everything else.
+    // Named `heldNote`, not `status`: `status` is already the one-word
+    // A.3 chip ("Built"), and reusing the key silently replaced it.
+    heldNote: {
+      heading: 'Not currently featured',
+      body: 'This page is still here and still accurate, but the humanoid is no longer on the home page or in the index of work. It has no photograph, no CAD and no published measurements, and a flagship project whose hero is a drawing of itself undermines every page that does have evidence behind it. It goes back the day there is a build photograph. Nothing below has been removed.',
+    },
+
+    limits: {
+      heading: 'What this page cannot show you',
+      body: 'There is no photograph of this robot on this site, and the drawing above is a placeholder, clearly marked as one. Degrees of freedom, actuator selection and the control topology are not listed because I have not published measurements for them. When there is a build photograph and a clip of it responding to a command, they go here and this note comes out.',
+    },
+
+    ownership: {
+      heading: 'What I owned',
+      body: 'Everything. The CAD, the print runs, the assembly, the electronics integration, the ROS control software and the onboard LLM layer were all mine — this was an independent build, not a team project.', // R
+    },
+
+    assembly: 'module-illustrative',
   },
+
+
 ];
 
 export const bySlug = (slug) => projects.find((p) => p.slug === slug);
 export const featured = projects.find((p) => p.featured) ?? projects[0];
+
+// Everything the site offers publicly, in editorial order. A held project is
+// reachable by its own URL and by the legacy redirects, but it is not offered
+// anywhere: not in the index, not in the sitemap, not in the next/previous
+// cycle at the foot of a case study.
+export const published = projects.filter((p) => !p.held);
+
 // The index excludes whichever project is featured above it on the home page.
-export const indexed = projects.filter((p) => !p.featured);
+export const indexed = published.filter((p) => !p.featured);

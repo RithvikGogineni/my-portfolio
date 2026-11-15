@@ -93,6 +93,9 @@ export function projectMeta(p) {
     ? lede
     : lede.slice(0, lede.lastIndexOf(' ', 152)) + '…';
   return {
+    // A held project stays reachable and stays indexable — it is real work
+    // at a URL people have — but it is out of the sitemap, so nothing
+    // advertises it. See `published` in content/projects.js.
     title: `${p.title} — ${p.kind} · Rithvik Gogineni`,
     description,
     path: `/work/${p.slug}`,

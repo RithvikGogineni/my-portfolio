@@ -131,7 +131,14 @@ export const practice = {
 // THE TOOLKIT
 //
 // Grouped by the kind of engineering it is used for rather than by language
-// family, and every group names the projects it was actually used on. A tool
+// family, and every group names the projects it was actually used on.
+//
+// A.4: three of these still point at the humanoid, deliberately. It is held
+// back from the index and the sitemap, not hidden — ROS, Raspberry Pi,
+// Fusion 360 and the onboard LLM work genuinely happened there, and dropping
+// the only robot they were used on to tidy up the link graph would be
+// removing true content to make a flag look tidier. The page it leads to
+// explains its own status in its first paragraph. A tool
 // with no project beside it is a word on a page; "Fusion 360 — FTC, FIRST
 // Global, Humanoid" is a claim someone can go and check two clicks later.
 //

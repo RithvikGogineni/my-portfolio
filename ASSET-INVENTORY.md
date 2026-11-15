@@ -161,7 +161,10 @@ Each was a résumé line that had acquired a comparison the source did not make.
    went next") or an entry of its own. It is not on the site today.
 4. **The humanoid comes back** the day there is a build photograph. Everything
    about it is intact; `held: true` is the only thing standing between it and
-   the front page.
+   the front page. Note that “held” means *not promoted*, not *hidden*: it is
+   out of the index, the sitemap and the next/previous cycle, but the Practice
+   toolkit still links to it from three groups, because ROS, Raspberry Pi and
+   Fusion 360 were in fact used on it.
 
 ## 5. Still missing, in priority order
 

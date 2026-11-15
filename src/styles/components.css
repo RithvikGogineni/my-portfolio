@@ -1060,3 +1060,158 @@
   .a2-ach__meta, .a2-ach__note { grid-column: 1 / -1; }
   .a2-edu__when { grid-row: auto; grid-column: 1 / -1; text-align: left; }
 }
+
+/* ===========================================================================
+   A.4 — THE PERSON
+   One new sheet, one new interaction, and a hero that no longer leans on a
+   drawing of a part nobody made. Same vocabulary throughout: hairline rules,
+   mono for data, display for names, coral used once per row at most.
+   ========================================================================= */
+
+/* ------------------------------------------------- HERO TITLE BLOCK */
+/* Where the illustrative exhibit used to be. A drawing-sheet title block:
+   four facts, ruled, right-aligned to the sheet on wide viewports. */
+.a2-hero__spec {
+  display: grid; align-content: start;
+  border-top: 1px solid var(--rule);
+}
+/* A fixed label column, not `auto`. Each row is its own grid, so `auto`
+   sized the label to that row's own label and the values stepped in and out
+   down the block — a title block whose columns do not line up is not a title
+   block. */
+.a2-hero__specRow {
+  display: grid; grid-template-columns: 7rem minmax(0, 1fr);
+  gap: 0.25rem 0.875rem; align-items: baseline;
+  padding: 0.625rem 0; border-bottom: 1px solid var(--rule-hair);
+}
+.a2-hero__specRow dd { max-width: 28ch; }
+@media (min-width: 1040px) {
+  .a2-hero__spec { margin-top: 0.5rem; }
+}
+
+/* --------------------------------------------------- THE PERSON SHEET */
+.a2-person__grid {
+  display: grid; gap: clamp(1.75rem, 4vw, 3.5rem);
+  padding-top: clamp(1.25rem, 2.5vw, 2rem);
+  align-items: start;
+}
+@media (min-width: 900px) {
+  /* Text leads, portrait answers. The portrait is the smaller column on
+     purpose — it is a person, not a billboard. Explicit placement, because
+     the DOM is ordered for the phone. */
+  .a2-person__grid {
+    grid-template-columns: minmax(0, 1.12fr) minmax(280px, 0.88fr);
+    column-gap: clamp(2rem, 4vw, 3.5rem);
+    row-gap: clamp(1rem, 2vw, 1.5rem);
+  }
+  .a2-person__head { grid-column: 1; grid-row: 1; }
+  .a2-person__body { grid-column: 1; grid-row: 2; }
+  .a2-person__portrait { grid-column: 2; grid-row: 1 / span 2; align-self: start; }
+}
+.a2-person__body { display: grid; gap: clamp(0.875rem, 2vw, 1.25rem); align-content: start; }
+.a2-person__head { margin: 0 0 0.25rem; }
+.a2-person__lede { max-width: 30ch; }
+.a2-person__para { max-width: 52ch; }
+.a2-person__portrait { position: relative; }
+
+/* ------------------------------------------------- PARTICLE PORTRAIT */
+/* The canvas and the photograph occupy one square box. The box has its
+   dimensions before either arrives, so nothing moves when they do. */
+@supports (background: paint(x)) { /* no-op guard, keeps the block grouped */ }
+
+.a2-pp {
+  position: relative; aspect-ratio: 1 / 1; width: 100%;
+  background: var(--well); color: var(--well-ink);
+  clip-path: polygon(
+    var(--chamfer-l) 0, 100% 0, 100% calc(100% - var(--chamfer-l)),
+    calc(100% - var(--chamfer-l)) 100%, 0 100%, 0 var(--chamfer-l)
+  );
+  overflow: hidden;
+}
+/* The canvas sits ABOVE the photograph. During the formation the photograph
+   is not yet visible, so it makes no difference; afterwards it is what lets
+   a handful of particles lift off the surface under the pointer. They are
+   transparent everywhere else — see uReveal in the vertex shader. An earlier
+   attempt cut an aperture in the photograph instead, which put what looked
+   like a redaction bar across his chin. */
+.a2-pp__canvas {
+  position: absolute; inset: 0; z-index: 1;
+  width: 100%; height: 100%;
+  opacity: 0; transition: opacity 260ms var(--ease-out);
+  pointer-events: none;
+}
+.a2-pp__canvas[data-up='true'] { opacity: 1; }
+.a2-pp__img {
+  position: absolute; inset: 0; z-index: 0;
+  width: 100%; height: 100%; object-fit: cover;
+  opacity: 0;
+  /* Ease-out, long enough to read as the photograph resolving rather than
+     as a crossfade between two pictures. */
+  transition: opacity 760ms var(--ease-out);
+}
+.a2-pp[data-revealed='true'] .a2-pp__img { opacity: 1; }
+.a2-pp__cap {
+  position: absolute; left: 0; bottom: 0; z-index: 2;
+  padding: 0.5rem 0.875rem;
+  color: var(--well-dim);
+  background: linear-gradient(to top, rgb(26 27 30 / 72%), transparent);
+  width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .a2-pp__img { opacity: 1; transition: none; }
+  .a2-pp__canvas { display: none; }
+}
+
+/* ------------------------------------------- THINGS THAT KEEP MY ATTENTION */
+/* Explicit column counts rather than auto-fit. There are exactly six of
+   these, and auto-fit chose four at desktop width — two rows, two empty
+   cells and a long drop of nothing before the next sheet. Three and two
+   both divide six. */
+.a2-curio { display: grid; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 700px) { .a2-curio { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1080px) { .a2-curio { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.a2-curio__row {
+  display: grid; grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.25rem 0.875rem; align-content: start;
+  padding: 1rem 1.25rem 1.25rem 0;
+  border-top: 1px solid var(--rule-hair);
+}
+.a2-curio__n { color: var(--accent-surface); font-size: var(--type-label); }
+.a2-curio__name {
+  font-size: clamp(1.125rem, 2.4vw, 1.5rem); line-height: 1.1;
+  margin: 0;
+}
+.a2-curio__fact, .a2-curio__voice { grid-column: 2; max-width: 34ch; }
+.a2-curio__fact { font-size: var(--type-note); line-height: var(--leading-note); }
+/* The voice line is the one place on the site where italic is not reserved
+   for the name of a real thing. */
+.a2-curio__voice { font-style: italic; }
+
+/* Practice without its portrait: one column of text rather than a figure
+   and a column beside it. */
+.a2-practice--text { grid-template-columns: minmax(0, 1fr); }
+.a2-practice--text .a2-practice__body { max-width: 68ch; }
+
+/* ----------------------------------------------- A HELD CASE STUDY */
+.a2-case__held {
+  padding-block: clamp(1rem, 2vw, 1.5rem) 0;
+}
+.a2-case__heldHead {
+  display: inline-block; padding: 0.3rem 0.625rem;
+  border: 1px solid var(--accent-voice); color: var(--accent-voice);
+}
+.a2-case__heldBody { max-width: 62ch; margin-top: 0.75rem; }
+
+/* The inspection stage can now hold a photograph or illustration as well as
+   the drawing. `contain`, because a real part must not be cropped to fit a
+   box, and the focus boxes are positioned against the full frame. */
+.a2-inspect__img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: contain; padding: 3%;
+}
+
+@media (max-width: 620px) {
+  .a2-curio__fact, .a2-curio__voice { grid-column: 1 / -1; }
+  .a2-hero__specRow { grid-template-columns: minmax(0, 1fr); }
+}

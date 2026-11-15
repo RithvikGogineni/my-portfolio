@@ -32,6 +32,17 @@ export const site = {
     'Founder, RehabOS.',
   ],
 
+  // A.4 — the hero's right-hand column. It replaces the illustrative CAD
+  // exhibit that used to sit there: four lines of fact carry an opening
+  // better than a drawing of a flange nobody made. Every line is the
+  // résumé's own.
+  heroSpec: [
+    { k: 'Discipline', v: 'Mechanical & Robotics Engineering' },
+    { k: 'Institution', v: 'Worcester Polytechnic Institute' },
+    { k: 'Also', v: 'Software & intelligent systems' },
+    { k: 'Based', v: 'Worcester, MA · Kingston, Jamaica' },
+  ],
+
   availability: {
     open: true,
     line: 'Open to Summer 2027 internships.',

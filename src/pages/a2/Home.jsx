@@ -1,28 +1,35 @@
 // ===========================================================================
 // A.2 — HOME
-// Sheet 01 Hero · 02 Featured · 03 Index of work · 04 Other work
-//       · 05 Practice · 06 Contact · 07 Colophon
+// Sheet 01 Hero · 02 The person · 03 Featured · 04 Index of work
+//       · 05 Other work · 06 Practice · 07 Contact · 08 Colophon
 //
-// A.3 added sheet 04 and widened sheet 05. Both come from the audit: seven
-// projects had no destination at all, and Practice had been compressed to the
-// point where a reader could not tell what I am studying or where I am.
+// A.4 reordered the page around a story rather than an inventory: who this
+// is, then what they built, then what they can do, then how to reach them.
+// The person comes second because by the time a reader reaches a case study
+// about a flywheel they should already know whose flywheel it is.
+//
+// Two things left the hero. The illustrative CAD exhibit is gone — it was a
+// drawing of a flange nobody made, carrying the opening of an engineering
+// portfolio — and the portrait that used to sit in Practice has moved to
+// sheet 02, where it belongs and where it now assembles itself.
 // ===========================================================================
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import SheetHead from '../../components/a2/SheetHead';
 import Button from '../../components/a2/Button';
-import HeroExhibit from '../../components/a2/HeroExhibit';
 import FeaturedInspect from '../../components/a2/FeaturedInspect';
 import ProjectIndex from '../../components/a2/ProjectIndex';
 import OtherWork from '../../components/a2/OtherWork';
+import ParticlePortrait from '../../components/a2/ParticlePortrait';
 import { Colophon } from '../../components/a2/Chrome';
 import { MaskedLines, Reveal, RevealItem, RiseIn } from '../../motion/motion';
 import { site, practice, toolkit, achievements } from '../../content/site';
+import { person } from '../../content/person';
 import { featured, indexed } from '../../content/projects';
 import { applyMeta, HOME_META } from '../../lib/meta';
 
-import portrait from '../../assets/images/profile-photo.webp';
+import portrait from '../../assets/images/portrait-2026.webp';
 
 export default function Home() {
   useEffect(() => { applyMeta(HOME_META); }, []);
@@ -33,7 +40,7 @@ export default function Home() {
         {/* ---------------------------------------------------- SHEET 01 */}
         <section className="a2-sheet a2-hero">
           <p className="a2-label a2-hero__sheet">
-            Sheet 01 / 07 — Mechanical &amp; Robotics Engineering, WPI
+            Sheet 01 / 08 — Mechanical &amp; Robotics Engineering, WPI
           </p>
 
           <div className="a2-hero__grid">
@@ -55,9 +62,17 @@ export default function Home() {
               </RiseIn>
             </div>
 
-            <div className="a2-hero__exhibit">
-              <HeroExhibit />
-            </div>
+            {/* Where the exhibit was. A title-block of facts, set against the
+                drafting rules the sheet already uses — the typography carries
+                the opening and this annotates it, rather than competing. */}
+            <Reveal as="dl" className="a2-hero__spec" delay={0.3}>
+              {site.heroSpec.map((r) => (
+                <RevealItem className="a2-hero__specRow" key={r.k}>
+                  <dt className="a2-label a2-label--dim">{r.k}</dt>
+                  <dd className="a2-mono">{r.v}</dd>
+                </RevealItem>
+              ))}
+            </Reveal>
           </div>
 
           <Reveal className="a2-hero__foot" delay={0.1}>
@@ -73,11 +88,7 @@ export default function Home() {
                 </p>
               )}
               <span className="a2-hero__actions">
-                <Button href="#contact" tone="accent">Get in touch</Button>
-                {/* The résumé is the complete record and the thing a recruiter
-                    came for. On the previous site it was in the navigation and
-                    the hero; here it is one quiet line beside the primary
-                    action rather than a second button competing with it. */}
+                <Button href="#index" tone="accent">Selected work</Button>
                 <a className="a2-mono a2-hero__resume" href={site.resume.href}>
                   [ {site.resume.label} ]
                 </a>
@@ -87,8 +98,63 @@ export default function Home() {
         </section>
 
         {/* ---------------------------------------------------- SHEET 02 */}
+        <section className="a2-sheet a2-section a2-person" id="person">
+          <SheetHead n="01" name="The person" sheet="02" of="08" as="h2" />
+
+          {/* DOM order is headline → portrait → prose, which is the right
+              order on a phone: you meet the face before reading four
+              paragraphs about it. On a wide viewport explicit grid placement
+              overrides it, putting the portrait in a column of its own
+              beside both. */}
+          <div className="a2-person__grid">
+            <MaskedLines
+              as="p"
+              className="a2-display a2-section-type a2-person__head"
+              lines={person.headlineLines}
+              stop
+            />
+
+            {/* The portrait assembles out of particles on arrival, once.
+                The photograph underneath is the real deliverable and is what
+                remains; see components/a2/ParticlePortrait.jsx. */}
+            <div className="a2-person__portrait">
+              <ParticlePortrait
+                src={portrait}
+                alt={person.portrait.alt}
+                caption={person.portrait.caption}
+              />
+            </div>
+
+            <div className="a2-person__body">
+              <RiseIn as="p" className="a2-lede a2-person__lede">{person.lede}</RiseIn>
+              {person.body.map((para, i) => (
+                <RiseIn as="p" className="a2-read a2-read--wide a2-person__para" key={i} delay={0.06 + i * 0.05}>
+                  {para}
+                </RiseIn>
+              ))}
+            </div>
+          </div>
+
+          {/* An index of things that hold my attention — the same numbered
+              editorial rows as everywhere else, allowed slightly more voice. */}
+          <div className="a2-sub" id="curious">
+            <h3 className="a2-label a2-sub__head">Things that keep my attention</h3>
+            <Reveal as="ol" className="a2-curio">
+              {person.interests.map((it) => (
+                <RevealItem as="li" className="a2-curio__row" key={it.n}>
+                  <span className="a2-mono a2-curio__n">{it.n}</span>
+                  <h4 className="a2-display a2-curio__name">{it.name}</h4>
+                  <p className="a2-read a2-curio__fact">{it.fact}</p>
+                  <p className="a2-note a2-curio__voice">{it.voice}</p>
+                </RevealItem>
+              ))}
+            </Reveal>
+          </div>
+        </section>
+
+        {/* ---------------------------------------------------- SHEET 03 */}
         <section className="a2-sheet a2-section" id="work">
-          <SheetHead n="01" name="Featured" sheet="02" of="07" />
+          <SheetHead n="02" name="Featured" sheet="03" of="08" />
           <div className="a2-feature">
             <div className="a2-feature__head">
               <MaskedLines
@@ -96,14 +162,7 @@ export default function Home() {
                 className="a2-display a2-section-type"
                 lines={featured.titleLines}
                 stop
-                immediate
               />
-              {/* The lede and the verified spec table share one band. The
-                  approved sheet puts a flagship-candidates note to the right
-                  of the lede, but that line is the design document talking to
-                  me about which project to feature — not site copy — so the
-                  space carries real facts instead of leaving 60% of the band
-                  empty. */}
               <div className="a2-feature__intro">
                 <RiseIn as="p" className="a2-lede a2-feature__lede">{featured.lede}</RiseIn>
 
@@ -130,15 +189,15 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ---------------------------------------------------- SHEET 03 */}
+        {/* ---------------------------------------------------- SHEET 04 */}
         <section className="a2-sheet a2-section" id="index">
-          <SheetHead n="02" name="Index of work" sheet="03" of="07" as="h2" />
+          <SheetHead n="03" name="Index of work" sheet="04" of="08" as="h2" />
           <ProjectIndex projects={indexed} />
         </section>
 
-        {/* ---------------------------------------------------- SHEET 04 */}
+        {/* ---------------------------------------------------- SHEET 05 */}
         <section className="a2-sheet a2-section" id="other">
-          <SheetHead n="03" name="Other work" sheet="04" of="07" as="h2" />
+          <SheetHead n="04" name="Other work" sheet="05" of="08" as="h2" />
           <RiseIn as="p" className="a2-lede a2-other__lede">
             Work that is real but does not need a sheet of its own — a guide, a
             prototype, something still being built, and the client sites.
@@ -146,17 +205,14 @@ export default function Home() {
           <OtherWork />
         </section>
 
-        {/* ---------------------------------------------------- SHEET 05 */}
+        {/* ---------------------------------------------------- SHEET 06 */}
         <section className="a2-sheet a2-section" id="practice">
-          <SheetHead n="04" name="Practice" sheet="05" of="07" as="h2" />
-          <div className="a2-practice">
-            <RiseIn as="figure" className="a2-practice__well a2-well a2-ch-l">
-              <figcaption className="a2-exhibit__bar">
-                <span className="a2-label">Fig. 04 — Portrait</span>
-              </figcaption>
-              <img src={portrait} alt={`${site.name}.`} loading="lazy" decoding="async" width="1000" height="1250" />
-            </RiseIn>
+          <SheetHead n="05" name="Practice" sheet="06" of="08" as="h2" />
 
+          {/* The portrait that used to open this sheet is now on sheet 02.
+              Practice is about what I have done and what I can do; the
+              introductions have already happened. */}
+          <div className="a2-practice a2-practice--text">
             <div className="a2-practice__body">
               <RiseIn as="p" className="a2-prose">
                 {practice.statement.map((s, i) =>
@@ -164,18 +220,6 @@ export default function Home() {
                     ? <em className="a2-voice" key={i}>{s.t}</em>
                     : <React.Fragment key={i}>{s.t}</React.Fragment>,
                 )}
-              </RiseIn>
-
-              {/* Where and what — the two facts the audit found a reader could
-                  not recover from the page, in two lines rather than a
-                  biography. */}
-              <RiseIn className="a2-where">
-                <p className="a2-where__line a2-mono">
-                  <span>{practice.where.from}</span>
-                  <span className="a2-where__arrow" aria-hidden="true">→</span>
-                  <span>{practice.where.to}</span>
-                </p>
-                <p className="a2-read a2-where__note">{practice.where.note}</p>
               </RiseIn>
 
               <Reveal as="dl" className="a2-edu">
@@ -199,10 +243,6 @@ export default function Home() {
                   <span className="a2-mono a2-kit__n">{g.n}</span>
                   <span className="a2-kit__name a2-display">{g.group}</span>
                   <p className="a2-kit__tools a2-mono">{g.tools.join(' · ')}</p>
-                  {/* Links to the projects, not names in a sentence. Inline
-                      text links here measured 17px tall on a phone, which is
-                      well under the approved 44px and exactly the size of
-                      target this section would be used with one thumb. */}
                   <div className="a2-kit__used">
                     <span className="a2-label a2-label--dim a2-kit__usedHead">Used on</span>
                     <ul className="a2-kit__links">
@@ -256,12 +296,12 @@ export default function Home() {
         </section>
       </main>
 
-      {/* ------------------------------------------------------ SHEET 06 */}
+      {/* ------------------------------------------------------ SHEET 07 */}
       <section className="a2-contact" id="contact">
         <div className="a2-sheet">
           <div className="a2-sheet-head a2-contact__head">
-            <span className="a2-label">05 — Contact</span>
-            <span className="a2-label">Sheet 06 / 07</span>
+            <span className="a2-label">06 — Contact</span>
+            <span className="a2-label">Sheet 07 / 08</span>
           </div>
 
           <MaskedLines
@@ -293,7 +333,7 @@ export default function Home() {
         </div>
       </section>
 
-      <Colophon sheet="07 / 07" />
+      <Colophon sheet="08 / 08" />
     </>
   );
 }

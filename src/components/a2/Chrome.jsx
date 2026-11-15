@@ -12,9 +12,13 @@ import { useMediaQuery, NARROW } from '../../hooks/useMediaQuery';
 import { site } from '../../content/site';
 import { T } from '../../motion/tokens';
 
+// A.4 — the destinations follow the new reading order: who I am, then what I
+// built, then what I can do, then how to reach me. Still four, because the
+// header carries four without crowding and the index sits immediately under
+// the featured project rather than needing its own stop.
 const SECTIONS = [
-  { id: 'work', n: '01', label: 'Work' },
-  { id: 'index', n: '02', label: 'Index' },
+  { id: 'person', n: '01', label: 'Person' },
+  { id: 'work', n: '02', label: 'Work' },
   { id: 'practice', n: '03', label: 'Practice' },
   { id: 'contact', n: '04', label: 'Contact' },
 ];

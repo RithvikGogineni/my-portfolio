@@ -78,7 +78,13 @@ a { color: inherit; text-decoration: none; }
 }
 .a2-skip:focus-visible {
   width: auto;
+  /* A.4 — `height: auto` left it 41px tall once focused: three pixels under
+     the 44px the approved sheet asks for, on the first control a keyboard
+     visitor ever reaches. It had never been measured in its focused state. */
   height: auto;
+  min-height: var(--touch-min);
+  display: inline-flex;
+  align-items: center;
   padding: 0.75rem 1.25rem;
   overflow: visible;
   clip-path: none;

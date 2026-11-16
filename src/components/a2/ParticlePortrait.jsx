@@ -166,6 +166,7 @@ export default function ParticlePortrait({ src, alt, caption }) {
       const S2 = state.current;
       S2.done = true;
       clearTimeout(S2.failsafe);
+      clearTimeout(S2.arrivalGuard);
       teardown();
       setRevealed(true);
     };
@@ -355,8 +356,17 @@ export default function ParticlePortrait({ src, alt, caption }) {
     image.onerror = fail;
     image.onload = () => {
       if (killed) return;
+
+      // No observer at all: there is nothing to wait for, so the photograph
+      // is simply the photograph.
+      if (typeof IntersectionObserver === 'undefined') { fail(); return; }
+
       let started = false;
       const io = new IntersectionObserver((entries) => {
+        // Proof of life. An observer delivers an initial callback for
+        // anything it is given, intersecting or not; receiving one means it
+        // is reporting and the escape hatch below is not needed.
+        if (S.arrivalGuard) { clearTimeout(S.arrivalGuard); S.arrivalGuard = 0; }
         for (const en of entries) {
           if (!en.isIntersecting || started) continue;
           started = true;
@@ -367,6 +377,16 @@ export default function ParticlePortrait({ src, alt, caption }) {
       }, { threshold: 0.25 });
       io.observe(el);
       S.io = io;
+
+      // A.5 — and if the observer never reports at all, the portrait must
+      // not stay hidden behind it. This was a real hole: every other failure
+      // path ended with the photograph visible, but "the observer never
+      // fires" ended with an empty frame, which is the one outcome the whole
+      // component is written to prevent. A dead observer now reveals the
+      // photograph rather than animating it into a room nobody is looking at.
+      S.arrivalGuard = setTimeout(() => {
+        if (!started && !killed) fail();
+      }, 1500);
     };
     image.src = src;
 
@@ -395,6 +415,7 @@ export default function ParticlePortrait({ src, alt, caption }) {
 
     return () => {
       clearTimeout(S.failsafe);
+      clearTimeout(S.arrivalGuard);
       S.io?.disconnect();
       vis.disconnect();
       el.removeEventListener('pointermove', onMove);

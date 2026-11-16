@@ -37,3 +37,35 @@ export const T = {
 
 // Entrance distance. Small enough that a reveal never reads as a slideshow.
 export const RISE = 18;
+
+// ---------------------------------------------------------------------------
+// A.5 — INTENSITY TIERS
+//
+// A.4's problem was not that motion was wrong, it was that it was uniform:
+// every block on the page arrived with the same 18px rise and the same 450ms
+// fade, so nothing on the page was louder than anything else. These four
+// tiers are how a section says how much it matters. They change distance,
+// duration and stagger together — the three things the eye reads as weight.
+//
+//   signature — the hero name, the portrait. Once per page, ideally.
+//   feature   — the flagship, the contact finale.
+//   support   — index rows, case-study modules.
+//   quiet     — Other work, Practice. Present, barely noticed.
+// ---------------------------------------------------------------------------
+export const TIER = {
+  signature: { rise: 34, duration: 0.72, step: 0.085, ease: EASE.out },
+  feature:   { rise: 26, duration: 0.56, step: 0.065, ease: EASE.out },
+  support:   { rise: 18, duration: 0.45, step: 0.05,  ease: EASE.out },
+  quiet:     { rise: 10, duration: 0.34, step: 0.035, ease: EASE.out },
+};
+
+// Clip-path insets for a wipe. A masked reveal is the one entrance that
+// cannot be mistaken for a fade, and it suits a site built on drawing sheets:
+// the image is uncovered rather than faded up.
+export const WIPE = {
+  up:    'inset(100% 0 0 0)',
+  down:  'inset(0 0 100% 0)',
+  left:  'inset(0 100% 0 0)',
+  right: 'inset(0 0 0 100%)',
+  open:  'inset(0 0 0 0)',
+};

@@ -14,8 +14,32 @@ import { useEffect, useState } from 'react';
  * makes the entrance well-timed; the failsafe guarantees the content appears
  * regardless. It is also the reduced-motion and no-IO path, since both resolve
  * to "show it now".
+ *
+ * ---------------------------------------------------------------------------
+ * A.5 — WHY THE FAILSAFE IS NOW CONDITIONAL
+ *
+ * The failsafe used to be an unconditional 1100ms timer. That meant every
+ * element on the page — including everything far below the fold — flipped to
+ * `arrived` 1.1 seconds after load, whether or not it had been anywhere near
+ * the viewport. Each entrance did play; it played to an empty room, and by
+ * the time a reader scrolled down, every section was already in its final
+ * state. The site had scroll choreography in the source and none on screen.
+ * The A.5 audit found almost nothing animating during a full scroll pass and
+ * this was the reason.
+ *
+ * The fix keeps the original protection exactly and costs nothing. An
+ * IntersectionObserver delivers an initial callback for every element it is
+ * given, intersecting or not, very shortly after `observe()`. So:
+ *
+ *   • any callback at all  → the observer works. Cancel the failsafe and wait
+ *                            for a real intersection, however long that takes.
+ *   • no callback in 1.5s  → the observer is not reporting, which is the
+ *                            failure this guard was written for. Reveal.
+ *
+ * A prerendered or backgrounded document still gets its content. A reader who
+ * takes ten seconds to reach sheet 06 now sees sheet 06 arrive.
  */
-export function useArrived(ref, { margin = '0px 0px -10% 0px', failsafe = 1100, enabled = true } = {}) {
+export function useArrived(ref, { margin = '0px 0px -10% 0px', failsafe = 1500, enabled = true } = {}) {
   const [arrived, setArrived] = useState(!enabled);
 
   useEffect(() => {
@@ -27,6 +51,7 @@ export function useArrived(ref, { margin = '0px 0px -10% 0px', failsafe = 1100, 
     }
 
     let settled = false;
+    let timer = 0;
     const finish = () => {
       if (settled) return;
       settled = true;
@@ -34,13 +59,18 @@ export function useArrived(ref, { margin = '0px 0px -10% 0px', failsafe = 1100, 
     };
 
     const io = new IntersectionObserver(
-      (entries) => { if (entries.some((e) => e.isIntersecting)) finish(); },
+      (entries) => {
+        // Proof of life: the observer is delivering, so the timed escape
+        // hatch is not needed and would only cut the entrance short.
+        if (timer) { clearTimeout(timer); timer = 0; }
+        if (entries.some((e) => e.isIntersecting)) finish();
+      },
       { rootMargin: margin },
     );
     io.observe(el);
-    const timer = setTimeout(finish, failsafe);
+    timer = setTimeout(finish, failsafe);
 
-    return () => { io.disconnect(); clearTimeout(timer); };
+    return () => { io.disconnect(); if (timer) clearTimeout(timer); };
   }, [arrived, enabled, failsafe, margin, ref]);
 
   return arrived;

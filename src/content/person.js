@@ -27,9 +27,17 @@ export const person = {
     'I grew up in Kingston, Jamaica, and now study mechanical and robotics engineering in Worcester, Massachusetts — a move that has been an education in weather as much as in engineering.',
 
   body: [
-    // Robotics first, cars, aviation: R (FTC, FIRST Global, Motorsport Club,
+    // That the interests exist at all: R (Motorsport Club, FTC, FIRST Global,
     // Aeronautics Club). The software turn: R (RehabOS, Roamly, NexusOS).
-    'The short version is that I like things with moving parts. Robots got there first. Then cars, then anything that flies, and somewhere in the middle of all that the interest in mechanisms turned into writing the software that runs them too.',
+    //
+    // The *order* is not a résumé fact and never was — a résumé lists
+    // memberships, not the sequence someone acquired an interest in. The A.4
+    // draft inferred "robots first" from the robotics entries being the most
+    // prominent, which was a guess dressed as a sourced claim. The author
+    // states it is cars first, then robots; that is the source, and it
+    // outranks the inference. Do not reorder this back to match the
+    // prominence of the résumé entries.
+    'The short version is that I like things with moving parts. Cars got there first. Then robots, then anything that flies, and somewhere in the middle of all that the interest in mechanisms turned into writing the software that runs them too.',
     'Most of what is on this site started the same way: wanting to know whether something would actually work, and not being able to leave it alone until I found out.',
   ],
 

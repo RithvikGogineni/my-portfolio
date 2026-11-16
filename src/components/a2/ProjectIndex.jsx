@@ -22,10 +22,11 @@ import React, { useState, useId } from 'react';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, m, useReducedMotion } from 'framer-motion';
 import { useCoarsePointer } from '../../hooks/useCoarsePointer';
+import { Sequence, SequenceItem } from '../../motion/motion';
 import { DUR, EASE } from '../../motion/tokens';
 import Button from './Button';
 
-function Preview({ p, inline = false }) {
+function Preview({ p, inline = false, dir = 1 }) {
   const reduce = useReducedMotion();
   return (
     <div className={`a2-prev${inline ? ' a2-prev--inline' : ''}`}>
@@ -37,12 +38,22 @@ function Preview({ p, inline = false }) {
           )}
         </figcaption>
         <div className="a2-prev__media">
-          <AnimatePresence mode="wait" initial={false}>
+          {/* A.5 — a crossfade, not a queue. `mode="wait"` held the incoming
+              frame until the outgoing one had finished leaving, so every swap
+              cost exit + enter back to back and running the pointer down the
+              list stacked them up. The frames are absolutely positioned on
+              top of each other, so letting both run at once is a true
+              crossfade and the index answers the pointer immediately.
+
+              The new frame also enters from the direction the selection
+              moved, which is the difference between a transition and a
+              dissolve. */}
+          <AnimatePresence initial={false}>
             <m.div
               key={p.slug}
-              initial={reduce ? false : { opacity: 0, scale: 1.015 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={reduce ? { opacity: 0 } : { opacity: 0, transition: { duration: DUR.control, ease: EASE.in } }}
+              initial={reduce ? false : { opacity: 0, scale: 1.02, y: 10 * dir }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.995, transition: { duration: DUR.control, ease: EASE.in } }}
               transition={{ duration: DUR.panel, ease: EASE.out }}
               className="a2-prev__frame"
             >
@@ -64,15 +75,25 @@ function Preview({ p, inline = false }) {
         </div>
       </figure>
 
-      <dl className="a2-meta">
-        {p.facts.slice(0, 3).map((f) => (
-          <div className="a2-meta__row" key={f.label}>
-            <dt className="a2-label a2-label--dim">{f.label}</dt>
-            <dd className="a2-mono">{f.value}</dd>
-          </div>
-        ))}
-      </dl>
-      <p className="a2-prev__line a2-read">{p.lede}</p>
+      {/* The metadata is part of the same change of subject as the image, so
+          it is keyed on the same slug and offset a beat behind it. Without
+          this the picture crossfaded while the facts underneath it snapped. */}
+      <m.div
+        key={`${p.slug}-meta`}
+        initial={reduce ? false : { opacity: 0, y: 6 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: DUR.state, ease: EASE.out, delay: reduce ? 0 : 0.06 }}
+      >
+        <dl className="a2-meta">
+          {p.facts.slice(0, 3).map((f) => (
+            <div className="a2-meta__row" key={f.label}>
+              <dt className="a2-label a2-label--dim">{f.label}</dt>
+              <dd className="a2-mono">{f.value}</dd>
+            </div>
+          ))}
+        </dl>
+        <p className="a2-prev__line a2-read">{p.lede}</p>
+      </m.div>
     </div>
   );
 }
@@ -80,14 +101,27 @@ function Preview({ p, inline = false }) {
 export default function ProjectIndex({ projects }) {
   const coarse = useCoarsePointer();
   const [active, setActive] = useState(projects[0]?.slug);
+  const [dir, setDir] = useState(1);
   const [open, setOpen] = useState(null);
+  // Moving down the list should bring the next preview up from below, and
+  // vice versa. One number, set where the selection changes.
+  const select = (slug) => {
+    setActive((prev) => {
+      if (prev !== slug) {
+        const a = projects.findIndex((x) => x.slug === prev);
+        const b = projects.findIndex((x) => x.slug === slug);
+        setDir(b >= a ? 1 : -1);
+      }
+      return slug;
+    });
+  };
   const reduce = useReducedMotion();
   const uid = useId().replace(/:/g, '');
   const current = projects.find((p) => p.slug === active) ?? projects[0];
 
   return (
     <div className={`a2-index${coarse ? ' a2-index--touch' : ''}`}>
-      <ol className="a2-index__rows">
+      <Sequence as="ol" className="a2-index__rows" tier="support">
         {projects.map((p) => {
           const seated = !coarse && active === p.slug;
           const isOpen = coarse && open === p.slug;
@@ -103,7 +137,7 @@ export default function ProjectIndex({ projects }) {
           );
 
           return (
-            <li key={p.slug} className="a2-index__item">
+            <SequenceItem as="li" tier="support" key={p.slug} className="a2-index__item">
               {coarse ? (
                 <button
                   type="button"
@@ -123,8 +157,8 @@ export default function ProjectIndex({ projects }) {
                   to={`/work/${p.slug}`}
                   viewTransition
                   className={`a2-row${seated ? ' is-on' : ''}`}
-                  onMouseEnter={() => setActive(p.slug)}
-                  onFocus={() => setActive(p.slug)}
+                  onMouseEnter={() => select(p.slug)}
+                  onFocus={() => select(p.slug)}
                 >
                   {body}
                   <span className="a2-sr">— open case study</span>
@@ -150,14 +184,14 @@ export default function ProjectIndex({ projects }) {
                   )}
                 </AnimatePresence>
               )}
-            </li>
+            </SequenceItem>
           );
         })}
-      </ol>
+      </Sequence>
 
       {!coarse && current && (
         <aside className="a2-index__preview" aria-live="polite">
-          <Preview p={current} />
+          <Preview p={current} dir={dir} />
         </aside>
       )}
     </div>

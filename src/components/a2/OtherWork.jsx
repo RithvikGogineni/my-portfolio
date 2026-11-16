@@ -16,12 +16,12 @@
 // ===========================================================================
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Reveal, RevealItem, RiseIn } from '../../motion/motion';
+import { Sequence, SequenceItem, RiseIn } from '../../motion/motion';
 import { otherWork, colophonNote } from '../../content/other';
 
 function Row({ e }) {
   return (
-    <RevealItem as="li" className="a2-other__item" id={e.id}>
+    <SequenceItem as="li" tier="quiet" className="a2-other__item" id={e.id}>
       <div className="a2-other__head">
         <span className="a2-mono a2-other__n">{e.n}</span>
         <h3 className="a2-display a2-other__title">{e.title}</h3>
@@ -70,16 +70,16 @@ function Row({ e }) {
           </figure>
         )}
       </div>
-    </RevealItem>
+    </SequenceItem>
   );
 }
 
 export default function OtherWork() {
   return (
     <div className="a2-other">
-      <Reveal as="ol" className="a2-other__rows">
+      <Sequence as="ol" className="a2-other__rows" tier="quiet">
         {otherWork.map((e) => <Row e={e} key={e.id} />)}
-      </Reveal>
+      </Sequence>
 
       <RiseIn className="a2-other__colophon" id={colophonNote.id}>
         <h3 className="a2-label a2-other__colophonHead">{colophonNote.heading}</h3>

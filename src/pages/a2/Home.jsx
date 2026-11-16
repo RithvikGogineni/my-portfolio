@@ -23,7 +23,7 @@ import ProjectIndex from '../../components/a2/ProjectIndex';
 import OtherWork from '../../components/a2/OtherWork';
 import ParticlePortrait from '../../components/a2/ParticlePortrait';
 import { Colophon } from '../../components/a2/Chrome';
-import { MaskedLines, Reveal, RevealItem, RiseIn } from '../../motion/motion';
+import { MaskedLines, RiseIn, Sequence, SequenceItem, Rule, Wipe } from '../../motion/motion';
 import { site, practice, toolkit, achievements } from '../../content/site';
 import { person } from '../../content/person';
 import { featured, indexed } from '../../content/projects';
@@ -43,6 +43,10 @@ export default function Home() {
             Sheet 01 / 08 — Mechanical &amp; Robotics Engineering, WPI
           </p>
 
+          {/* A.5 — the right column now runs the full depth of the name.
+              A.4 left a 404 x 300 hole between the bottom of the title block
+              and the foot row; the availability line and both actions moved
+              up into it, which is also where a drawing sheet keeps them. */}
           <div className="a2-hero__grid">
             <div className="a2-hero__plate">
               <MaskedLines
@@ -51,50 +55,53 @@ export default function Home() {
                 lines={site.nameLines}
                 stop
                 immediate
-                step={0.085}
-                delay={0.05}
+                tier="signature"
+                step={0.07}
+                delay={0.04}
               />
-
-              <RiseIn as="p" className="a2-hero__rule" delay={0.45}>
-                <span className="a2-hero__rule-line" aria-hidden="true" />
-                <span className="a2-label">{site.rule}</span>
-                <span className="a2-hero__rule-line" aria-hidden="true" />
-              </RiseIn>
             </div>
 
-            {/* Where the exhibit was. A title-block of facts, set against the
-                drafting rules the sheet already uses — the typography carries
-                the opening and this annotates it, rather than competing. */}
-            <Reveal as="dl" className="a2-hero__spec" delay={0.3}>
-              {site.heroSpec.map((r) => (
-                <RevealItem className="a2-hero__specRow" key={r.k}>
-                  <dt className="a2-label a2-label--dim">{r.k}</dt>
-                  <dd className="a2-mono">{r.v}</dd>
-                </RevealItem>
-              ))}
-            </Reveal>
+            <div className="a2-hero__block">
+              <Sequence as="dl" className="a2-hero__spec" tier="feature" delay={0.42}>
+                {site.heroSpec.map((r) => (
+                  <SequenceItem className="a2-hero__specRow" tier="feature" key={r.k}>
+                    <dt className="a2-label a2-label--dim">{r.k}</dt>
+                    <dd className="a2-mono">{r.v}</dd>
+                  </SequenceItem>
+                ))}
+              </Sequence>
+
+              <Sequence className="a2-hero__cta" tier="feature" delay={0.62}>
+                {site.availability.open && (
+                  <SequenceItem as="p" className="a2-avail" tier="feature">
+                    <span className="a2-avail__mark" aria-hidden="true" />
+                    <span className="a2-read">{site.availability.line}</span>
+                  </SequenceItem>
+                )}
+                <SequenceItem className="a2-hero__actions" tier="feature">
+                  <Button href="#index" tone="accent">Selected work</Button>
+                  <a className="a2-mono a2-hero__resume" href={site.resume.href}>
+                    [ {site.resume.label} ]
+                  </a>
+                </SequenceItem>
+              </Sequence>
+            </div>
           </div>
 
-          <Reveal className="a2-hero__foot" delay={0.1}>
-            <RevealItem as="p" className="a2-lede">{site.lede}</RevealItem>
-            <RevealItem as="ul" className="a2-hero__standing">
+          {/* The rule spans the sheet now, not just the column the name sits
+              in — it is the drawing's horizon, and it stopped 448px short. */}
+          <p className="a2-hero__rule">
+            <Rule className="a2-hero__rule-line" tier="signature" delay={0.34} origin="right" />
+            <span className="a2-label">{site.rule}</span>
+            <Rule className="a2-hero__rule-line" tier="signature" delay={0.34} origin="left" />
+          </p>
+
+          <Sequence className="a2-hero__foot" tier="feature" delay={0.52}>
+            <SequenceItem as="p" className="a2-lede" tier="feature">{site.lede}</SequenceItem>
+            <SequenceItem as="ul" className="a2-hero__standing" tier="feature">
               {site.standing.map((s) => <li className="a2-read" key={s}>{s}</li>)}
-            </RevealItem>
-            <RevealItem className="a2-hero__cta">
-              {site.availability.open && (
-                <p className="a2-avail">
-                  <span className="a2-avail__mark" aria-hidden="true" />
-                  <span className="a2-read">{site.availability.line}</span>
-                </p>
-              )}
-              <span className="a2-hero__actions">
-                <Button href="#index" tone="accent">Selected work</Button>
-                <a className="a2-mono a2-hero__resume" href={site.resume.href}>
-                  [ {site.resume.label} ]
-                </a>
-              </span>
-            </RevealItem>
-          </Reveal>
+            </SequenceItem>
+          </Sequence>
         </section>
 
         {/* ---------------------------------------------------- SHEET 02 */}
@@ -128,7 +135,7 @@ export default function Home() {
             <div className="a2-person__body">
               <RiseIn as="p" className="a2-lede a2-person__lede">{person.lede}</RiseIn>
               {person.body.map((para, i) => (
-                <RiseIn as="p" className="a2-read a2-read--wide a2-person__para" key={i} delay={0.06 + i * 0.05}>
+                <RiseIn as="p" className="a2-read a2-read--wide a2-person__para" key={i} delay={0.08 + i * 0.07}>
                   {para}
                 </RiseIn>
               ))}
@@ -139,16 +146,16 @@ export default function Home() {
               editorial rows as everywhere else, allowed slightly more voice. */}
           <div className="a2-sub" id="curious">
             <h3 className="a2-label a2-sub__head">Things that keep my attention</h3>
-            <Reveal as="ol" className="a2-curio">
+            <Sequence as="ol" className="a2-curio" tier="feature">
               {person.interests.map((it) => (
-                <RevealItem as="li" className="a2-curio__row" key={it.n}>
+                <SequenceItem as="li" className="a2-curio__row" tier="feature" key={it.n}>
                   <span className="a2-mono a2-curio__n">{it.n}</span>
                   <h4 className="a2-display a2-curio__name">{it.name}</h4>
                   <p className="a2-read a2-curio__fact">{it.fact}</p>
                   <p className="a2-note a2-curio__voice">{it.voice}</p>
-                </RevealItem>
+                </SequenceItem>
               ))}
-            </Reveal>
+            </Sequence>
           </div>
         </section>
 
@@ -166,14 +173,14 @@ export default function Home() {
               <div className="a2-feature__intro">
                 <RiseIn as="p" className="a2-lede a2-feature__lede">{featured.lede}</RiseIn>
 
-                <Reveal as="dl" className="a2-meta a2-feature__meta">
+                <Sequence as="dl" className="a2-meta a2-feature__meta" tier="feature">
                   {featured.facts.map((f) => (
-                    <RevealItem className="a2-meta__row" key={f.label}>
+                    <SequenceItem className="a2-meta__row" tier="feature" key={f.label}>
                       <dt className="a2-label a2-label--dim">{f.label}</dt>
                       <dd className="a2-mono">{f.value}</dd>
-                    </RevealItem>
+                    </SequenceItem>
                   ))}
-                </Reveal>
+                </Sequence>
               </div>
             </div>
 
@@ -222,24 +229,24 @@ export default function Home() {
                 )}
               </RiseIn>
 
-              <Reveal as="dl" className="a2-edu">
+              <Sequence as="dl" className="a2-edu" tier="quiet">
                 {site.education.map((e) => (
-                  <RevealItem className="a2-edu__row" key={e.school}>
+                  <SequenceItem className="a2-edu__row" tier="quiet" key={e.school}>
                     <dt className="a2-edu__school">{e.school}</dt>
                     <dd className="a2-edu__detail a2-read">{e.detail}</dd>
                     <dd className="a2-mono a2-label--dim a2-edu__when">{e.place} · {e.when}</dd>
-                  </RevealItem>
+                  </SequenceItem>
                 ))}
-              </Reveal>
+              </Sequence>
             </div>
           </div>
 
           {/* ------------------------------------------------- TOOLKIT */}
           <div className="a2-sub" id="toolkit">
             <h3 className="a2-label a2-sub__head">Toolkit</h3>
-            <Reveal as="ol" className="a2-kit">
+            <Sequence as="ol" className="a2-kit" tier="quiet">
               {toolkit.map((g) => (
-                <RevealItem as="li" className="a2-kit__group" key={g.n}>
+                <SequenceItem as="li" className="a2-kit__group" tier="quiet" key={g.n}>
                   <span className="a2-mono a2-kit__n">{g.n}</span>
                   <span className="a2-kit__name a2-display">{g.group}</span>
                   <p className="a2-kit__tools a2-mono">{g.tools.join(' · ')}</p>
@@ -253,51 +260,57 @@ export default function Home() {
                       ))}
                     </ul>
                   </div>
-                </RevealItem>
+                </SequenceItem>
               ))}
-            </Reveal>
+            </Sequence>
           </div>
 
           {/* -------------------------------------------- ACHIEVEMENTS */}
           <div className="a2-sub" id="achievements">
             <h3 className="a2-label a2-sub__head">Achievements</h3>
-            <Reveal as="ol" className="a2-ach">
+            <Sequence as="ol" className="a2-ach" tier="quiet">
               {achievements.map((a) => (
-                <RevealItem as="li" className="a2-ach__row" key={a.n}>
+                <SequenceItem as="li" className="a2-ach__row" tier="quiet" key={a.n}>
                   <span className="a2-mono a2-ach__n">{a.n}</span>
                   <span className="a2-ach__award a2-display">{a.award}</span>
                   <span className="a2-mono a2-ach__meta">
                     {a.event}<span aria-hidden="true"> · </span>{a.level}<span aria-hidden="true"> · </span>{a.when}
                   </span>
                   <p className="a2-read a2-ach__note">{a.note}</p>
-                </RevealItem>
+                </SequenceItem>
               ))}
-            </Reveal>
+            </Sequence>
           </div>
 
           {/* --------------------------------- TEACHING AND LEADERSHIP */}
           <div className="a2-sub" id="teaching">
             <h3 className="a2-label a2-sub__head">Teaching &amp; leadership</h3>
-            <Reveal as="ul" className="a2-teach">
+            <Sequence as="ul" className="a2-teach" tier="quiet">
               {practice.teaching.map((t) => (
-                <RevealItem as="li" className="a2-teach__row" key={t.org}>
+                <SequenceItem as="li" className="a2-teach__row" tier="quiet" key={t.org}>
                   <span className="a2-teach__role">{t.role}<span className="a2-teach__org"> · {t.org}</span></span>
                   <span className="a2-mono a2-label--dim">{t.when}</span>
                   <p className="a2-read a2-teach__note">{t.note}</p>
-                </RevealItem>
+                </SequenceItem>
               ))}
-            </Reveal>
-            <Reveal as="ul" className="a2-offices">
+            </Sequence>
+            <Sequence as="ul" className="a2-offices" tier="quiet">
               {practice.offices.map((o) => (
-                <RevealItem as="li" className="a2-note a2-offices__row" key={o}>{o}</RevealItem>
+                <SequenceItem as="li" className="a2-note a2-offices__row" tier="quiet" key={o}>{o}</SequenceItem>
               ))}
-            </Reveal>
+            </Sequence>
           </div>
         </section>
       </main>
 
       {/* ------------------------------------------------------ SHEET 07 */}
-      <section className="a2-contact" id="contact">
+      {/* A.5 — the finale, and deliberately only one gesture. The coral band
+          is uncovered from its top edge as it arrives, so the colour, the
+          oversized type and the actions all appear together as a single
+          event rather than as three animations competing at the end of the
+          page. The title plays on mount instead of on arrival, so it has
+          already settled behind the mask by the time the mask opens. */}
+      <Wipe as="section" from="up" tier="feature" className="a2-contact" id="contact">
         <div className="a2-sheet">
           <div className="a2-sheet-head a2-contact__head">
             <span className="a2-label">06 — Contact</span>
@@ -309,6 +322,7 @@ export default function Home() {
             className="a2-display a2-hero-type a2-contact__title"
             lines={site.availability.headlineLines}
             stop
+            immediate
             step={0.08}
           />
 
@@ -331,7 +345,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </Wipe>
 
       <Colophon sheet="08 / 08" />
     </>

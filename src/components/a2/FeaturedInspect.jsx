@@ -15,6 +15,7 @@ import React, { useRef, useState } from 'react';
 import { m, useReducedMotion } from 'framer-motion';
 import HumanoidDrawing from './HumanoidDrawing';
 import { T, DUR, EASE } from '../../motion/tokens';
+import { Wipe } from '../../motion/motion';
 
 export default function FeaturedInspect({ systems, media }) {
   const [i, setI] = useState(0);
@@ -41,7 +42,10 @@ export default function FeaturedInspect({ systems, media }) {
 
   return (
     <div className="a2-inspect">
-      <figure className="a2-inspect__well a2-well a2-ch-l">
+      {/* A.5 — the machine is uncovered rather than faded up. A wipe from the
+          base reads as a drawing being pulled out of a drawer, which is the
+          right gesture for a sheet-based site and the wrong one for a card. */}
+      <Wipe as="figure" from="up" tier="feature" className="a2-inspect__well a2-well a2-ch-l">
         <figcaption className="a2-exhibit__bar">
           {/* The figure label names the system currently being inspected, so
               the drawing and its caption can never disagree. */}
@@ -85,6 +89,33 @@ export default function FeaturedInspect({ systems, media }) {
             }}
             transition={reduce ? { duration: 0 } : { duration: DUR.panel, ease: EASE.inOut }}
           />
+
+          {/* A leader line out of the focus box to the edge of the sheet,
+              with the subsystem's number on the end of it. It travels with
+              the box and redraws its length on each selection — the way a
+              callout behaves on a real drawing, and the reason the box and
+              the panel read as one annotation rather than two widgets. */}
+          <m.span
+            className="a2-leader"
+            aria-hidden="true"
+            initial={false}
+            animate={{
+              left: `${f.x + f.w / 2}%`,
+              top: `${f.y}%`,
+              width: `${Math.max(2, 98 - (f.x + f.w / 2))}%`,
+            }}
+            transition={reduce ? { duration: 0 } : { duration: DUR.panel, ease: EASE.inOut }}
+          >
+            <m.span
+              className="a2-leader__n a2-mono"
+              key={active.id}
+              initial={reduce ? false : { opacity: 0, x: -6 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={reduce ? { duration: 0 } : { duration: DUR.state, ease: EASE.out, delay: 0.1 }}
+            >
+              {active.n}
+            </m.span>
+          </m.span>
         </div>
 
         {media.illustrative && (
@@ -93,7 +124,7 @@ export default function FeaturedInspect({ systems, media }) {
         {/* The image above is alt="" because it is the same subject the panel
             is describing in words; this carries the description once. */}
         <span className="a2-sr">{media.inspectAlt ?? media.alt}</span>
-      </figure>
+      </Wipe>
 
       <div className="a2-inspect__side">
         <p className="a2-label a2-label--dim">Inspect a system</p>

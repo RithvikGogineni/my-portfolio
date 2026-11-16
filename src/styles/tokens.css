@@ -50,8 +50,13 @@
   --leading-read: 1.52;
 
   /* Mono: 10–14px. Mobile floor is 10px for captions, 12px for data. */
+  /* A.5 — the smallest tier went up a point. The audit counted 19 elements
+     rendering at 10px and 124 at 11px on the home page: at that density the
+     mono stops reading as technical annotation and starts reading as small
+     print. 11px is the floor now, and the label tier is unchanged at 11px so
+     that the header's measured 620/760 breakpoints still hold. */
   --type-label: 0.6875rem;   /* 11px — section labels, sheet numbers */
-  --type-caption: 0.625rem;  /* 10px — in-well captions (mobile floor)   */
+  --type-caption: 0.6875rem; /* 11px — in-well captions (mobile floor)   */
   --type-data: 0.75rem;      /* 12px — spec values, parts lists          */
   --track-label: 0.12em;
   --track-data: 0.08em;

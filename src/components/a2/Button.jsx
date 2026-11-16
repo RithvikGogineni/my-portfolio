@@ -2,6 +2,12 @@
 // removes real borders; the inner surface carries the fill. On hover the
 // directional edge highlight sweeps from the side the pointer is on, and the
 // arrow advances — a small, 180ms acknowledgement, never a bounce.
+//
+// A.5 adds press. `:active` compresses the inner surface by 1.5% over 120ms
+// and releases on the ease-out curve — the mechanical acknowledgement the
+// rest of the site's controls already imply and this one did not give. It is
+// CSS, not Framer: a press must survive the main thread being busy, and a
+// transform on :active cannot be dropped by a stalled animation frame.
 import React from 'react';
 import { Link } from 'react-router-dom';
 

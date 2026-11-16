@@ -1143,7 +1143,31 @@
   .a2-person__portrait { grid-column: 2; grid-row: 1 / span 2; align-self: start; }
 }
 .a2-person__body { display: grid; gap: clamp(0.875rem, 2vw, 1.25rem); align-content: start; }
-.a2-person__head { margin: 0 0 0.25rem; }
+/* A.5.1 — "Some assembly required." is sized from its own column, not from
+   the window.
+
+   `--type-section` scales on `9.5vw`, but from 900px up this heading does not
+   occupy the viewport: it occupies column 1 of `.a2-person__grid`, which is
+   0.92 of two fr-columns, so roughly 42% of the sheet. The type kept growing
+   with the window while the box it sits in did not, and at 1728px the first
+   line measured 943px inside a 644px mask.
+
+   A.5 had made that failure silent. `.a2-mask__in` carries `white-space:
+   nowrap` so an author-broken line is never re-broken by the browser, and
+   `.a2-mask` carries `overflow: hidden` for the reveal — so instead of
+   wrapping, the overflow was simply clipped and the word lost its ending.
+
+   The cap is container-relative, measured rather than guessed: the longest
+   line renders at 5.899x its font size, so it fits whenever the font size is
+   at most 1/5.899 = 16.95% of the column. 16.2cqw leaves about 4% of
+   headroom for font-loading and sub-pixel differences.
+
+   `min()` keeps `--type-section` the ceiling, so every width below 900px —
+   where the heading really does span the sheet — is unchanged. The token is
+   untouched; every other display line on the site still gets the full
+   scale. */
+.a2-person__head { margin: 0 0 0.25rem; container-type: inline-size; }
+.a2-person__head .a2-mask { font-size: min(var(--type-section), 16.2cqw); }
 .a2-person__lede { max-width: 30ch; }
 .a2-person__para { max-width: 52ch; }
 .a2-person__portrait { position: relative; }

@@ -166,6 +166,25 @@ Each was a résumé line that had acquired a comparison the source did not make.
    toolkit still links to it from three groups, because ROS, Raspberry Pi and
    Fusion 360 were in fact used on it.
 
+### 4.5 Corrected after A.5, on the author's word
+
+| Was | Now |
+|---|---|
+| “**Robots** got there first. Then **cars**…” | “**Cars** got there first. Then **robots**…” |
+
+This one is worth recording because of *how* it was wrong. It was not a
+mis-read source — it was an inference presented as a sourced claim. The résumé
+lists Motorsport Club, FTC, FIRST Global and Aeronautics Club as memberships;
+it says nothing about the order the interests arrived in, because a résumé
+never does. The A.4 draft took the robotics entries being the most prominent
+and turned that into a chronology, then marked the sentence `R` as though the
+résumé had stated it.
+
+The author states the order is cars first, then robots. That is the source now,
+and the comment in `src/content/person.js` says so explicitly, including an
+instruction not to reorder it back to match the prominence of the résumé
+entries.
+
 ## 5. Still missing, in priority order
 
 1. **A photograph of a robot.** The flagship is now a real technical

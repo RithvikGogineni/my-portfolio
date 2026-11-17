@@ -26,7 +26,6 @@
 // ===========================================================================
 
 import guide from '../assets/images/ftc-starter-guide.webp';
-import medrehab from '../assets/images/medrehab-website.webp';
 import proper from '../assets/images/proper-constructions.webp';
 import gorilla from '../assets/images/gorilla-gym.webp';
 
@@ -91,29 +90,8 @@ export const otherWork = [
   },
 
   {
-    id: 'other-medrehab',
-    n: '10',
-    title: 'Med Rehab Professionals',
-    kind: 'Client · Web & branding',
-    status: 'Deployed',
-    when: '2023–Present',
-    summary:
-      'The website and digital branding for a physiotherapy and rehabilitation clinic in Kingston.', // R + S
-    detail:
-      'Services, conditions, products, 3D foot scans, patient stories, FAQ and online booking, in a warm family-first identity rather than a clinical one.', // S
-    ownership: 'Designed and built it.',
-    // The audit's finding: these are two different deliverables for the same
-    // client, and the site had started to blur them.
-    note: 'The same clinic runs RehabOS. The website and the clinic operating system are separate pieces of work.',
-    media: { src: medrehab, alt: 'The Med Rehab Professionals website.' },
-    href: 'https://www.medrehabphysio.com/',
-    to: '/work/rehabos#related',
-    toLabel: 'RehabOS — the clinic',
-  },
-
-  {
     id: 'other-proper-constructions',
-    n: '11',
+    n: '10',
     title: 'Proper Constructions Ltd.',
     kind: 'Client · Web',
     status: 'Built',
@@ -127,7 +105,7 @@ export const otherWork = [
 
   {
     id: 'other-gorilla-gym',
-    n: '12',
+    n: '11',
     title: 'Gorilla Gym & Club1962',
     kind: 'Client · Web & brand',
     status: 'Built',

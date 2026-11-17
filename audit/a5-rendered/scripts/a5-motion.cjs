@@ -101,11 +101,19 @@ const ck = (ok, l, d) => { if (!ok) fail.push(l + (d ? ' — ' + d : '')); conso
     kit: getComputedStyle(document.querySelector('.a2-kit__group')).opacity,
     contact: getComputedStyle(document.querySelector('.a2-contact')).clipPath,
     idx: getComputedStyle(document.querySelector('.a2-index__item')).opacity,
-    pp: getComputedStyle(document.querySelector('.a2-pp__img')).opacity,
+    // A.5.3 — the portrait is withheld, so there is no photograph and no
+    // canvas to check. What has to be true instead is that the well is
+    // still there, at full opacity, saying what is missing — a collapsed
+    // or invisible placeholder would be the failure this guards against.
+    pp: getComputedStyle(document.querySelector('.a2-pp--empty')).opacity,
+    ppSays: (document.querySelector('.a2-pp--empty')||{}).innerText ? 1 : 0,
+    ppNoLikeness: document.querySelector('.a2-pp__img, .a2-pp__canvas') ? 0 : 1,
     anims: document.getAnimations().filter(a=>(a.effect?.getTiming?.().duration||0)>1).length })`));
   console.log('  ', JSON.stringify(rm));
   ck(+rm.other === 1 && +rm.kit === 1 && +rm.idx === 1 && +rm.pp === 1,
     'reduced motion shows everything immediately', JSON.stringify(rm));
+  ck(rm.ppSays === 1 && rm.ppNoLikeness === 1,
+    'the withheld portrait shows a labelled well and no likeness', JSON.stringify({says:rm.ppSays, noLikeness:rm.ppNoLikeness}));
   ck(rm.contact === 'inset(0px)' || rm.contact === 'none', 'reduced motion does not clip the contact band', rm.contact);
   ck(rm.anims === 0, 'reduced motion runs no timed animations', String(rm.anims));
 
@@ -130,18 +138,23 @@ const ck = (ok, l, d) => { if (!ok) fail.push(l + (d ? ' — ' + d : '')); conso
     await new Promise(r=>setTimeout(r,1500)); o.disconnect(); return long;})()`);
   ck(idle === 0, 'nothing runs while the page sits idle', String(idle));
 
-  // mobile: the particle sim must be the cheaper one
+  // A.5.3 — was "the particle sim must be the cheaper one on mobile". The
+  // portrait is withheld, so what is checked now is that the well survives
+  // the narrow layout: square, visible, labelled, and carrying no likeness.
   await setup(S, { width: 390, height: 844, scheme: 'light', dpr: 1, mobile: true });
-  await goto(S, B + '/', 3600);
-  await evaluate(S, `(()=>{const e=document.querySelector('.a2-pp');
-    window.scrollTo({top:e.getBoundingClientRect().top+scrollY-80,behavior:'instant'});})()`);
-  await sleep(3200);
-  const m = JSON.parse(await evaluate(S, `JSON.stringify((()=>{const f=document.querySelector('.a2-pp');
-    const c=f.querySelector('canvas');
-    return {revealed:f.dataset.revealed, op:getComputedStyle(f.querySelector('img')).opacity,
-      canvasPx:c.width*c.height, w:Math.round(f.getBoundingClientRect().width)};})())`));
-  console.log('   mobile portrait:', JSON.stringify(m));
-  ck(m.revealed === 'true' && +m.op === 1, 'mobile portrait resolves', JSON.stringify(m));
+  await goto(S, B + '/', 2600);
+  await evaluate(S, `(()=>{const e=document.querySelector('.a2-pp--empty');
+    if(e) window.scrollTo({top:e.getBoundingClientRect().top+scrollY-80,behavior:'instant'});})()`);
+  await sleep(900);
+  const m = JSON.parse(await evaluate(S, `JSON.stringify((()=>{const f=document.querySelector('.a2-pp--empty');
+    if(!f) return {missing:true};
+    const r=f.getBoundingClientRect();
+    return { w:Math.round(r.width), square: Math.abs(r.width-r.height) < 2,
+      says: /awaiting/i.test(f.innerText),
+      likeness: !!document.querySelector('.a2-pp__img, .a2-pp__canvas') };})())`));
+  console.log('   mobile portrait well:', JSON.stringify(m));
+  ck(!m.missing && m.square && m.says && !m.likeness,
+    'the withheld well holds its square on mobile and shows no likeness', JSON.stringify(m));
 
   // ===== a dead observer must still reveal everything =====================
   console.log('\n===== dead IntersectionObserver =====');
@@ -153,7 +166,7 @@ const ck = (ok, l, d) => { if (!ok) fail.push(l + (d ? ' — ' + d : '')); conso
   const dead = JSON.parse(await evaluate(S, `JSON.stringify({
     other: getComputedStyle(document.querySelector('.a2-other__item')).opacity,
     contact: getComputedStyle(document.querySelector('.a2-contact')).clipPath,
-    pp: getComputedStyle(document.querySelector('.a2-pp__img')).opacity })`));
+    pp: getComputedStyle(document.querySelector('.a2-pp--empty')).opacity })`));
   console.log('  ', JSON.stringify(dead));
   ck(+dead.other === 1 && dead.contact === 'inset(0px)' && +dead.pp === 1,
     'the failsafe still reveals everything when the observer is dead', JSON.stringify(dead));

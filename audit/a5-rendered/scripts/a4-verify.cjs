@@ -33,9 +33,11 @@ const ck = (ok, label, detail) => {
     href: r.getAttribute('href')})))`));
   console.log('   index:', rows.map(r => `${r.n} ${r.t}`).join(' | '));
   ck(rows.length === 4, 'index holds four projects', String(rows.length));
-  ck(rows.map(r => r.t).join('|') === 'FIRST Global Challenge|RehabOS|NexusOS|Roamly', 'index order', rows.map(r => r.t).join('|'));
+  // A.5.3 — NexusOS was held back and Med Rehab Professionals took slot 04.
+  ck(rows.map(r => r.t).join('|') === 'FIRST Global Challenge|RehabOS|Med Rehab Professionals|Roamly', 'index order', rows.map(r => r.t).join('|'));
   ck(rows.every(r => r.n && r.t), 'every index row numbered');
   ck(!JSON.stringify(rows).includes('Humanoid'), 'humanoid is not in the index');
+  ck(!JSON.stringify(rows).includes('NexusOS'), 'nexusos is held back, not in the index');
   const sitemap = await evaluate(S, `fetch('/sitemap.xml').then(r=>r.text())`);
   // Match <loc> entries only: the file explains in a comment why the humanoid
   // is absent, and a naive substring search found that sentence.
@@ -96,81 +98,50 @@ const ck = (ok, label, detail) => {
   await goto(S, B + '/', 2600);
   ck((await evaluate(S, `document.querySelector('link[rel=canonical]')?.href`)) === 'https://rithvikgogineni.vercel.app/', 'home canonical');
 
-  // ===== the particle portrait =============================================
-  console.log('\n===== particle portrait =====');
-  await goto(S, B + '/', 3200);
-  await hover(S, 12, 12);
-  await evaluate(S, `(()=>{const e=document.querySelector('.a2-pp');
-    window.scrollTo({top:e.getBoundingClientRect().top+window.scrollY-130,behavior:'instant'});})()`);
-  const t0 = Date.now();
-  let revealed = 'false';
-  while (Date.now() - t0 < 6000) {
-    revealed = await evaluate(S, `document.querySelector('.a2-pp').dataset.revealed`);
-    if (revealed === 'true') break;
-    await sleep(120);
-  }
-  const took = Date.now() - t0;
-  ck(revealed === 'true', 'portrait resolves', revealed);
-  ck(took >= 1200 && took <= 3600, 'formation lands in the 1.5–2.5s band (plus observer latency)', took + 'ms');
-  await sleep(1100); // the photograph fades in over 760ms once `revealed` flips
-  const pp = JSON.parse(await evaluate(S, `JSON.stringify((()=>{const f=document.querySelector('.a2-pp');
-    const img=f.querySelector('img'), c=f.querySelector('canvas');
-    const ib=img.getBoundingClientRect();
-    return { imgOpacity: getComputedStyle(img).opacity, alt: img.getAttribute('alt')?.length,
-      canvasAria: c.getAttribute('aria-hidden'), natural: img.naturalWidth,
-      sameBox: Math.abs(ib.width-ib.height) < 2, mask: getComputedStyle(img).maskImage };})())`));
-  console.log('   ', JSON.stringify(pp));
-  ck(pp.imgOpacity === '1', 'the photograph is fully visible', pp.imgOpacity);
-  ck(pp.natural > 0, 'the photograph actually decoded', String(pp.natural));
-  ck(pp.alt > 40, 'the photograph carries real alt text', String(pp.alt));
-  ck(pp.canvasAria === 'true', 'canvas is hidden from assistive tech');
-  ck(pp.mask === 'none', 'nothing is masking the face at rest', pp.mask);
+  // ===== the withheld portrait ============================================
+  // A.5.3 — the particle portrait and the photograph are both off the page at
+  // the author's request, so every check that used to live here (formation
+  // timing, the photograph's opacity, the no-WebGL fallback, replay on
+  // scroll) is testing something that no longer exists. What has to be true
+  // instead is narrower and, for a withheld likeness, more important: the
+  // well still occupies its square, it says what is missing, and there is no
+  // image or canvas anywhere that could carry the face.
+  console.log('\n===== withheld portrait =====');
+  await goto(S, B + '/', 2600);
+  await evaluate(S, `(()=>{const e=document.querySelector('.a2-pp--empty');
+    if(e) window.scrollTo({top:e.getBoundingClientRect().top+window.scrollY-130,behavior:'instant'});})()`);
+  await sleep(700);
+  const ph = JSON.parse(await evaluate(S, `JSON.stringify((()=>{
+    const f=document.querySelector('.a2-pp--empty');
+    if(!f) return {missing:true};
+    const r=f.getBoundingClientRect();
+    return { square: Math.abs(r.width-r.height) < 2, w: Math.round(r.width),
+      opacity: getComputedStyle(f).opacity,
+      says: /awaiting/i.test(f.innerText),
+      tagged: !!f.querySelector('.a2-tag'),
+      likeness: !!document.querySelector('.a2-pp__img, .a2-pp__canvas'),
+      anyPortraitAsset: [...document.querySelectorAll('img')]
+        .some(i=>/portrait-/i.test(i.currentSrc||i.src||'')) };})())`));
+  console.log('   ', JSON.stringify(ph));
+  ck(!ph.missing && ph.w > 0, 'the portrait well is still in the layout', JSON.stringify(ph));
+  ck(ph.square, 'the well keeps its square box, so nothing below it moves', String(ph.square));
+  ck(+ph.opacity === 1 && ph.says && ph.tagged,
+    'the well is visible and says what is missing', JSON.stringify({op:ph.opacity, says:ph.says, tagged:ph.tagged}));
+  ck(!ph.likeness && !ph.anyPortraitAsset,
+    'no likeness is rendered anywhere — no canvas, no photograph',
+    JSON.stringify({likeness:ph.likeness, asset:ph.anyPortraitAsset}));
 
-  // it must idle at zero cost once revealed
-  const frames = await evaluate(S, `new Promise(res=>{let n=0;const t=performance.now();
-    const f=()=>{n++; if(performance.now()-t<900) requestAnimationFrame(f); else res(n);}; requestAnimationFrame(f);})`);
-  const busy = await evaluate(S, `new Promise(res=>{
-    let painted=0; const o=new PerformanceObserver(()=>{painted++;});
-    try{o.observe({entryTypes:['longtask']});}catch(e){}
-    setTimeout(()=>{o.disconnect();res(painted);},900);})`);
-  console.log('   idle rAF frames (browser clock):', frames, ' longtasks:', busy);
-  ck(busy <= 1, 'no sustained long tasks while idle', String(busy));
-
-  // scrolling away and back must not replay it
-  await evaluate(S, `window.scrollTo({top:0,behavior:'instant'})`); await sleep(700);
-  await evaluate(S, `(()=>{const e=document.querySelector('.a2-pp');
-    window.scrollTo({top:e.getBoundingClientRect().top+window.scrollY-130,behavior:'instant'});})()`);
-  await sleep(500);
-  ck((await evaluate(S, `document.querySelector('.a2-pp').dataset.revealed`)) === 'true',
-    'scrolling away and back does not replay the formation');
-
-  // reduced motion: the photograph is simply there
+  // reduced motion: the well is simply there, as everything else is
   await setup(S, { width: 1440, height: 1000, scheme: 'light', dpr: 1, mobile: false, reducedMotion: true });
   await goto(S, B + '/', 900);
-  const rm = JSON.parse(await evaluate(S, `JSON.stringify((()=>{const f=document.querySelector('.a2-pp');
-    return { revealed: f.dataset.revealed, imgOpacity: getComputedStyle(f.querySelector('img')).opacity,
-      canvas: getComputedStyle(f.querySelector('canvas')).display,
+  const rm = JSON.parse(await evaluate(S, `JSON.stringify((()=>{
+    const f=document.querySelector('.a2-pp--empty');
+    return { opacity: f? getComputedStyle(f).opacity : null,
       anims: document.getAnimations().filter(a=>(a.effect?.getTiming?.().duration||0)>1).length };})())`));
   console.log('   reduced motion:', JSON.stringify(rm));
-  ck(rm.imgOpacity === '1', 'reduced motion shows the portrait immediately', rm.imgOpacity);
-  ck(rm.canvas === 'none', 'reduced motion renders no canvas', rm.canvas);
+  ck(+rm.opacity === 1, 'reduced motion shows the well immediately', String(rm.opacity));
   ck(rm.anims === 0, 'reduced motion runs no entrance animations', String(rm.anims));
-
-  // no WebGL: the photograph still arrives
   await setup(S, { width: 1440, height: 1000, scheme: 'light', dpr: 1, mobile: false });
-  await S('Page.addScriptToEvaluateOnNewDocument', {
-    source: `HTMLCanvasElement.prototype.getContext = new Proxy(HTMLCanvasElement.prototype.getContext, {
-      apply(t, self, args){ if(String(args[0]).indexOf('webgl')===0) return null; return Reflect.apply(t,self,args); }});`,
-  });
-  await goto(S, B + '/', 3200);
-  await evaluate(S, `(()=>{const e=document.querySelector('.a2-pp');
-    window.scrollTo({top:e.getBoundingClientRect().top+window.scrollY-130,behavior:'instant'});})()`);
-  await sleep(1600);
-  const nogl = JSON.parse(await evaluate(S, `JSON.stringify({
-    revealed: document.querySelector('.a2-pp').dataset.revealed,
-    op: getComputedStyle(document.querySelector('.a2-pp__img')).opacity })`));
-  console.log('   no webgl:', JSON.stringify(nogl));
-  ck(nogl.op === '1', 'portrait appears with WebGL unavailable', nogl.op);
 
   // ===== overflow ===========================================================
   console.log('\n===== overflow =====');

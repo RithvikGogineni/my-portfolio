@@ -39,7 +39,6 @@ export const site = {
   heroSpec: [
     { k: 'Discipline', v: 'Mechanical & Robotics Engineering' },
     { k: 'Institution', v: 'Worcester Polytechnic Institute' },
-    { k: 'Also', v: 'Software & intelligent systems' },
     { k: 'Based', v: 'Worcester, MA · Kingston, Jamaica' },
   ],
 

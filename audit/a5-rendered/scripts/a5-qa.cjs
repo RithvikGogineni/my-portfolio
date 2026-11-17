@@ -21,7 +21,7 @@ const fail=[]; const ck=(ok,l,d)=>{ if(!ok) fail.push(l+(d?' — '+d:'')); conso
         const broken=[...document.images].filter(i=>i.complete&&i.naturalWidth===0).length;
         return {over, hiddenVisible:hidden, broken,
           contact:getComputedStyle(document.querySelector('.a2-contact')).clipPath,
-          pp:getComputedStyle(document.querySelector('.a2-pp__img')).opacity};})())`));
+          pp:getComputedStyle(document.querySelector('.a2-pp--empty')).opacity};})())`));
       ck(m.over<=0 && m.hiddenVisible===0 && m.broken===0 && +m.pp===1,
         `${w} ${scheme}`, JSON.stringify(m));
       if (scheme==='light' && (w===320||w===1920)) { await evaluate(S,`window.scrollTo({top:0,behavior:'instant'})`); await sleep(500); await shot(S,`a5-qa-${w}.png`); }

@@ -382,10 +382,30 @@ export const projects = [
   // -------------------------------------------------------------------------
   {
     slug: 'nexusos',
-    number: '04',
+    // A.5.3 — moved to the end of the site's single number sequence, because
+    // Med Rehab Professionals now holds 04 in the index and two sheets both
+    // labelled 04 would be a numbering bug on whichever one you opened
+    // second. 12 is free: removing the duplicate Med Rehab entry from Other
+    // work closed that list to 07–11. The humanoid keeps 06 because nothing
+    // published collides with it.
+    number: '12',
     title: 'NexusOS',
     titleLines: ['NexusOS'],
     kind: 'Software · AI',
+    // A.5.3 — HELD BACK, NOT REMOVED, at the author's request: Med Rehab
+    // Professionals takes this slot in the index.
+    //
+    // Same mechanism the humanoid uses. `held` keeps it off the home page,
+    // out of the index and out of the sitemap while /work/nexusos stays live,
+    // reachable and linked from the Practice toolkit — a URL that has been
+    // published should not start returning 404.
+    //
+    // It is also the entry with nothing to show: its product screen was
+    // withdrawn in A.3 over unverifiable customer and agent counts, so of the
+    // four index rows it was the only one whose hover preview said "awaiting
+    // screenshot". The replacement is a deployed client site with a real
+    // screenshot and a live URL.
+    held: true,
     role: 'Founder & Product Architect', // R
     when: '2025–2026',                   // R
     // A.3 — the résumé's verbs here are "designed" and "architected", not
@@ -440,6 +460,73 @@ export const projects = [
     ownership: {
       heading: 'What I owned',
       body: 'The product architecture — the agent split, the supervisor/critic oversight model, the confidence scoring and the human-approval guardrails.', // R
+    },
+  },
+
+  // -------------------------------------------------------------------------
+  // A.5.3 — promoted into the index in NexusOS's place, at the author's
+  // request. Nothing here is new: every line is lifted from the entry this
+  // project already had in content/other.js, which carries its own R and S
+  // markers. It is a shorter page than the robotics case studies on purpose
+  // — there is no iteration history, no decision log and no reliability
+  // section, because I have no record of any of those for this build and the
+  // alternative would be inventing them.
+  {
+    slug: 'medrehab',
+    number: '04',
+    title: 'Med Rehab Professionals',
+    titleLines: ['Med Rehab', 'Professionals'],
+    kind: 'Client · Web & branding',
+    role: 'Designed and built it', // S — "Designed and built it."
+    when: '2023–Present',          // R
+    status: 'Deployed',
+    stack: ['Web', 'Branding'],
+    lede: 'The website and digital branding for a physiotherapy and rehabilitation clinic in Kingston.', // R + S
+
+    media: {
+      src: medrehab,
+      verified: true,
+      figure: 'Fig. 01 — The website',
+      alt: 'The Med Rehab Professionals website.',
+    },
+
+    facts: [
+      { label: 'My role', value: 'Designed and built it', verified: true },          // S
+      { label: 'Client', value: 'Med Rehab Professionals, Kingston', verified: true }, // R
+      { label: 'Status', value: 'Deployed · live', verified: true },
+      { label: 'Live at', value: 'medrehabphysio.com', verified: true },
+    ],
+
+    architecture: {
+      heading: 'What is on it',
+      // S — the previous site's own description of the build. Listed as
+      // sections of the site, which is what they are; nothing here claims a
+      // result, a volume or an outcome.
+      items: [
+        { n: '01', name: 'Services and conditions',
+          note: 'The clinic’s treatments and the conditions it treats, as browsable sections rather than one page of prose.' },
+        { n: '02', name: 'Products and 3D foot scans',
+          note: 'The retail side of the practice, including its 3D foot-scanning service.' },
+        { n: '03', name: 'Patient stories and FAQ',
+          note: 'Written patient stories and a question set, carrying the warm family-first identity rather than a clinical one.' },
+        { n: '04', name: 'Online booking',
+          note: 'Appointment booking from the site itself.' },
+      ],
+    },
+
+    related: {
+      heading: 'The other piece of work for this clinic',
+      // The distinction A.4's audit asked for, kept intact on the way across.
+      // No `href`: this section's link affordance is an external "Visit the
+      // site" button, and RehabOS is a page on this site, not somewhere to
+      // send a reader off to. It sits one row above this one in the index.
+      body: 'The same clinic runs RehabOS. The website and the clinic operating system are separate pieces of work: one is a public website, the other is the software the practice runs on.', // R + S
+      media: { src: rehabos, verified: true, alt: 'The RehabOS clinic dashboard.' },
+    },
+
+    ownership: {
+      heading: 'What I owned',
+      body: 'The website and the digital branding — design and build.', // S
     },
   },
 

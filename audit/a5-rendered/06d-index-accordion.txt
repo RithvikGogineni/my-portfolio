@@ -1,0 +1,5 @@
+closed: {"expanded":["false","false","false","false"],"links":[],"imgs":[],"secH":412}
+tapping: {"x":195,"y":299,"w":354,"h":72,"t":"03 REHABOS SOFTWARE · AI +"}
+after tap: {"expanded":["false","true","false","false"],"links":[{"h":"/work/rehabos","t":"READ THE CASE STUDY →","vis":true}],"imgs":["rehabos-CGIfS48x.webp"],"secH":995}
+reachable link: {"x":139,"y":893,"h":50,"href":"/work/rehabos","t":"READ THE CASE STUDY →"}
+navigated to: /

@@ -1,0 +1,54 @@
+=== case studies @1440 ===
+  ftc-16075     {"h1":"FTC TEAM\n16075","docH":7747,"imgs":1,"links":16,"stillFaded":5,"prevNext":["/work/first-global"],"backLink":true,"hOrder":"H1>H2>H2>H3>H3>H3>H3>H2>H3>H3>H3>H3>H3>H2>H3>H3>H3>H3>H2>H2"}
+  first-global  {"h1":"FIRST\nGLOBAL","docH":7195,"imgs":1,"links":15,"stillFaded":5,"prevNext":["/work/rehabos"],"backLink":true,"hOrder":"H1>H2>H2>H3>H3>H3>H3>H2>H3>H3>H3>H3>H3>H2>H2"}
+  rehabos       {"h1":"REHABOS","docH":4291,"imgs":2,"links":15,"stillFaded":1,"prevNext":["/work/nexusos"],"backLink":true,"hOrder":"H1>H2>H3>H3>H3>H3>H2>H2>H2"}
+  nexusos       {"h1":"NEXUSOS","docH":3063,"imgs":0,"links":13,"stillFaded":0,"prevNext":["/work/roamly"],"backLink":true,"hOrder":"H1>H2>H3>H3>H3>H3>H2>H2"}
+  roamly        {"h1":"ROAMLY","docH":3467,"imgs":1,"links":13,"stillFaded":0,"prevNext":["/work/ftc-16075"],"backLink":true,"hOrder":"H1>H2>H3>H3>H3>H3>H2>H2"}
+  humanoid      {"h1":"THE\nHUMANOID","docH":5019,"imgs":0,"links":13,"stillFaded":5,"prevNext":[],"backLink":true,"hOrder":"H1>H2>H2>H3>H3>H3>H3>H2>H2"}
+
+=== navigating between case studies ===
+  next link: {"x":720,"y":7493,"href":"/work/first-global","t":"NEXT — 02 FIRST GLOBAL CHA"}
+  after click -> /work/first-global | scrollY=0
+
+=== A.2 identity conformance ===
+{
+ "tokens": {
+  "--ink": "#242528",
+  "--rule": "#242528",
+  "--type-hero": "clamp(4.25rem, 15.5vw, 18.75rem)",
+  "--type-section": "clamp(3rem, 9.5vw, 10rem)"
+ },
+ "distinctTextColours": 9,
+ "topColours": [
+  [
+   "rgb(36, 37, 40)",
+   256
+  ],
+  [
+   "rgb(94, 96, 101)",
+   125
+  ],
+  [
+   "rgb(241, 237, 230)",
+   25
+  ],
+  [
+   "rgb(104, 31, 43)",
+   25
+  ],
+  [
+   "rgb(255, 64, 64)",
+   12
+  ],
+  [
+   "rgb(27, 28, 30)",
+   8
+  ]
+ ],
+ "fontFamilies": {
+  "Newsreader": 270,
+  "IBM Plex Mono": 153,
+  "Archivo": 49
+ },
+ "elementsChecked": 459
+}

@@ -1,0 +1,42 @@
+interactive elements inside #index:
+[
+ {
+  "tag": "BUTTON",
+  "cls": "a2-row",
+  "href": null,
+  "aria": "false",
+  "h": 72,
+  "t": "02 FIRST GLOBAL CHALLENGE ROBOTICS +"
+ },
+ {
+  "tag": "BUTTON",
+  "cls": "a2-row",
+  "href": null,
+  "aria": "false",
+  "h": 72,
+  "t": "03 REHABOS SOFTWARE · AI +"
+ },
+ {
+  "tag": "BUTTON",
+  "cls": "a2-row",
+  "href": null,
+  "aria": "false",
+  "h": 72,
+  "t": "04 NEXUSOS SOFTWARE · AI +"
+ },
+ {
+  "tag": "BUTTON",
+  "cls": "a2-row",
+  "href": null,
+  "aria": "false",
+  "h": 72,
+  "t": "05 ROAMLY SOFTWARE +"
+ }
+]
+
+raw row markup (first row):
+<ol class="a2-index__rows"><li class="a2-index__item" style="opacity: 1; transform: none;"><button type="button" class="a2-row" aria-expanded="false"><span class="a2-row__n a2-mono">02</span><span class="a2-row__title a2-display">FIRST Global Challenge</span><span class="a2-row__kind a2-mono">Robotics<span class="a2-row__arrow" aria-hidden="true">+</span></span></button></li><li class="a2-index__item" style="opacity: 1; transform: none;"><button type="button" class="a2-row" aria-expanded="false"><span class="a2-row__n a2-mono">03</span><span class="a2-row__title a2-display">RehabOS</span><span class="a2-row__kind a2-mono">Software · AI<span class="a2-row__arrow" aria-hidden="true">+</span></
+
+first row box: {"x":195,"y":335,"h":292}
+after tap, path: /
+after tap, #index interactive count: 4

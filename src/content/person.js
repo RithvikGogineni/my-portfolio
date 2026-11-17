@@ -41,11 +41,26 @@ export const person = {
     'Most of what is on this site started the same way: wanting to know whether something would actually work, and not being able to leave it alone until I found out.',
   ],
 
-  // The portrait. A.4 replaces the 2023-era outdoor photograph with a current
+  // The portrait. A.4 replaced the 2023-era outdoor photograph with a current
   // one; the old file stays in the repository.
+  //
+  // A.5.3 — WITHHELD AT THE AUTHOR'S REQUEST. Both the photograph and the
+  // particle portrait that was generated from it are off the page: the
+  // particle render resolves into a recognisable face, so taking down only
+  // the <img> would have left the likeness on the site in halftone. The well
+  // keeps its place and says what is missing, which is the same treatment the
+  // withdrawn NexusOS product screen gets, rather than collapsing the layout
+  // around a gap.
+  //
+  // Nothing is deleted: src/assets/images/portrait-2026.webp is still in the
+  // repository and components/a2/ParticlePortrait.jsx is untouched. Restoring
+  // this is re-importing both in pages/a2/Home.jsx.
   portrait: {
+    withheld: true,
+    assetId: 'A-06',
     alt: 'Rithvik Gogineni, photographed straight on against a plain wall, wearing a dark quarter-zip over a black t-shirt.',
     caption: 'Fig. 01 — The subject',
+    need: 'a portrait',
   },
 
   // ------------------------------------------------------------------------

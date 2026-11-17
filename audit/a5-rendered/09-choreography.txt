@@ -1,0 +1,57 @@
+=== per-section entrance, sampled on the real page @1440 ===
+   dy = pixels still to travel, op = opacity. Peak dy ≈ the tier rise.
+
+  hero name (signature)     
+      t40:{"dy":0,"op":1,"clip":null}
+      t120:{"dy":0,"op":1,"clip":null}
+      t240:{"dy":0,"op":1,"clip":null}
+      t400:{"dy":0,"op":1,"clip":null}
+      t600:{"dy":0,"op":1,"clip":null}
+      t850:{"dy":0,"op":1,"clip":null}
+  person head (signature)   
+      t40:{"dy":84.9,"op":1,"clip":null}
+      t120:{"dy":65.5,"op":1,"clip":null}
+      t240:{"dy":13.2,"op":1,"clip":null}
+      t400:{"dy":0.6,"op":1,"clip":null}
+      t600:{"dy":0,"op":1,"clip":null}
+      t850:{"dy":0,"op":1,"clip":null}
+  curio row (feature)       
+      t40:{"dy":19.7,"op":0.236,"clip":null}
+      t120:{"dy":8.2,"op":0.682,"clip":null}
+      t240:{"dy":1.9,"op":0.924,"clip":null}
+      t400:{"dy":0.2,"op":0.993,"clip":null}
+      t600:{"dy":0,"op":1,"clip":null}
+      t850:{"dy":0,"op":1,"clip":null}
+  flagship well (feature)   
+      t40:{"dy":0,"op":0.507,"clip":"inset(81.4645% 0px 0px"}
+      t120:{"dy":0,"op":0.934,"clip":"inset(47.9603% 0px 0px"}
+      t240:{"dy":0,"op":1,"clip":"inset(16.2632% 0px 0px"}
+      t400:{"dy":0,"op":1,"clip":"inset(2.71439% 0px 0px"}
+      t600:{"dy":0,"op":1,"clip":"inset(0.0894205% 0px 0"}
+      t850:{"dy":0,"op":1,"clip":"inset(0px)"}
+  index row (support)       
+      t40:{"dy":15.4,"op":0.139,"clip":null}
+      t120:{"dy":5.2,"op":0.707,"clip":null}
+      t240:{"dy":0.8,"op":0.953,"clip":null}
+      t400:{"dy":0,"op":0.999,"clip":null}
+      t600:{"dy":0,"op":1,"clip":null}
+      t850:{"dy":0,"op":1,"clip":null}
+  other work (quiet)        
+      t40:{"dy":5.9,"op":0.402,"clip":null}
+      t120:{"dy":1.2,"op":0.878,"clip":null}
+      t240:{"dy":0.1,"op":0.993,"clip":null}
+      t400:{"dy":0,"op":1,"clip":null}
+      t600:{"dy":0,"op":1,"clip":null}
+      t850:{"dy":0,"op":1,"clip":null}
+  practice (quiet)          
+      t40:{"dy":12.2,"op":0.314,"clip":null}
+      t120:{"dy":3.9,"op":0.781,"clip":null}
+      t240:{"dy":0.6,"op":0.967,"clip":null}
+      t400:{"dy":0,"op":0.999,"clip":null}
+      t600:{"dy":0,"op":1,"clip":null}
+      t850:{"dy":0,"op":1,"clip":null}
+
+=== vertical rhythm: gap between consecutive sections ===
+  @390 {"count":6,"sections":[{"id":"a2-hero","h":876,"padTop":24,"padBot":0},{"id":"person","h":2297,"padTop":72,"padBot":0},{"id":"work","h":1589,"padTop":72,"padBot":0},{"id":"index","h":412,"padTop":72,"padBot":0},{"id":"other","h":4525,"padTop":72,"padBot":0},{"id":"practice","h":3206,"padTop":72,"padBot":0}],"docH":13867}
+  @768 {"count":6,"sections":[{"id":"a2-hero","h":957,"padTop":24,"padBot":0},{"id":"person","h":2153,"padTop":72,"padBot":0},{"id":"work","h":1745,"padTop":72,"padBot":0},{"id":"index","h":1177,"padTop":72,"padBot":0},{"id":"other","h":4818,"padTop":72,"padBot":0},{"id":"practice","h":2387,"padTop":72,"padBot":0}],"docH":14196}
+  @1440 {"count":6,"sections":[{"id":"a2-hero","h":762,"padTop":43,"padBot":0},{"id":"person","h":1362,"padTop":130,"padBot":0},{"id":"work","h":1394,"padTop":130,"padBot":0},{"id":"index","h":844,"padTop":130,"padBot":0},{"id":"other","h":3309,"padTop":130,"padBot":0},{"id":"practice","h":2301,"padTop":130,"padBot":0}],"docH":11102}

@@ -6,7 +6,14 @@
 *,
 *::before,
 *::after { box-sizing: border-box; }
-
+em,
+i,
+.italic,
+[class~="italic"],
+[style*="font-style: italic"],
+[style*="font-style:italic"] {
+  font-style: normal !important;
+}
 html {
   -webkit-text-size-adjust: 100%;
   /* The approved system has no scroll choreography, so native scrolling is
@@ -160,7 +167,6 @@ a { color: inherit; text-decoration: none; }
 .a2-lede {
   font-family: var(--font-read);
   font-size: var(--type-read-lg);
-  font-style: italic;
   line-height: 1.34;
   max-width: 22ch;
   text-wrap: pretty;
@@ -172,8 +178,8 @@ a { color: inherit; text-decoration: none; }
   max-width: 28ch;
   text-wrap: pretty;
 }
-/* Italic is the oxblood voice, used on the names of real things only. */
-.a2-voice { font-style: italic; color: var(--accent-voice); }
+/* Oxblood marks the names of real things. No italics anywhere on the site. */
+.a2-voice { color: var(--accent-voice); }
 
 .a2-mono {
   font-family: var(--font-mono);

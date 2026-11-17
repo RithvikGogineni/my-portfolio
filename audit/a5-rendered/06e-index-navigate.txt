@@ -1,0 +1,5 @@
+CTA position right after expanding: {"top":868,"viewportH":844,"belowFold":true,"overshoot":24}
+tapping CTA at {"x":139,"y":425,"href":"/work/rehabos"}
+navigated to: /work/rehabos
+case study heading: REHABOS
+scroll position on arrival: 0

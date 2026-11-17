@@ -1,0 +1,70 @@
+[
+ {
+  "id": "a2-hero",
+  "h": 762,
+  "pct": 6.9,
+  "heads": [],
+  "items": 3,
+  "links": 2
+ },
+ {
+  "id": "person",
+  "h": 1362,
+  "pct": 12.3,
+  "heads": [
+   "01 — THE PERSON",
+   "THINGS THAT KEEP MY ATTENTION"
+  ],
+  "items": 6,
+  "links": 0
+ },
+ {
+  "id": "work",
+  "h": 1394,
+  "pct": 12.6,
+  "heads": [
+   "FTC TEAM 16075"
+  ],
+  "items": 0,
+  "links": 1
+ },
+ {
+  "id": "index",
+  "h": 844,
+  "pct": 7.6,
+  "heads": [
+   "03 — INDEX OF WORK"
+  ],
+  "items": 4,
+  "links": 4
+ },
+ {
+  "id": "other",
+  "h": 3309,
+  "pct": 29.8,
+  "heads": [
+   "04 — OTHER WORK",
+   "FTC STARTER GUIDE",
+   "AUTONOMOUS OBJECT TRACKING",
+   "JARVIS",
+   "MED REHAB PROFESSIONALS"
+  ],
+  "items": 6,
+  "links": 2
+ },
+ {
+  "id": "practice",
+  "h": 2301,
+  "pct": 20.7,
+  "heads": [
+   "05 — PRACTICE",
+   "TOOLKIT",
+   "ACHIEVEMENTS",
+   "TEACHING & LEADERSHIP"
+  ],
+  "items": 29,
+  "links": 14
+ }
+]
+
+contact finale: {"h":745,"parent":"DIV."}

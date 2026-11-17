@@ -1,0 +1,21 @@
+=== prefers-reduced-motion: reduce ===
+  @1440 immediately after load: {"stillFaded":0,"stillTransformed":0,"portraitImgOpacity":1,"particleCanvasUp":"false","matchesReduce":true}
+  @1440 after full scroll: {"elementsStillUnder35pctOpacity":2,"sample":["a2-btn__edge","a2-btn__edge"]}
+  @390 immediately after load: {"stillFaded":0,"stillTransformed":0,"portraitImgOpacity":1,"particleCanvasUp":"false","matchesReduce":true}
+  @390 after full scroll: {"elementsStillUnder35pctOpacity":2,"sample":["a2-btn__edge","a2-btn__edge"]}
+
+=== accessibility, motion allowed ===
+  / {"h1":1,"headingSkips":[],"imgsMissingAlt":0,"unnamedButtons":0,"brokenAriaRefs":0,"landmarks":4,"title":"Rithvik Gogineni · Mechanical & Robotics Engin","lang":"en","skipLink":true}
+  /work/ftc-16075 {"h1":1,"headingSkips":[],"imgsMissingAlt":0,"unnamedButtons":0,"brokenAriaRefs":0,"landmarks":6,"title":"FTC Team 16075 — Robotics · Rithvik Gogineni","lang":"en","skipLink":true}
+  /work/rehabos {"h1":1,"headingSkips":[],"imgsMissingAlt":0,"unnamedButtons":0,"brokenAriaRefs":0,"landmarks":6,"title":"RehabOS — Software · AI · Rithvik Gogineni","lang":"en","skipLink":true}
+
+  tab order from load:
+   1. A.a2-skip | outline 3px solid | onscreen true
+   2. A.a2-head__id | outline 3px solid | onscreen true
+   3. A.a2-head__link | outline 3px solid | onscreen true
+   4. A.a2-head__link | outline 3px solid | onscreen true
+   5. A.a2-head__link | outline 3px solid | onscreen true
+   6. A.a2-head__link | outline 3px solid | onscreen true
+   7. A.a2-head__link | outline 3px solid | onscreen true
+   8. BUTTON.a2-seg__btn | outline 3px solid | onscreen true
+   9. BUTTON.a2-seg__btn | outline 3px solid | onscreen true

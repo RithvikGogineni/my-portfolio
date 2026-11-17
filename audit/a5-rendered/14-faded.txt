@@ -1,0 +1,192 @@
+
+--- ftc-16075 ---
+[
+ {
+  "cls": "[object SVGAnimatedString]",
+  "tag": "ellipse",
+  "op": 0.26,
+  "w": 179,
+  "h": 79,
+  "topAbs": 2784,
+  "text": "",
+  "inView": false,
+  "ariaHidden": null
+ },
+ {
+  "cls": "[object SVGAnimatedString]",
+  "tag": "ellipse",
+  "op": 0.26,
+  "w": 234,
+  "h": 103,
+  "topAbs": 2746,
+  "text": "",
+  "inView": false,
+  "ariaHidden": null
+ },
+ {
+  "cls": "[object SVGAnimatedString]",
+  "tag": "ellipse",
+  "op": 0.26,
+  "w": 165,
+  "h": 73,
+  "topAbs": 2730,
+  "text": "",
+  "inView": false,
+  "ariaHidden": null
+ },
+ {
+  "cls": "[object SVGAnimatedString]",
+  "tag": "ellipse",
+  "op": 0.26,
+  "w": 207,
+  "h": 91,
+  "topAbs": 2674,
+  "text": "",
+  "inView": false,
+  "ariaHidden": null
+ },
+ {
+  "cls": "[object SVGAnimatedString]",
+  "tag": "ellipse",
+  "op": 0.26,
+  "w": 276,
+  "h": 121,
+  "topAbs": 2606,
+  "text": "",
+  "inView": false,
+  "ariaHidden": null
+ }
+]
+
+--- first-global ---
+[
+ {
+  "cls": "[object SVGAnimatedString]",
+  "tag": "ellipse",
+  "op": 0.26,
+  "w": 179,
+  "h": 79,
+  "topAbs": 2759,
+  "text": "",
+  "inView": false,
+  "ariaHidden": null
+ },
+ {
+  "cls": "[object SVGAnimatedString]",
+  "tag": "ellipse",
+  "op": 0.26,
+  "w": 234,
+  "h": 103,
+  "topAbs": 2720,
+  "text": "",
+  "inView": false,
+  "ariaHidden": null
+ },
+ {
+  "cls": "[object SVGAnimatedString]",
+  "tag": "ellipse",
+  "op": 0.26,
+  "w": 165,
+  "h": 73,
+  "topAbs": 2704,
+  "text": "",
+  "inView": false,
+  "ariaHidden": null
+ },
+ {
+  "cls": "[object SVGAnimatedString]",
+  "tag": "ellipse",
+  "op": 0.26,
+  "w": 207,
+  "h": 91,
+  "topAbs": 2649,
+  "text": "",
+  "inView": false,
+  "ariaHidden": null
+ },
+ {
+  "cls": "[object SVGAnimatedString]",
+  "tag": "ellipse",
+  "op": 0.26,
+  "w": 276,
+  "h": 121,
+  "topAbs": 2581,
+  "text": "",
+  "inView": false,
+  "ariaHidden": null
+ }
+]
+
+--- humanoid ---
+[
+ {
+  "cls": "[object SVGAnimatedString]",
+  "tag": "ellipse",
+  "op": 0.26,
+  "w": 179,
+  "h": 79,
+  "topAbs": 2881,
+  "text": "",
+  "inView": false,
+  "ariaHidden": null
+ },
+ {
+  "cls": "[object SVGAnimatedString]",
+  "tag": "ellipse",
+  "op": 0.26,
+  "w": 234,
+  "h": 103,
+  "topAbs": 2843,
+  "text": "",
+  "inView": false,
+  "ariaHidden": null
+ },
+ {
+  "cls": "[object SVGAnimatedString]",
+  "tag": "ellipse",
+  "op": 0.26,
+  "w": 165,
+  "h": 73,
+  "topAbs": 2827,
+  "text": "",
+  "inView": false,
+  "ariaHidden": null
+ },
+ {
+  "cls": "[object SVGAnimatedString]",
+  "tag": "ellipse",
+  "op": 0.26,
+  "w": 207,
+  "h": 91,
+  "topAbs": 2771,
+  "text": "",
+  "inView": false,
+  "ariaHidden": null
+ },
+ {
+  "cls": "[object SVGAnimatedString]",
+  "tag": "ellipse",
+  "op": 0.26,
+  "w": 276,
+  "h": 121,
+  "topAbs": 2703,
+  "text": "",
+  "inView": false,
+  "ariaHidden": null
+ }
+]
+
+--- rehabos ---
+[
+ {
+  "cls": "a2-btn__edge",
+  "tag": "SPAN",
+  "op": 0.1,
+  "w": 198,
+  "h": 48,
+  "topAbs": 3275,
+  "text": "",
+  "inView": false,
+  "ariaHidden": "true"
+ }
+]

@@ -1,0 +1,83 @@
+--- cold load, cache disabled ---
+{
+ "resourceCount": 7,
+ "totalTransferKB": 383.5,
+ "byExtension": {
+  "webp": 248.4,
+  "js": 124.9,
+  "css": 9,
+  "com/cs": 1.2
+ },
+ "htmlKB": 1.9,
+ "top": [
+  {
+   "n": "/assets/ftc-robot-side-MJQF2MYN.webp",
+   "kb": 164.9,
+   "decoded": 164.6
+  },
+  {
+   "n": "/assets/portrait-2026-CsUHn8UR.webp",
+   "kb": 83.5,
+   "decoded": 83.2
+  },
+  {
+   "n": "/assets/react-vendor-CsuRYwf2.js",
+   "kb": 70.9,
+   "decoded": 221.5
+  },
+  {
+   "n": "/assets/index-CbeSbPRr.js",
+   "kb": 28.3,
+   "decoded": 81.3
+  },
+  {
+   "n": "/assets/animation-vendor-BysAZZNc.js",
+   "kb": 25.7,
+   "decoded": 71.4
+  },
+  {
+   "n": "/assets/index-BajUyeP8.css",
+   "kb": 9,
+   "decoded": 45
+  },
+  {
+   "n": "https://fonts.googleapis.com/css2?family=Archivo:wdth,wght",
+   "kb": 1.2,
+   "decoded": 9.6
+  }
+ ]
+}
+
+--- after scrolling the whole page (lazy assets included) ---
+{
+ "resources": 12,
+ "totalKB": 626,
+ "imageCount": 7,
+ "imageKB": 491,
+ "biggestImages": [
+  {
+   "n": "ftc-robot-side-MJQF2MYN.webp",
+   "kb": 165
+  },
+  {
+   "n": "portrait-2026-CsUHn8UR.webp",
+   "kb": 83
+  },
+  {
+   "n": "medrehab-website-CIV7EKrg.webp",
+   "kb": 63
+  },
+  {
+   "n": "gorilla-gym-CpacEiLS.webp",
+   "kb": 62
+  },
+  {
+   "n": "ftc-starter-guide-BhgKCeDt.web",
+   "kb": 46
+  },
+  {
+   "n": "fgc-robot-BaSY8NPa.webp",
+   "kb": 40
+  }
+ ]
+}

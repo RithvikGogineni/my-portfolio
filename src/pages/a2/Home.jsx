@@ -21,7 +21,6 @@ import Button from '../../components/a2/Button';
 import FeaturedInspect from '../../components/a2/FeaturedInspect';
 import ProjectIndex from '../../components/a2/ProjectIndex';
 import OtherWork from '../../components/a2/OtherWork';
-import ParticlePortrait from '../../components/a2/ParticlePortrait';
 import { Colophon } from '../../components/a2/Chrome';
 import { MaskedLines, RiseIn, Sequence, SequenceItem, Rule, Wipe } from '../../motion/motion';
 import { site, practice, toolkit, achievements } from '../../content/site';
@@ -29,7 +28,6 @@ import { person } from '../../content/person';
 import { featured, indexed } from '../../content/projects';
 import { applyMeta, HOME_META } from '../../lib/meta';
 
-import portrait from '../../assets/images/portrait-2026.webp';
 
 export default function Home() {
   useEffect(() => { applyMeta(HOME_META); }, []);
@@ -108,11 +106,9 @@ export default function Home() {
         <section className="a2-sheet a2-section a2-person" id="person">
           <SheetHead n="01" name="The person" sheet="02" of="08" as="h2" />
 
-          {/* DOM order is headline → portrait → prose, which is the right
-              order on a phone: you meet the face before reading four
-              paragraphs about it. On a wide viewport explicit grid placement
-              overrides it, putting the portrait in a column of its own
-              beside both. */}
+          {/* DOM order is headline → portrait well → prose. On a wide
+              viewport explicit grid placement overrides it, putting the well
+              in a column of its own beside both. */}
           <div className="a2-person__grid">
             <MaskedLines
               as="p"
@@ -121,15 +117,22 @@ export default function Home() {
               stop
             />
 
-            {/* The portrait assembles out of particles on arrival, once.
-                The photograph underneath is the real deliverable and is what
-                remains; see components/a2/ParticlePortrait.jsx. */}
+            {/* A.5.3 — the portrait is withheld; see content/person.js. The
+                well stays and says what is missing, as the withdrawn NexusOS
+                product screen does. To restore: re-import ParticlePortrait
+                and the portrait asset, and put the component back here. */}
             <div className="a2-person__portrait">
-              <ParticlePortrait
-                src={portrait}
-                alt={person.portrait.alt}
-                caption={person.portrait.caption}
-              />
+              <figure className="a2-pp a2-pp--empty">
+                <figcaption className="a2-exhibit__bar">
+                  <span className="a2-label">{person.portrait.caption}</span>
+                  <span className="a2-tag a2-ch-s a2-chamfer">
+                    Illustrative · asset {person.portrait.assetId}
+                  </span>
+                </figcaption>
+                <div className="a2-case__empty">
+                  <span className="a2-mono">Awaiting {person.portrait.need}</span>
+                </div>
+              </figure>
             </div>
 
             <div className="a2-person__body">

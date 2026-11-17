@@ -1,0 +1,9 @@
+nav at top: {"scrollY":0,"marked":["01 PERSON"],"all":["01 PERSON","02 WORK","03 PRACTICE","04 CONTACT","RÉSUMÉ"]}
+nav at #person: {"scrollY":759,"marked":["01 PERSON"],"all":["01 PERSON","02 WORK","03 PRACTICE","04 CONTACT","RÉSUMÉ"]}
+nav at #work: {"scrollY":2121,"marked":["02 WORK"],"all":["01 PERSON","02 WORK","03 PRACTICE","04 CONTACT","RÉSUMÉ"]}
+nav at #index: {"scrollY":3515,"marked":["02 WORK"],"all":["01 PERSON","02 WORK","03 PRACTICE","04 CONTACT","RÉSUMÉ"]}
+nav at #practice: {"scrollY":7669,"marked":["03 PRACTICE"],"all":["01 PERSON","02 WORK","03 PRACTICE","04 CONTACT","RÉSUMÉ"]}
+hover 02 FIRST GLOBAL CHALLE   {"hasImg":true,"src":"fgc-robot-BaSY8NPa.webp","imgOp":1,"previewText":"02 — PREVIEW MY ROLE Lead Engineer SEASON Eco-Equili","h":654}
+hover 03 REHABOS SOFTWARE ·    {"hasImg":true,"src":"rehabos-CGIfS48x.webp","imgOp":1,"previewText":"03 — PREVIEW MY ROLE Founder & Lead Engineer DEPLOYE","h":629}
+hover 04 NEXUSOS SOFTWARE ·    {"hasImg":false,"src":null,"imgOp":null,"previewText":"04 — PREVIEW ILLUSTRATIVE · A-05 AWAITING SCREENSHOT","h":637}
+hover 05 ROAMLY SOFTWARE → —   {"hasImg":true,"src":"roamly-DjnavVVj.webp","imgOp":1,"previewText":"05 — PREVIEW MY ROLE Founder & Developer MODES Drive","h":647}

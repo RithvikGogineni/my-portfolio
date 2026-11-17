@@ -1,0 +1,22 @@
+
+=== 1440-dark — portrait region vs settled photograph ===
+  meanLum = average brightness, rms = contrast, corrWithFinal = structural match (1.0 = the photo)
+  t+  60ms  mean  55.2  rms   1.7  corr 0.2
+  t+ 200ms  mean  55.3  rms   2.2  corr 0.155
+  t+ 400ms  mean  55.8  rms   2.7  corr 0.174
+  t+ 700ms  mean  56.5  rms   3.2  corr 0.251
+  t+1100ms  mean  57.6  rms   4.1  corr 0.433
+  t+1600ms  mean  57.6  rms   3.3  corr 0.643
+  t+2400ms  mean 101.3  rms  40.4  corr 1
+  t+3200ms  mean 103.9  rms  42.3  corr 1
+
+=== 390-light — portrait region vs settled photograph ===
+  meanLum = average brightness, rms = contrast, corrWithFinal = structural match (1.0 = the photo)
+  t+  60ms  mean  51.8  rms  15.2  corr 0.304
+  t+ 200ms  mean  51.8  rms  15.2  corr 0.305
+  t+ 400ms  mean    52  rms  15.3  corr 0.312
+  t+ 700ms  mean  52.6  rms  15.4  corr 0.335
+  t+1100ms  mean  53.1  rms  15.5  corr 0.377
+  t+1600ms  mean  53.1  rms  15.4  corr 0.397
+  t+2400ms  mean  83.1  rms  51.3  corr 1
+  t+3200ms  mean  83.8  rms  52.9  corr 1

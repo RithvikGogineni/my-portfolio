@@ -106,7 +106,7 @@
    COLOUR — TWO EDITIONS
    Coral is a surface: #FF4040 fills buttons, the contact band and single
    marks, and always takes #1B1C1E text, never white. No orange, no salmon.
-   Oxblood is a voice: italic accent text in light, the contact surface in
+   Oxblood is a voice: accent text in light, the contact surface in
    dark. Periwinkle is rare: charcoal wells only — hotspot highlight, focus
    box, the exploded part. Never on ivory, never as a fill, never as a theme.
    ========================================================================= */
@@ -123,7 +123,7 @@
   --rule: #242528;
   --rule-hair: rgb(36 37 40 / 30%);
 
-  --accent-voice: #681f2b;   /* deep oxblood — the italic voice */
+  --accent-voice: #681f2b;   /* deep oxblood — the voice */
   --accent-surface: #ff4040; /* vivid coral — fills only */
   --on-accent: #1b1c1e;      /* the only text colour coral ever takes */
   /* A.3 — the accent for the small type that sits on a *seated* surface,

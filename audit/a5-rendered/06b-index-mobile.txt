@@ -1,0 +1,5 @@
+{"w":390,"secH":412,"anchors":0,"hrefs":[],"rowH":[],"previewEl":false,"previewDisplay":null,"imgs":0,"text":"03 — INDEX OF WORK SHEET 04 / 08 02 FIRST GLOBAL CHALLENGE ROBOTICS + 03 REHABOS SOFTWARE · AI + 04 NEXUSOS SO"}
+{"w":768,"secH":357,"anchors":0,"hrefs":[],"rowH":[],"previewEl":false,"previewDisplay":null,"imgs":0,"text":"03 — INDEX OF WORK SHEET 04 / 08 02 FIRST GLOBAL CHALLENGE ROBOTICS + 03 REHABOS SOFTWARE · AI + 04 NEXUSOS SO"}
+{"w":1024,"secH":685,"anchors":4,"hrefs":["/work/first-global","/work/rehabos","/work/nexusos","/work/roamly"],"rowH":[118,75,75,75],"previewEl":true,"previewDisplay":"block","imgs":1,"text":"03 — INDEX OF WORK SHEET 04 / 08 02 FIRST GLOBAL CHALLENGE ROBOTICS → — open case study 03 REHABOS SOFTWARE · "}
+{"w":1440,"secH":844,"anchors":4,"hrefs":["/work/first-global","/work/rehabos","/work/nexusos","/work/roamly"],"rowH":[86,86,86,86],"previewEl":true,"previewDisplay":"block","imgs":1,"text":"03 — INDEX OF WORK SHEET 04 / 08 02 FIRST GLOBAL CHALLENGE ROBOTICS → — open case study 03 REHABOS SOFTWARE · "}
+tap target: null

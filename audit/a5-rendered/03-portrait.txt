@@ -1,0 +1,28 @@
+
+=== portrait formation @1440 dark ===
+  before entry: {"up":"false","canvasOpacity":"0","imgOpacity":"0"}
+  t+60ms {"up":"true","cOp":"0.270067","iOp":0,"raf":93}
+  t+200ms {"up":"true","cOp":"0.999992","iOp":0,"raf":113}
+  t+400ms {"up":"true","cOp":"1","iOp":0,"raf":133}
+  t+700ms {"up":"true","cOp":"1","iOp":0,"raf":151}
+  t+1100ms {"up":"true","cOp":"1","iOp":0,"raf":168}
+  t+1600ms {"up":"true","cOp":"1","iOp":0,"raf":195}
+  t+2400ms {"up":"true","cOp":"1","iOp":0.927,"raf":219}
+  t+3200ms {"up":"true","cOp":"1","iOp":1,"raf":219}
+  idle rAF over 2s: 0  (0 = animation parked)
+  rAF during 1.4s hover: 87  (>0 = portrait responds to pointer)
+  rAF 1.5s after pointer left region: 90  (0 = settles back to parked)
+  canvas: {"w":1395,"h":1395,"ctx":true}
+
+=== portrait formation @390 light ===
+  before entry: {"up":"false","canvasOpacity":"0","imgOpacity":"0"}
+  t+60ms {"up":"true","cOp":"0.491946","iOp":0,"raf":184}
+  t+200ms {"up":"true","cOp":"0.994516","iOp":0,"raf":216}
+  t+400ms {"up":"true","cOp":"1","iOp":0,"raf":264}
+  t+700ms {"up":"true","cOp":"1","iOp":0,"raf":336}
+  t+1100ms {"up":"true","cOp":"1","iOp":0,"raf":386}
+  t+1600ms {"up":"true","cOp":"1","iOp":0,"raf":446}
+  t+2400ms {"up":"true","cOp":"1","iOp":0.947,"raf":496}
+  t+3200ms {"up":"true","cOp":"1","iOp":1,"raf":496}
+  idle rAF over 2s: 0  (0 = animation parked)
+  canvas: {"w":708,"h":708,"ctx":true}

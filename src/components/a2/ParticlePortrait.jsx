@@ -79,10 +79,14 @@ void main() {
   gl_Position = vec4(pos, 0.0, 1.0);
   // Particles start a touch larger and tighten as they land: it reads as
   // depth without needing a third axis.
-  // Post-reveal the few visible particles are a little larger, so the patch
-  // under the pointer reads as grain lifting off the print rather than as
-  // dust on the screen.
-  gl_PointSize = uPointSize * (1.0 + (1.0 - e) * 1.6) * (1.0 + uReveal * 0.7);
+  //
+  // A.5.2 — both multipliers moved, because uPointSize now tiles the grid
+  // rather than dusting it. The formation swell is smaller (was 1.6) so that
+  // a frame of full-coverage discs at 2.6x does not become a wall of
+  // overdraw. And post-reveal the pointer patch is now SMALLER than a cell
+  // (was 1.7x larger): at cell size it read as a blocky mosaic laid over the
+  // photograph, where the intent is grain lifting off a print.
+  gl_PointSize = uPointSize * (1.0 + (1.0 - e) * 0.7) * (1.0 - uReveal * 0.45);
   vColor = aColor;
 
   // Before the reveal every particle is visible: it is the picture.
@@ -185,11 +189,19 @@ export default function ParticlePortrait({ src, alt, caption }) {
       const H = Math.max(1, Math.round(box.height * dpr));
       cv.width = W; cv.height = H;
 
-      // Sampling density. A phone gets a coarser grid: fewer particles, and
-      // each one larger, so it still reads as a portrait rather than as dust.
+      // Sampling density. The grid is square: SRC / step points on a side.
+      //
+      // A.5.2 — a phone now gets a smaller source image but the SAME step, not
+      // a coarser one. A.5 sampled a 180px source every 5px, which is 36
+      // points across, and a 36x36 mosaic of a person is not a person: the
+      // rendered field never rose above 0.40 structural correlation with the
+      // photograph it was supposed to be forming. 64 across is still cheap —
+      // it is one `gl.POINTS` draw call either way — and it is enough to carry
+      // a face.
       const coarse = box.width < 420;
-      const step = coarse ? 5 : 3;
-      const SRC = coarse ? 180 : 320;
+      const step = 3;
+      const SRC = coarse ? 192 : 320;
+      const across = Math.ceil(SRC / step);
 
       const off = document.createElement('canvas');
       off.width = SRC; off.height = SRC;
@@ -207,10 +219,15 @@ export default function ParticlePortrait({ src, alt, caption }) {
         for (let x = 0; x < SRC; x += step) {
           const i = (y * SRC + x) * 4;
           const r = data[i] / 255, g = data[i + 1] / 255, b = data[i + 2] / 255;
-          // Skip the flattest background pixels. It keeps the particle count
-          // down and lets the figure read as a figure from the first frame.
+          // Thin the flattest background, but only just.
+          //
+          // A.5.2 — A.5 dropped 88% of every pixel above 0.86 luminance, which
+          // is most of the wall the subject stands against. The particle image
+          // was therefore missing a large part of the picture and could not
+          // resolve into it however long it ran. Only near-white is thinned
+          // now, and only by half.
           const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-          if (lum > 0.86 && Math.random() > 0.12) continue;
+          if (lum > 0.93 && Math.random() > 0.55) continue;
 
           const tx = (x / SRC) * 2 - 1;
           const ty = -((y / SRC) * 2 - 1);
@@ -226,11 +243,22 @@ export default function ParticlePortrait({ src, alt, caption }) {
           const rad = 0.3 + Math.random() * 0.8;
           starts.push(tx + Math.cos(ang) * rad, ty + Math.sin(ang) * rad);
 
-          // The palette is the photograph's own, lifted a little so it holds
-          // on the charcoal well — plus an occasional coral particle, which
-          // is the only colour on this site that is allowed to be loud.
-          if (Math.random() < 0.012) colors.push(1.0, 0.25, 0.25);
-          else colors.push(Math.min(1, r * 1.1 + 0.04), Math.min(1, g * 1.1 + 0.04), Math.min(1, b * 1.1 + 0.05));
+          // The palette is the photograph's own — plus an occasional coral
+          // particle, which is the only colour on this site that is allowed
+          // to be loud.
+          //
+          // A.5.2 — the lift is smaller than A.5's (was r * 1.1 + 0.04) but
+          // not absent. It is tuned against a measurement, not guessed: with
+          // no lift the resolved field sat about 35 RGB units darker than the
+          // photograph across the well, because the seams between discs still
+          // show the charcoal behind them, and the hand-off to the photograph
+          // then read as a brightness pop.
+          //
+          // The coral is much rarer. At A.5's 1.2% it was invisible in a field
+          // that was itself noise; in a field that now resolves into a face it
+          // read as dead pixels scattered across the subject.
+          if (Math.random() < 0.0006) colors.push(1.0, 0.25, 0.25);
+          else colors.push(Math.min(1, r * 1.06 + 0.02), Math.min(1, g * 1.06 + 0.02), Math.min(1, b * 1.06 + 0.022));
 
           seeds.push(Math.random(), Math.random());
         }
@@ -278,7 +306,17 @@ export default function ParticlePortrait({ src, alt, caption }) {
         size: gl.getUniformLocation(prog, 'uPointSize'),
         aspect: gl.getUniformLocation(prog, 'uAspect'),
       };
-      S.pointSize = (coarse ? 3.0 : 2.3) * dpr;
+      // A.5.2 — point size is derived from the grid instead of guessed.
+      //
+      // This is the whole reason the portrait never resolved. A.5 drew 4.6px
+      // points on a 13px grid: about 12% of the frame covered by area, so the
+      // render was mostly gaps and carried roughly 8% of the photograph's
+      // contrast. Each particle has to cover its own cell. The disc is
+      // inscribed in the point square and its edge is feathered, so it needs
+      // to be a little wider than the cell to close the seams. 1.32 was measured
+      // up from 1.22: at 1.22 the remaining seams left the resolved field
+      // noticeably darker than the photograph it hands off to.
+      S.pointSize = (Math.min(W, H) / across) * 1.32;
       S.mouse = [-9, -9];
       S.mouseOn = 0;
       S.target = 0;

@@ -1,0 +1,8 @@
+  portrait box: {"x":1045,"y":439,"left":696,"top":90,"w":698,"h":698}
+  settled, pointer never on it: 0 rAF over 2000ms
+  pointer HELD on portrait: 90 rAF over 1500ms
+  pointer moved AWAY (after 1.2s decay): 0 rAF over 2500ms
+  pointer away, second window: 0 rAF over 2500ms
+  portrait scrolled out of view: 0 rAF over 2500ms
+  on return: {"up":"true","cOp":"1","iOp":1}
+  after returning to the portrait: 0 rAF over 2500ms

@@ -1,0 +1,16 @@
+=== index @1440 light ===
+  structure: {"links":4,"sample":[{"cls":"a2-row is-on","href":"/work/first-global","t":"02 FIRST GLOBAL CHALLENGE ROBOTICS"},{"cls":"a2-row","href":"/work/rehabos","t":"03 REHABOS SOFTWARE · AI → — open "},{"cls":"a2-row","href":"/work/nexusos","t":"04 NEXUSOS SOFTWARE · AI → — open "},{"cls":"a2-row","href":"/work/roamly","t":"05 ROAMLY SOFTWARE → — open case s"}]}
+  rest: {"rows":1,"rowClasses":["a2-index__rows"],"hot":0,"preview":{"cls":"a2-index__preview","op":1},"imgs":[{"src":"fgc-robot-BaSY8NPa.webp","op":1}],"active":"BODY","focusVisible":null}
+  row heights: [86,86,86,86]
+  hover "02 FIRST GLOBAL CHALLENGE ": {"rows":1,"rowClasses":["a2-index__rows"],"hot":1,"preview":{"cls":"a2-index__preview","op":1},"imgs":[{"src":"fgc-robot-BaSY8NPa.webp","op":1}],"active":"BODY","focusVisible":null}
+  hover "04 NEXUSOS SOFTWARE · AI →": {"rows":1,"rowClasses":["a2-index__rows"],"hot":1,"preview":{"cls":"a2-index__preview","op":1},"imgs":[],"active":"BODY","focusVisible":null}
+  pointer away: {"rows":1,"rowClasses":["a2-index__rows"],"hot":0,"preview":{"cls":"a2-index__preview","op":1},"imgs":[],"active":"BODY","focusVisible":null}
+
+  --- keyboard ---
+  focus row 1: {"rows":1,"rowClasses":["a2-index__rows"],"hot":0,"preview":{"cls":"a2-index__preview","op":1},"imgs":[{"src":"fgc-robot-BaSY8NPa.webp","op":1}],"active":"a2-row is-on","focusVisible":{"outline":"3px solid","shadow":"none"}}
+  Tab 1: focus=a2-row is-on outline={"outline":"3px solid","shadow":"none"}
+  Tab 2: focus=a2-row is-on outline={"outline":"3px solid","shadow":"none"}
+
+=== index @390 dark (touch) ===
+  touch row heights: []
+  rest: {"rows":1,"rowClasses":["a2-index__rows"],"hot":0,"preview":null,"imgs":[],"active":"BODY","focusVisible":null}

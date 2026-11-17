@@ -1,0 +1,2 @@
+@1440 {"containerWidthPx":828,"containerFont":"22px Newsreader","proseFont":"32px Newsreader","chWidthInContainerFont":12.18,"chWidthInProseFont":18.01,"capIs68ch_resolvesTo":"828px","thatIsCharsOfProse":46,"maxWidthComputed":"828.342px"}
+@768 {"containerWidthPx":719,"containerFont":"21.2544px Newsreader","proseFont":"30.208px Newsreader","chWidthInContainerFont":11.75,"chWidthInProseFont":16.95,"capIs68ch_resolvesTo":"799px","thatIsCharsOfProse":42,"maxWidthComputed":"799.102px"}

@@ -1,0 +1,20 @@
+=== body copy: measured characters per line ===
+   (comfortable range is roughly 45-85; under 35 or over 95 is a problem)
+
+  @ 320 {"lede":{"lines":8,"cpl":25,"fs":28},"para":{"lines":8,"cpl":36,"fs":20},"prose":{"lines":22,"cpl":22,"fs":28},"curio":{"lines":3,"cpl":34,"fs":17}}
+  @ 390 {"lede":{"lines":7,"cpl":32,"fs":28},"para":{"lines":6,"cpl":44,"fs":20},"prose":{"lines":16,"cpl":27,"fs":28},"curio":{"lines":3,"cpl":41,"fs":17}}
+  @ 480 {"lede":{"lines":5,"cpl":40,"fs":28.5},"para":{"lines":5,"cpl":55,"fs":20.3},"prose":{"lines":13,"cpl":35,"fs":28.5},"curio":{"lines":3,"cpl":41,"fs":17}}
+  @ 600 {"lede":{"lines":5,"cpl":42,"fs":29.2},"para":{"lines":4,"cpl":69,"fs":20.7},"prose":{"lines":13,"cpl":35,"fs":29.2},"curio":{"lines":3,"cpl":41,"fs":17}}
+  @ 768 {"lede":{"lines":5,"cpl":42,"fs":30.2},"para":{"lines":4,"cpl":73,"fs":21.3},"prose":{"lines":13,"cpl":35,"fs":30.2},"curio":{"lines":3,"cpl":41,"fs":17}}
+  @ 900 {"lede":{"lines":8,"cpl":29,"fs":31},"para":{"lines":6,"cpl":43,"fs":21.7},"prose":{"lines":13,"cpl":35,"fs":31},"curio":{"lines":3,"cpl":41,"fs":17}}
+  @1024 {"lede":{"lines":6,"cpl":33,"fs":31.7},"para":{"lines":6,"cpl":48,"fs":22},"prose":{"lines":13,"cpl":35,"fs":31.7},"curio":{"lines":3,"cpl":41,"fs":17}}
+  @1280 {"lede":{"lines":5,"cpl":42,"fs":32},"para":{"lines":5,"cpl":59,"fs":22},"prose":{"lines":13,"cpl":35,"fs":32},"curio":{"lines":3,"cpl":41,"fs":17}}
+  @1440 {"lede":{"lines":5,"cpl":42,"fs":32},"para":{"lines":4,"cpl":69,"fs":22},"prose":{"lines":13,"cpl":35,"fs":32},"curio":{"lines":3,"cpl":41,"fs":17}}
+  @1920 {"lede":{"lines":5,"cpl":42,"fs":32},"para":{"lines":4,"cpl":73,"fs":22},"prose":{"lines":13,"cpl":35,"fs":32},"curio":{"lines":3,"cpl":41,"fs":17}}
+  @2560 {"lede":{"lines":5,"cpl":42,"fs":32},"para":{"lines":4,"cpl":73,"fs":22},"prose":{"lines":13,"cpl":35,"fs":32},"curio":{"lines":3,"cpl":41,"fs":17}}
+
+=== tap targets under 44px, mobile widths ===
+  @320 {"interactive":35,"under44":1,"list":[{"t":"SKIP TO CONTENT","w":1,"h":1}]}
+  @390 {"interactive":35,"under44":1,"list":[{"t":"SKIP TO CONTENT","w":1,"h":1}]}
+  @414 {"interactive":35,"under44":1,"list":[{"t":"SKIP TO CONTENT","w":1,"h":1}]}
+  @768 {"interactive":40,"under44":1,"list":[{"t":"SKIP TO CONTENT","w":1,"h":1}]}

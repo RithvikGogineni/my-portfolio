@@ -1,0 +1,16 @@
+=== flagship @1440 light (pointer + keyboard) ===
+  rest: {"tabs":4,"selected":0,"selectedName":"01 INTAKE ●","roving":"0,-1,-1,-1","focusbox":{"x":443.7,"y":265.4,"w":202,"op":"1"},"leader":{"x":645.9,"y":359.7},"panelText":"Dual-stage and fully open, so an ARTIFACT can be collected w","active":"BODY"}
+  tabs: ["01 INTAKE ●","02 TRANSFER +","03 LAUNCHER +","04 AUTONOMOUS +"]
+  click "02 TRANSFER +": {"tabs":4,"selected":1,"selectedName":"02 TRANSFER ●","roving":"-1,0,-1,-1","focusbox":{"x":308.9,"y":292.3,"w":175,"op":"1"},"leader":{"x":484.1,"y":368.7},"panelText":"A third stage with a high-torque motor of its own, stationar","active":"a2-tab a2-ch-s is-on"}
+  click "03 LAUNCHER +": {"tabs":4,"selected":2,"selectedName":"03 LAUNCHER ●","roving":"-1,-1,0,-1","focusbox":{"x":120.2,"y":130.6,"w":283,"op":"1"},"leader":{"x":403.3,"y":216},"panelText":"A turret-mounted hooded flywheel. The turret aims across the","active":"a2-tab a2-ch-s is-on"}
+  click "04 AUTONOMOUS +": {"tabs":4,"selected":3,"selectedName":"04 AUTONOMOUS ●","roving":"-1,-1,-1,0","focusbox":{"x":275.2,"y":117.1,"w":148,"op":"1"},"leader":{"x":423.5,"y":162},"panelText":"A webcam reads the MOTIF; odometry and AprilTag readings are","active":"a2-tab a2-ch-s is-on"}
+  key ArrowDown  -> selected 1 (02 TRANSFER ●) focus=a2-tab a2-ch-s is-on
+  key ArrowDown  -> selected 2 (03 LAUNCHER ●) focus=a2-tab a2-ch-s is-on
+  key ArrowUp    -> selected 1 (02 TRANSFER ●) focus=a2-tab a2-ch-s is-on
+  key End        -> selected 3 (04 AUTONOMOUS ●) focus=a2-tab a2-ch-s is-on
+  key Home       -> selected 0 (01 INTAKE ●) focus=a2-tab a2-ch-s is-on
+
+=== flagship @390 dark (touch) ===
+  rest: {"tabs":4,"selected":0,"selectedName":"01 INTAKE ●","roving":"0,-1,-1,-1","focusbox":{"x":226.9,"y":176.4,"w":106,"op":"1"},"leader":{"x":333,"y":225.9},"panelText":"Dual-stage and fully open, so an ARTIFACT can be collected w","active":"BODY"}
+  touch target sizes: ["354x48","354x48","354x48","354x48"]
+  tap "03 LAUNCHER +": {"tabs":4,"selected":2,"selectedName":"03 LAUNCHER ●","roving":"-1,-1,0,-1","focusbox":{"x":56.9,"y":105.6,"w":149,"op":"1"},"leader":{"x":205.6,"y":150.4},"panelText":"A turret-mounted hooded flywheel. The turret aims across the","active":"a2-tab a2-ch-s is-on"}

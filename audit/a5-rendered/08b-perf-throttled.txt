@@ -1,0 +1,62 @@
+=== payload (per resource) ===
+{
+ "totalKB": 2.8,
+ "byExtension": {
+  "com/css2": 1,
+  "js": 0.9,
+  "css": 0.3,
+  "webp": 0.6
+ },
+ "top": [
+  {
+   "n": "https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap",
+   "kb": 1,
+   "t": "link"
+  },
+  {
+   "n": "/assets/index-CbeSbPRr.js",
+   "kb": 0.3,
+   "t": "script"
+  },
+  {
+   "n": "/assets/index-BajUyeP8.css",
+   "kb": 0.3,
+   "t": "link"
+  },
+  {
+   "n": "/assets/animation-vendor-BysAZZNc.js",
+   "kb": 0.3,
+   "t": "other"
+  },
+  {
+   "n": "/assets/react-vendor-CsuRYwf2.js",
+   "kb": 0.3,
+   "t": "other"
+  },
+  {
+   "n": "/assets/portrait-2026-CsUHn8UR.webp",
+   "kb": 0.3,
+   "t": "img"
+  },
+  {
+   "n": "/assets/ftc-robot-side-MJQF2MYN.webp",
+   "kb": 0.3,
+   "t": "img"
+  }
+ ]
+}
+
+=== mobile 390, CPU throttled 1x ===
+  load: {"lcpMs":1156,"cls":0,"longTasks":0,"longestMs":0}
+  scroll pacing: {"frames":89,"median":16.7,"p90":16.7,"p99":33.4,"worst":33.4,"over32":2,"pctOver32":2.2}
+  cls after scroll: 0
+
+=== mobile 390, CPU throttled 4x ===
+  load: {"lcpMs":1268,"cls":0,"longTasks":0,"longestMs":0}
+  scroll pacing: {"frames":89,"median":16.7,"p90":16.7,"p99":16.8,"worst":16.8,"over32":0,"pctOver32":0}
+  cls after scroll: 0
+
+=== mobile 390, CPU throttled 6x ===
+  load: {"lcpMs":1352,"cls":0,"longTasks":3,"longestMs":66}
+  scroll pacing: {"frames":89,"median":16.7,"p90":16.7,"p99":16.8,"worst":16.8,"over32":0,"pctOver32":0}
+  cls after scroll: 0

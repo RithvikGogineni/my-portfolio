@@ -351,7 +351,26 @@
   gap: clamp(1.5rem, 3vw, 2.5rem);
 }
 
-.a2-hero__plate { position: relative; }
+/* A.5.2 — the hero name is sized from the plate it sits in.
+   `--type-hero` is `clamp(4.25rem, 15.5vw, 18.75rem)`, and the 15.5vw term
+   does not overtake the 68px floor until 439px — wider than every common
+   phone. So from 320px to 438px the largest element on the site was a
+   constant 68px while its column grew by a third, and the type got relatively
+   SMALLER the larger the phone: "Gogineni" filled 88.8% of the measure at
+   320px and 66.7% at 414px. That is fluid type running backwards.
+   The cause is the same one A.5.1 fixed on the person heading: the type is
+   sized from the window while the box is sized from the grid. In the
+   two-column layout the plate is about 64% of the viewport, so 15.5vw lands
+   at a well-composed ~89% fill; on a phone the plate is about 89% of the
+   viewport, and the same coefficient is far too small.
+   24cqw is measured, not guessed: the longest line renders at 3.706x its font
+   size, so it fills the plate at 26.98cqw, and 24cqw sits at 88.9% — the fill
+   the 1440 composition already had.
+   `max()` makes this a floor, not a replacement: every width where the
+   existing curve was already well composed (1180px and up, where the two
+   columns appear) keeps the value it has today, including the 264px cap at
+   the top end. Only the widths where the name was loose are raised. */
+.a2-hero__plate { position: relative; container-type: inline-size; }
 /* A.5 — the hero name gets its own ceiling, below the shared --type-hero
    cap. That token scales with the viewport, but this name does not live in
    the viewport: it lives in the left column of a two-column grid whose width
@@ -363,7 +382,7 @@
    16.5rem keeps the longest line and the stop inside the column at every
    width. The token is untouched, so the contact title and the case-study
    headings — which do have the full sheet — still reach 300px. */
-.a2-hero__name { margin: 0; font-size: min(var(--type-hero), 16.5rem); }
+.a2-hero__name { margin: 0; font-size: min(max(var(--type-hero), 24cqw), 16.5rem); }
 /* The mask that each display line slides out of. */
 /* A display line is broken by the author, never by the browser: that is
    the whole contract of MaskedLines, and nowrap is what enforces it. */

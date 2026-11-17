@@ -1,0 +1,17 @@
+
+=== desktop 1440 ===
+  at rest after load: {"cls":0,"shifts":[],"longTasksMs":[],"longTaskCount":0,"lcpMs":152,"errs":[]}
+  frame pacing during full-page scroll: {"frames":89,"medianMs":16.7,"p90Ms":16.7,"p99Ms":66.6,"worstMs":66.6,"framesOver32ms":1,"framesOver50ms":1,"pctOver32":1.1}
+  cls after scroll: {"cls":0,"shiftCount":0,"biggest":0}
+  rAF callbacks the page itself drives while idle (3s): 180 were served to MY probe (a parked page still serves the probe; see note)
+  (idle sanity) {"elapsed":2001}
+
+=== mobile 390 ===
+  at rest after load: {"cls":0,"shifts":[],"longTasksMs":[],"longTaskCount":0,"lcpMs":1208,"errs":[]}
+  frame pacing during full-page scroll: {"frames":89,"medianMs":16.7,"p90Ms":16.7,"p99Ms":16.8,"worstMs":16.8,"framesOver32ms":0,"framesOver50ms":0,"pctOver32":0}
+  cls after scroll: {"cls":0,"shiftCount":0,"biggest":0}
+  rAF callbacks the page itself drives while idle (3s): 181 were served to MY probe (a parked page still serves the probe; see note)
+  (idle sanity) {"elapsed":2001}
+
+=== payload ===
+{"resources":16,"totalKB":269,"byType":{"72,40":"1KB","js":"1KB","css":"0KB","com/l":"194KB","woff2":"72KB","webp":"2KB"},"domContentLoadedMs":65,"loadMs":66}
